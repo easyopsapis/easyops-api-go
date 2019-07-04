@@ -32,7 +32,7 @@ const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_m
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	Register(ctx context.Context, in *types.Empty) (*types.Empty, error)
+	InitOrg(ctx context.Context, in *types.Empty) (*types.Empty, error)
 }
 
 type client struct {
@@ -45,9 +45,9 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) Register(ctx context.Context, in *types.Empty) (*types.Empty, error) {
+func (c *client) InitOrg(ctx context.Context, in *types.Empty) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _RegisterContract, in, out)
+	err := c.c.Invoke(ctx, _InitOrgContract, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -56,31 +56,31 @@ func (c *client) Register(ctx context.Context, in *types.Empty) (*types.Empty, e
 
 // Service is the server API for org service.
 type Service interface {
-	Register(context.Context, *types.Empty) (*types.Empty, error)
+	InitOrg(context.Context, *types.Empty) (*types.Empty, error)
 }
 
-func _RegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+func _InitOrgEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.Register(ctx, req.(*types.Empty))
+		return s.InitOrg(ctx, req.(*types.Empty))
 	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_RegisterContract, _RegisterEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InitOrgContract, _InitOrgEndpoint(srv))
 }
 
 // API Contract
-var _RegisterContract = &registerContract{}
+var _InitOrgContract = &initOrgContract{}
 
-type registerContract struct{}
+type initOrgContract struct{}
 
-func (*registerContract) ServiceName() string          { return "org.rpc" }
-func (*registerContract) MethodName() string           { return "Register" }
-func (*registerContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*registerContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*registerContract) ContractName() string         { return "easyops.api.ops_automation.org.Register" }
-func (*registerContract) ContractVersion() string      { return "1.0" }
-func (*registerContract) Pattern() (string, string) {
+func (*initOrgContract) ServiceName() string          { return "org.rpc" }
+func (*initOrgContract) MethodName() string           { return "InitOrg" }
+func (*initOrgContract) RequestMessage() interface{}  { return new(types.Empty) }
+func (*initOrgContract) ResponseMessage() interface{} { return new(types.Empty) }
+func (*initOrgContract) ContractName() string         { return "easyops.api.ops_automation.org.InitOrg" }
+func (*initOrgContract) ContractVersion() string      { return "1.0" }
+func (*initOrgContract) Pattern() (string, string) {
 	return "POST", "/api/ops_automation/v1/org/register"
 }
-func (*registerContract) Body() string { return "" }
+func (*initOrgContract) Body() string { return "" }

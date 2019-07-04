@@ -39,6 +39,7 @@ type Client interface {
 	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
 	GetProgressLog(ctx context.Context, in *GetProgressLogRequest) (*pipeline.ProgressLog, error)
 	POST(ctx context.Context, in *POSTRequest) (*POSTResponse, error)
+	Retry(ctx context.Context, in *RetryRequest) (*RetryResponse, error)
 	UpdateBuildStatus(ctx context.Context, in *UpdateBuildStatusRequest) (*pipeline.Build, error)
 	UpdateProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
 	UpdateStageStatus(ctx context.Context, in *pipeline.StageStatus) (*pipeline.StageStatus, error)
@@ -117,6 +118,15 @@ func (c *client) POST(ctx context.Context, in *POSTRequest) (*POSTResponse, erro
 	return out, nil
 }
 
+func (c *client) Retry(ctx context.Context, in *RetryRequest) (*RetryResponse, error) {
+	out := new(RetryResponse)
+	err := c.c.Invoke(ctx, _RetryContract, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) UpdateBuildStatus(ctx context.Context, in *UpdateBuildStatusRequest) (*pipeline.Build, error) {
 	out := new(pipeline.Build)
 	err := c.c.Invoke(ctx, _UpdateBuildStatusContract, in, out)
@@ -153,6 +163,7 @@ type Service interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	GetProgressLog(context.Context, *GetProgressLogRequest) (*pipeline.ProgressLog, error)
 	POST(context.Context, *POSTRequest) (*POSTResponse, error)
+	Retry(context.Context, *RetryRequest) (*RetryResponse, error)
 	UpdateBuildStatus(context.Context, *UpdateBuildStatusRequest) (*pipeline.Build, error)
 	UpdateProgressLog(context.Context, *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
 	UpdateStageStatus(context.Context, *pipeline.StageStatus) (*pipeline.StageStatus, error)
@@ -200,6 +211,12 @@ func _POSTEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _RetryEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.Retry(ctx, req.(*RetryRequest))
+	}
+}
+
 func _UpdateBuildStatusEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.UpdateBuildStatus(ctx, req.(*UpdateBuildStatusRequest))
@@ -226,6 +243,7 @@ func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetProgressLogContract, _GetProgressLogEndpoint(srv))
 	s.RegisterUnaryEndpoint(_POSTContract, _POSTEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RetryContract, _RetryEndpoint(srv))
 	s.RegisterUnaryEndpoint(_UpdateBuildStatusContract, _UpdateBuildStatusEndpoint(srv))
 	s.RegisterUnaryEndpoint(_UpdateProgressLogContract, _UpdateProgressLogEndpoint(srv))
 	s.RegisterUnaryEndpoint(_UpdateStageStatusContract, _UpdateStageStatusEndpoint(srv))
@@ -338,6 +356,21 @@ func (*pOSTContract) ContractName() string         { return "easyops.api.pipelin
 func (*pOSTContract) ContractVersion() string      { return "1.0" }
 func (*pOSTContract) Pattern() (string, string)    { return "POST", "/api/pipeline/v1/builds/list" }
 func (*pOSTContract) Body() string                 { return "" }
+
+var _RetryContract = &retryContract{}
+
+type retryContract struct{}
+
+func (*retryContract) ServiceName() string          { return "build.rpc" }
+func (*retryContract) MethodName() string           { return "Retry" }
+func (*retryContract) RequestMessage() interface{}  { return new(RetryRequest) }
+func (*retryContract) ResponseMessage() interface{} { return new(RetryRequest) }
+func (*retryContract) ContractName() string         { return "easyops.api.pipeline.build.Retry" }
+func (*retryContract) ContractVersion() string      { return "1.0" }
+func (*retryContract) Pattern() (string, string) {
+	return "POST", "/api/pipeline/v1/builds/:build_id/retry"
+}
+func (*retryContract) Body() string { return "" }
 
 var _UpdateBuildStatusContract = &updateBuildStatusContract{}
 

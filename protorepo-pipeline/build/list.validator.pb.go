@@ -68,6 +68,11 @@ var _regex_POSTResponse_Data_List_Id = regexp.MustCompile(`^[0-9a-z]{13}$`)
 var _regex_POSTResponse_Data_List_Sender = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
 
 func (this *POSTResponse_Data_List) Validate() error {
+	if this.Project != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Project); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Project", err)
+		}
+	}
 	if this.Pipeline != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Pipeline); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Pipeline", err)

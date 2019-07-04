@@ -9,6 +9,7 @@ import (
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
 	_ "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
 )
@@ -31,6 +32,7 @@ const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_m
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*types.Empty, error)
 	UserRegister(ctx context.Context, in *UserRegisterRequest) (*UserRegisterResponse, error)
 }
 
@@ -44,6 +46,15 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _AlterPasswordContract, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) UserRegister(ctx context.Context, in *UserRegisterRequest) (*UserRegisterResponse, error) {
 	out := new(UserRegisterResponse)
 	err := c.c.Invoke(ctx, _UserRegisterContract, in, out)
@@ -55,7 +66,14 @@ func (c *client) UserRegister(ctx context.Context, in *UserRegisterRequest) (*Us
 
 // Service is the server API for user_admin service.
 type Service interface {
+	AlterPassword(context.Context, *AlterPasswordRequest) (*types.Empty, error)
 	UserRegister(context.Context, *UserRegisterRequest) (*UserRegisterResponse, error)
+}
+
+func _AlterPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.AlterPassword(ctx, req.(*AlterPasswordRequest))
+	}
 }
 
 func _UserRegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -65,10 +83,28 @@ func _UserRegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
+	s.RegisterUnaryEndpoint(_AlterPasswordContract, _AlterPasswordEndpoint(srv))
 	s.RegisterUnaryEndpoint(_UserRegisterContract, _UserRegisterEndpoint(srv))
 }
 
 // API Contract
+var _AlterPasswordContract = &alterPasswordContract{}
+
+type alterPasswordContract struct{}
+
+func (*alterPasswordContract) ServiceName() string          { return "user_admin.rpc" }
+func (*alterPasswordContract) MethodName() string           { return "AlterPassword" }
+func (*alterPasswordContract) RequestMessage() interface{}  { return new(AlterPasswordRequest) }
+func (*alterPasswordContract) ResponseMessage() interface{} { return new(AlterPasswordRequest) }
+func (*alterPasswordContract) ContractName() string {
+	return "easyops.api.user_service.user_admin.AlterPassword"
+}
+func (*alterPasswordContract) ContractVersion() string { return "1.0" }
+func (*alterPasswordContract) Pattern() (string, string) {
+	return "POST", "/api/v1/users/alter_password"
+}
+func (*alterPasswordContract) Body() string { return "" }
+
 var _UserRegisterContract = &userRegisterContract{}
 
 type userRegisterContract struct{}
