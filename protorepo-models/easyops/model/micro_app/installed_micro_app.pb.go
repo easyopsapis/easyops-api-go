@@ -44,7 +44,7 @@ type InstalledMicroApp struct {
 	//当前版本
 	CurrentVersion string `protobuf:"bytes,6,opt,name=currentVersion,proto3" json:"currentVersion" form:"currentVersion"`
 	//
-	//当前版本
+	//安装状态， ok-成功, running-正在安装
 	InstallStatus        string   `protobuf:"bytes,7,opt,name=installStatus,proto3" json:"installStatus" form:"installStatus"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

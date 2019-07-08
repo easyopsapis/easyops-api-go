@@ -9,6 +9,7 @@ import (
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
 	_ "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
 )
@@ -35,6 +36,7 @@ type Client interface {
 	GetApproveObjectList(ctx context.Context, in *GetApproveObjectListRequest) (*GetApproveObjectListResponse, error)
 	GetHistoryApproverList(ctx context.Context, in *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error)
 	GetHistoryObjectList(ctx context.Context, in *GetHistoryObjectListRequest) (*GetHistoryObjectListResponse, error)
+	InstanceRelationEdit(ctx context.Context, in *InstanceRelationEditRequest) (*types.Empty, error)
 }
 
 type client struct {
@@ -83,12 +85,22 @@ func (c *client) GetHistoryObjectList(ctx context.Context, in *GetHistoryObjectL
 	return out, nil
 }
 
+func (c *client) InstanceRelationEdit(ctx context.Context, in *InstanceRelationEditRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _InstanceRelationEditContract, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Service is the server API for cmdb_approve service.
 type Service interface {
 	GetApproveCount(context.Context, *GetApproveCountRequest) (*GetApproveCountResponse, error)
 	GetApproveObjectList(context.Context, *GetApproveObjectListRequest) (*GetApproveObjectListResponse, error)
 	GetHistoryApproverList(context.Context, *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error)
 	GetHistoryObjectList(context.Context, *GetHistoryObjectListRequest) (*GetHistoryObjectListResponse, error)
+	InstanceRelationEdit(context.Context, *InstanceRelationEditRequest) (*types.Empty, error)
 }
 
 func _GetApproveCountEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -115,11 +127,18 @@ func _GetHistoryObjectListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _InstanceRelationEditEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.InstanceRelationEdit(ctx, req.(*InstanceRelationEditRequest))
+	}
+}
+
 func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_GetApproveCountContract, _GetApproveCountEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetApproveObjectListContract, _GetApproveObjectListEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetHistoryApproverListContract, _GetHistoryApproverListEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetHistoryObjectListContract, _GetHistoryObjectListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceRelationEditContract, _InstanceRelationEditEndpoint(srv))
 }
 
 // API Contract
@@ -200,3 +219,24 @@ func (*getHistoryObjectListContract) Pattern() (string, string) {
 	return "POST", "/api/v1/history/object/list"
 }
 func (*getHistoryObjectListContract) Body() string { return "" }
+
+var _InstanceRelationEditContract = &instanceRelationEditContract{}
+
+type instanceRelationEditContract struct{}
+
+func (*instanceRelationEditContract) ServiceName() string { return "cmdb_approve.rpc" }
+func (*instanceRelationEditContract) MethodName() string  { return "InstanceRelationEdit" }
+func (*instanceRelationEditContract) RequestMessage() interface{} {
+	return new(InstanceRelationEditRequest)
+}
+func (*instanceRelationEditContract) ResponseMessage() interface{} {
+	return new(InstanceRelationEditRequest)
+}
+func (*instanceRelationEditContract) ContractName() string {
+	return "easyops.api.resource_manage.cmdb_approve.InstanceRelationEdit"
+}
+func (*instanceRelationEditContract) ContractVersion() string { return "1.0" }
+func (*instanceRelationEditContract) Pattern() (string, string) {
+	return "POST", "/object/:object_id/relation/:relation_side_id/:operation"
+}
+func (*instanceRelationEditContract) Body() string { return "" }

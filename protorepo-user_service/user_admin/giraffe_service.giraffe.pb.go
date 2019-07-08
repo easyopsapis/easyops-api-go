@@ -33,6 +33,9 @@ const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_m
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
 	AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*types.Empty, error)
+	AlterSelfPassword(ctx context.Context, in *AlterSelfPasswordRequest) (*types.Empty, error)
+	ForgotPassword(ctx context.Context, in *ForgotPasswordRequest) (*types.Empty, error)
+	ResetPassword(ctx context.Context, in *ResetPasswordRequest) (*types.Empty, error)
 	UserRegister(ctx context.Context, in *UserRegisterRequest) (*UserRegisterResponse, error)
 }
 
@@ -55,6 +58,33 @@ func (c *client) AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*
 	return out, nil
 }
 
+func (c *client) AlterSelfPassword(ctx context.Context, in *AlterSelfPasswordRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _AlterSelfPasswordContract, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ForgotPassword(ctx context.Context, in *ForgotPasswordRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _ForgotPasswordContract, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ResetPassword(ctx context.Context, in *ResetPasswordRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _ResetPasswordContract, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) UserRegister(ctx context.Context, in *UserRegisterRequest) (*UserRegisterResponse, error) {
 	out := new(UserRegisterResponse)
 	err := c.c.Invoke(ctx, _UserRegisterContract, in, out)
@@ -67,12 +97,33 @@ func (c *client) UserRegister(ctx context.Context, in *UserRegisterRequest) (*Us
 // Service is the server API for user_admin service.
 type Service interface {
 	AlterPassword(context.Context, *AlterPasswordRequest) (*types.Empty, error)
+	AlterSelfPassword(context.Context, *AlterSelfPasswordRequest) (*types.Empty, error)
+	ForgotPassword(context.Context, *ForgotPasswordRequest) (*types.Empty, error)
+	ResetPassword(context.Context, *ResetPasswordRequest) (*types.Empty, error)
 	UserRegister(context.Context, *UserRegisterRequest) (*UserRegisterResponse, error)
 }
 
 func _AlterPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.AlterPassword(ctx, req.(*AlterPasswordRequest))
+	}
+}
+
+func _AlterSelfPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.AlterSelfPassword(ctx, req.(*AlterSelfPasswordRequest))
+	}
+}
+
+func _ForgotPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ForgotPassword(ctx, req.(*ForgotPasswordRequest))
+	}
+}
+
+func _ResetPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ResetPassword(ctx, req.(*ResetPasswordRequest))
 	}
 }
 
@@ -84,6 +135,9 @@ func _UserRegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_AlterPasswordContract, _AlterPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AlterSelfPasswordContract, _AlterSelfPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ForgotPasswordContract, _ForgotPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ResetPasswordContract, _ResetPasswordEndpoint(srv))
 	s.RegisterUnaryEndpoint(_UserRegisterContract, _UserRegisterEndpoint(srv))
 }
 
@@ -104,6 +158,55 @@ func (*alterPasswordContract) Pattern() (string, string) {
 	return "POST", "/api/v1/users/alter_password"
 }
 func (*alterPasswordContract) Body() string { return "" }
+
+var _AlterSelfPasswordContract = &alterSelfPasswordContract{}
+
+type alterSelfPasswordContract struct{}
+
+func (*alterSelfPasswordContract) ServiceName() string          { return "user_admin.rpc" }
+func (*alterSelfPasswordContract) MethodName() string           { return "AlterSelfPassword" }
+func (*alterSelfPasswordContract) RequestMessage() interface{}  { return new(AlterSelfPasswordRequest) }
+func (*alterSelfPasswordContract) ResponseMessage() interface{} { return new(AlterSelfPasswordRequest) }
+func (*alterSelfPasswordContract) ContractName() string {
+	return "easyops.api.user_service.user_admin.AlterSelfPassword"
+}
+func (*alterSelfPasswordContract) ContractVersion() string   { return "1.0" }
+func (*alterSelfPasswordContract) Pattern() (string, string) { return "POST", "/api/v1/users/password" }
+func (*alterSelfPasswordContract) Body() string              { return "" }
+
+var _ForgotPasswordContract = &forgotPasswordContract{}
+
+type forgotPasswordContract struct{}
+
+func (*forgotPasswordContract) ServiceName() string          { return "user_admin.rpc" }
+func (*forgotPasswordContract) MethodName() string           { return "ForgotPassword" }
+func (*forgotPasswordContract) RequestMessage() interface{}  { return new(ForgotPasswordRequest) }
+func (*forgotPasswordContract) ResponseMessage() interface{} { return new(ForgotPasswordRequest) }
+func (*forgotPasswordContract) ContractName() string {
+	return "easyops.api.user_service.user_admin.ForgotPassword"
+}
+func (*forgotPasswordContract) ContractVersion() string { return "1.0" }
+func (*forgotPasswordContract) Pattern() (string, string) {
+	return "POST", "/api/v1/users/password/forgot"
+}
+func (*forgotPasswordContract) Body() string { return "" }
+
+var _ResetPasswordContract = &resetPasswordContract{}
+
+type resetPasswordContract struct{}
+
+func (*resetPasswordContract) ServiceName() string          { return "user_admin.rpc" }
+func (*resetPasswordContract) MethodName() string           { return "ResetPassword" }
+func (*resetPasswordContract) RequestMessage() interface{}  { return new(ResetPasswordRequest) }
+func (*resetPasswordContract) ResponseMessage() interface{} { return new(ResetPasswordRequest) }
+func (*resetPasswordContract) ContractName() string {
+	return "easyops.api.user_service.user_admin.ResetPassword"
+}
+func (*resetPasswordContract) ContractVersion() string { return "1.0" }
+func (*resetPasswordContract) Pattern() (string, string) {
+	return "POST", "/api/v1/users/password/reset"
+}
+func (*resetPasswordContract) Body() string { return "" }
 
 var _UserRegisterContract = &userRegisterContract{}
 

@@ -234,4 +234,4 @@ func (*updateInstalledMicroAppContract) ContractVersion() string { return "1.0" 
 func (*updateInstalledMicroAppContract) Pattern() (string, string) {
 	return "PUT", "/api/micro_app/v1/installed_micro_app/:app_id"
 }
-func (*updateInstalledMicroAppContract) Body() string { return "" }
+func (*updateInstalledMicroAppContract) Body() string { return "micro_app" }

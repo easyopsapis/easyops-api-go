@@ -9,6 +9,8 @@ import (
 
 	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/mongo"
 
+	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/organization"
+
 	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/user_admin"
 )
 
@@ -18,6 +20,8 @@ type Client struct {
 	InvitationCode invitation_code.Client
 
 	Mongo mongo.Client
+
+	Organization organization.Client
 
 	UserAdmin user_admin.Client
 }
@@ -30,6 +34,8 @@ func NewClient(c giraffe.Client) *Client {
 	client.InvitationCode = invitation_code.NewClient(c)
 
 	client.Mongo = mongo.NewClient(c)
+
+	client.Organization = organization.NewClient(c)
 
 	client.UserAdmin = user_admin.NewClient(c)
 	return &client
