@@ -20,7 +20,7 @@ var _ = math.Inf
 
 var _regex_TaskDetail_AppId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 var _regex_TaskDetail_ClusterId = regexp.MustCompile(`^[0-9a-z]{13}$`)
-var _regex_TaskDetail_Operator = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_TaskDetail_Operator = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 var _regex_TaskDetail_StartTime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
 var _regex_TaskDetail_UpdateTime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
 var _regex_TaskDetail_EndTime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
@@ -38,7 +38,7 @@ func (this *TaskDetail) Validate() error {
 		}
 	}
 	if !_regex_TaskDetail_Operator.MatchString(this.Operator) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Operator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Operator))
+		return github_com_mwitkow_go_proto_validators.FieldError("Operator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Operator))
 	}
 	if !_regex_TaskDetail_StartTime.MatchString(this.StartTime) {
 		return github_com_mwitkow_go_proto_validators.FieldError("StartTime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.StartTime))

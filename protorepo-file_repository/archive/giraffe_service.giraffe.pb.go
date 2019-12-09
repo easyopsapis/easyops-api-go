@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	file_repository "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/file_repository"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for archive service.
 //
@@ -55,7 +56,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) DeleteArchive(ctx context.Context, in *DeleteArchiveRequest) (*DeleteArchiveResponse, error) {
 	out := new(DeleteArchiveResponse)
-	err := c.c.Invoke(ctx, _DeleteArchiveContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteArchiveMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func (c *client) DeleteArchive(ctx context.Context, in *DeleteArchiveRequest) (*
 
 func (c *client) DeleteArchiveV2(ctx context.Context, in *DeleteArchiveV2Request) (*DeleteArchiveV2Response, error) {
 	out := new(DeleteArchiveV2Response)
-	err := c.c.Invoke(ctx, _DeleteArchiveV2Contract, in, out)
+	err := c.c.Invoke(ctx, _DeleteArchiveV2MethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +74,7 @@ func (c *client) DeleteArchiveV2(ctx context.Context, in *DeleteArchiveV2Request
 
 func (c *client) GetDiffSize(ctx context.Context, in *GetDiffSizeRequest) (*GetDiffSizeResponse, error) {
 	out := new(GetDiffSizeResponse)
-	err := c.c.Invoke(ctx, _GetDiffSizeContract, in, out)
+	err := c.c.Invoke(ctx, _GetDiffSizeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +83,7 @@ func (c *client) GetDiffSize(ctx context.Context, in *GetDiffSizeRequest) (*GetD
 
 func (c *client) GetFileInfo(ctx context.Context, in *GetFileInfoRequest) (*GetFileInfoResponse, error) {
 	out := new(GetFileInfoResponse)
-	err := c.c.Invoke(ctx, _GetFileInfoContract, in, out)
+	err := c.c.Invoke(ctx, _GetFileInfoMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +92,7 @@ func (c *client) GetFileInfo(ctx context.Context, in *GetFileInfoRequest) (*GetF
 
 func (c *client) Listdir(ctx context.Context, in *ListdirRequest) (*ListdirResponse, error) {
 	out := new(ListdirResponse)
-	err := c.c.Invoke(ctx, _ListdirContract, in, out)
+	err := c.c.Invoke(ctx, _ListdirMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +101,7 @@ func (c *client) Listdir(ctx context.Context, in *ListdirRequest) (*ListdirRespo
 
 func (c *client) GetSign(ctx context.Context, in *GetSignRequest) (*GetSignResponse, error) {
 	out := new(GetSignResponse)
-	err := c.c.Invoke(ctx, _GetSignContract, in, out)
+	err := c.c.Invoke(ctx, _GetSignMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +110,7 @@ func (c *client) GetSign(ctx context.Context, in *GetSignRequest) (*GetSignRespo
 
 func (c *client) GetSize(ctx context.Context, in *GetSizeRequest) (*GetSizeResponse, error) {
 	out := new(GetSizeResponse)
-	err := c.c.Invoke(ctx, _GetSizeContract, in, out)
+	err := c.c.Invoke(ctx, _GetSizeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +119,7 @@ func (c *client) GetSize(ctx context.Context, in *GetSizeRequest) (*GetSizeRespo
 
 func (c *client) GetDifference(ctx context.Context, in *GetDifferenceRequest) (*file_repository.Diff, error) {
 	out := new(file_repository.Diff)
-	err := c.c.Invoke(ctx, _GetDifferenceContract, in, out)
+	err := c.c.Invoke(ctx, _GetDifferenceMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +128,7 @@ func (c *client) GetDifference(ctx context.Context, in *GetDifferenceRequest) (*
 
 func (c *client) GetPackageDifference(ctx context.Context, in *GetPackageDifferenceRequest) (*file_repository.Diff, error) {
 	out := new(file_repository.Diff)
-	err := c.c.Invoke(ctx, _GetPackageDifferenceContract, in, out)
+	err := c.c.Invoke(ctx, _GetPackageDifferenceMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -202,161 +203,176 @@ func _GetPackageDifferenceEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_DeleteArchiveContract, _DeleteArchiveEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteArchiveV2Contract, _DeleteArchiveV2Endpoint(srv))
-	s.RegisterUnaryEndpoint(_GetDiffSizeContract, _GetDiffSizeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetFileInfoContract, _GetFileInfoEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListdirContract, _ListdirEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetSignContract, _GetSignEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetSizeContract, _GetSizeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetDifferenceContract, _GetDifferenceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetPackageDifferenceContract, _GetPackageDifferenceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteArchiveMethodDesc, _DeleteArchiveEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteArchiveV2MethodDesc, _DeleteArchiveV2Endpoint(srv))
+	s.RegisterUnaryEndpoint(_GetDiffSizeMethodDesc, _GetDiffSizeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetFileInfoMethodDesc, _GetFileInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListdirMethodDesc, _ListdirEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetSignMethodDesc, _GetSignEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetSizeMethodDesc, _GetSizeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetDifferenceMethodDesc, _GetDifferenceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetPackageDifferenceMethodDesc, _GetPackageDifferenceEndpoint(srv))
 }
 
-// API Contract
-var _DeleteArchiveContract = &deleteArchiveContract{}
-
-type deleteArchiveContract struct{}
-
-func (*deleteArchiveContract) ServiceName() string          { return "archive.rpc" }
-func (*deleteArchiveContract) MethodName() string           { return "DeleteArchive" }
-func (*deleteArchiveContract) RequestMessage() interface{}  { return new(DeleteArchiveRequest) }
-func (*deleteArchiveContract) ResponseMessage() interface{} { return new(DeleteArchiveRequest) }
-func (*deleteArchiveContract) ContractName() string {
-	return "easyops.api.file_repository.archive.DeleteArchive"
+// Method Description
+var _DeleteArchiveMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.DeleteArchive",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "DeleteArchive",
+	RequestType:  (*DeleteArchiveRequest)(nil),
+	ResponseType: (*DeleteArchiveResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/archive/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*deleteArchiveContract) ContractVersion() string { return "1.0" }
-func (*deleteArchiveContract) Pattern() (string, string) {
-	return "DELETE", "/archive/:packageId/:versionId"
+
+var _DeleteArchiveV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.DeleteArchiveV2",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "DeleteArchiveV2",
+	RequestType:  (*DeleteArchiveV2Request)(nil),
+	ResponseType: (*DeleteArchiveV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/v2/archive/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*deleteArchiveContract) Body() string { return "" }
 
-var _DeleteArchiveV2Contract = &deleteArchiveV2Contract{}
-
-type deleteArchiveV2Contract struct{}
-
-func (*deleteArchiveV2Contract) ServiceName() string          { return "archive.rpc" }
-func (*deleteArchiveV2Contract) MethodName() string           { return "DeleteArchiveV2" }
-func (*deleteArchiveV2Contract) RequestMessage() interface{}  { return new(DeleteArchiveV2Request) }
-func (*deleteArchiveV2Contract) ResponseMessage() interface{} { return new(DeleteArchiveV2Request) }
-func (*deleteArchiveV2Contract) ContractName() string {
-	return "easyops.api.file_repository.archive.DeleteArchiveV2"
+var _GetDiffSizeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.GetDiffSize",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "GetDiffSize",
+	RequestType:  (*GetDiffSizeRequest)(nil),
+	ResponseType: (*GetDiffSizeResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/diff/size/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteArchiveV2Contract) ContractVersion() string { return "1.0" }
-func (*deleteArchiveV2Contract) Pattern() (string, string) {
-	return "DELETE", "/v2/archive/:packageId/:versionId"
+
+var _GetFileInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.GetFileInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "GetFileInfo",
+	RequestType:  (*GetFileInfoRequest)(nil),
+	ResponseType: (*GetFileInfoResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/info/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteArchiveV2Contract) Body() string { return "" }
 
-var _GetDiffSizeContract = &getDiffSizeContract{}
-
-type getDiffSizeContract struct{}
-
-func (*getDiffSizeContract) ServiceName() string          { return "archive.rpc" }
-func (*getDiffSizeContract) MethodName() string           { return "GetDiffSize" }
-func (*getDiffSizeContract) RequestMessage() interface{}  { return new(GetDiffSizeRequest) }
-func (*getDiffSizeContract) ResponseMessage() interface{} { return new(GetDiffSizeRequest) }
-func (*getDiffSizeContract) ContractName() string {
-	return "easyops.api.file_repository.archive.GetDiffSize"
+var _ListdirMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.Listdir",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "Listdir",
+	RequestType:  (*ListdirRequest)(nil),
+	ResponseType: (*ListdirResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/list/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getDiffSizeContract) ContractVersion() string   { return "1.0" }
-func (*getDiffSizeContract) Pattern() (string, string) { return "GET", "/archive/diff/size/@packageId" }
-func (*getDiffSizeContract) Body() string              { return "" }
 
-var _GetFileInfoContract = &getFileInfoContract{}
-
-type getFileInfoContract struct{}
-
-func (*getFileInfoContract) ServiceName() string          { return "archive.rpc" }
-func (*getFileInfoContract) MethodName() string           { return "GetFileInfo" }
-func (*getFileInfoContract) RequestMessage() interface{}  { return new(GetFileInfoRequest) }
-func (*getFileInfoContract) ResponseMessage() interface{} { return new(GetFileInfoRequest) }
-func (*getFileInfoContract) ContractName() string {
-	return "easyops.api.file_repository.archive.GetFileInfo"
+var _GetSignMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.GetSign",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "GetSign",
+	RequestType:  (*GetSignRequest)(nil),
+	ResponseType: (*GetSignResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/sign/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getFileInfoContract) ContractVersion() string { return "1.0" }
-func (*getFileInfoContract) Pattern() (string, string) {
-	return "GET", "/archive/info/@packageId/@versionId"
+
+var _GetSizeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.GetSize",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "GetSize",
+	RequestType:  (*GetSizeRequest)(nil),
+	ResponseType: (*GetSizeResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/size/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*getFileInfoContract) Body() string { return "" }
 
-var _ListdirContract = &listdirContract{}
-
-type listdirContract struct{}
-
-func (*listdirContract) ServiceName() string          { return "archive.rpc" }
-func (*listdirContract) MethodName() string           { return "Listdir" }
-func (*listdirContract) RequestMessage() interface{}  { return new(ListdirRequest) }
-func (*listdirContract) ResponseMessage() interface{} { return new(ListdirRequest) }
-func (*listdirContract) ContractName() string         { return "easyops.api.file_repository.archive.Listdir" }
-func (*listdirContract) ContractVersion() string      { return "1.0" }
-func (*listdirContract) Pattern() (string, string) {
-	return "GET", "/archive/list/@packageId/@versionId"
+var _GetDifferenceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.GetDifference",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "GetDifference",
+	RequestType:  (*GetDifferenceRequest)(nil),
+	ResponseType: (*file_repository.Diff)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/difference/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listdirContract) Body() string { return "" }
 
-var _GetSignContract = &getSignContract{}
-
-type getSignContract struct{}
-
-func (*getSignContract) ServiceName() string          { return "archive.rpc" }
-func (*getSignContract) MethodName() string           { return "GetSign" }
-func (*getSignContract) RequestMessage() interface{}  { return new(GetSignRequest) }
-func (*getSignContract) ResponseMessage() interface{} { return new(GetSignRequest) }
-func (*getSignContract) ContractName() string         { return "easyops.api.file_repository.archive.GetSign" }
-func (*getSignContract) ContractVersion() string      { return "1.0" }
-func (*getSignContract) Pattern() (string, string) {
-	return "GET", "/archive/sign/@packageId/@versionId"
+var _GetPackageDifferenceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.archive.GetPackageDifference",
+		Version: "1.0",
+	},
+	ServiceName:  "archive.rpc",
+	MethodName:   "GetPackageDifference",
+	RequestType:  (*GetPackageDifferenceRequest)(nil),
+	ResponseType: (*file_repository.Diff)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/archive/difference",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getSignContract) Body() string { return "" }
-
-var _GetSizeContract = &getSizeContract{}
-
-type getSizeContract struct{}
-
-func (*getSizeContract) ServiceName() string          { return "archive.rpc" }
-func (*getSizeContract) MethodName() string           { return "GetSize" }
-func (*getSizeContract) RequestMessage() interface{}  { return new(GetSizeRequest) }
-func (*getSizeContract) ResponseMessage() interface{} { return new(GetSizeRequest) }
-func (*getSizeContract) ContractName() string         { return "easyops.api.file_repository.archive.GetSize" }
-func (*getSizeContract) ContractVersion() string      { return "1.0" }
-func (*getSizeContract) Pattern() (string, string) {
-	return "GET", "/archive/size/@packageId/@versionId"
-}
-func (*getSizeContract) Body() string { return "" }
-
-var _GetDifferenceContract = &getDifferenceContract{}
-
-type getDifferenceContract struct{}
-
-func (*getDifferenceContract) ServiceName() string          { return "archive.rpc" }
-func (*getDifferenceContract) MethodName() string           { return "GetDifference" }
-func (*getDifferenceContract) RequestMessage() interface{}  { return new(GetDifferenceRequest) }
-func (*getDifferenceContract) ResponseMessage() interface{} { return new(GetDifferenceRequest) }
-func (*getDifferenceContract) ContractName() string {
-	return "easyops.api.file_repository.archive.GetDifference"
-}
-func (*getDifferenceContract) ContractVersion() string { return "1.0" }
-func (*getDifferenceContract) Pattern() (string, string) {
-	return "GET", "/archive/difference/:packageId"
-}
-func (*getDifferenceContract) Body() string { return "" }
-
-var _GetPackageDifferenceContract = &getPackageDifferenceContract{}
-
-type getPackageDifferenceContract struct{}
-
-func (*getPackageDifferenceContract) ServiceName() string { return "archive.rpc" }
-func (*getPackageDifferenceContract) MethodName() string  { return "GetPackageDifference" }
-func (*getPackageDifferenceContract) RequestMessage() interface{} {
-	return new(GetPackageDifferenceRequest)
-}
-func (*getPackageDifferenceContract) ResponseMessage() interface{} {
-	return new(GetPackageDifferenceRequest)
-}
-func (*getPackageDifferenceContract) ContractName() string {
-	return "easyops.api.file_repository.archive.GetPackageDifference"
-}
-func (*getPackageDifferenceContract) ContractVersion() string   { return "1.0" }
-func (*getPackageDifferenceContract) Pattern() (string, string) { return "GET", "/archive/difference" }
-func (*getPackageDifferenceContract) Body() string              { return "" }

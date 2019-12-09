@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for invitation_code service.
 //
@@ -49,7 +50,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CheckInvitationCode(ctx context.Context, in *CheckInvitationCodeRequest) (*CheckInvitationCodeResponse, error) {
 	out := new(CheckInvitationCodeResponse)
-	err := c.c.Invoke(ctx, _CheckInvitationCodeContract, in, out)
+	err := c.c.Invoke(ctx, _CheckInvitationCodeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +59,7 @@ func (c *client) CheckInvitationCode(ctx context.Context, in *CheckInvitationCod
 
 func (c *client) GetInvitationCode(ctx context.Context, in *types.Empty) (*GetInvitationCodeResponse, error) {
 	out := new(GetInvitationCodeResponse)
-	err := c.c.Invoke(ctx, _GetInvitationCodeContract, in, out)
+	err := c.c.Invoke(ctx, _GetInvitationCodeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +68,7 @@ func (c *client) GetInvitationCode(ctx context.Context, in *types.Empty) (*GetIn
 
 func (c *client) ResetInvitationCode(ctx context.Context, in *types.Empty) (*ResetInvitationCodeResponse, error) {
 	out := new(ResetInvitationCodeResponse)
-	err := c.c.Invoke(ctx, _ResetInvitationCodeContract, in, out)
+	err := c.c.Invoke(ctx, _ResetInvitationCodeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -100,61 +101,62 @@ func _ResetInvitationCodeEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CheckInvitationCodeContract, _CheckInvitationCodeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetInvitationCodeContract, _GetInvitationCodeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ResetInvitationCodeContract, _ResetInvitationCodeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CheckInvitationCodeMethodDesc, _CheckInvitationCodeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetInvitationCodeMethodDesc, _GetInvitationCodeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ResetInvitationCodeMethodDesc, _ResetInvitationCodeEndpoint(srv))
 }
 
-// API Contract
-var _CheckInvitationCodeContract = &checkInvitationCodeContract{}
-
-type checkInvitationCodeContract struct{}
-
-func (*checkInvitationCodeContract) ServiceName() string { return "invitation_code.rpc" }
-func (*checkInvitationCodeContract) MethodName() string  { return "CheckInvitationCode" }
-func (*checkInvitationCodeContract) RequestMessage() interface{} {
-	return new(CheckInvitationCodeRequest)
+// Method Description
+var _CheckInvitationCodeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.invitation_code.CheckInvitationCode",
+		Version: "1.0",
+	},
+	ServiceName:  "invitation_code.rpc",
+	MethodName:   "CheckInvitationCode",
+	RequestType:  (*CheckInvitationCodeRequest)(nil),
+	ResponseType: (*CheckInvitationCodeResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/invitation/code/:code/check",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*checkInvitationCodeContract) ResponseMessage() interface{} {
-	return new(CheckInvitationCodeRequest)
-}
-func (*checkInvitationCodeContract) ContractName() string {
-	return "easyops.api.user_service.invitation_code.CheckInvitationCode"
-}
-func (*checkInvitationCodeContract) ContractVersion() string { return "1.0" }
-func (*checkInvitationCodeContract) Pattern() (string, string) {
-	return "GET", "/api/v1/invitation/code/:code/check"
-}
-func (*checkInvitationCodeContract) Body() string { return "" }
 
-var _GetInvitationCodeContract = &getInvitationCodeContract{}
-
-type getInvitationCodeContract struct{}
-
-func (*getInvitationCodeContract) ServiceName() string          { return "invitation_code.rpc" }
-func (*getInvitationCodeContract) MethodName() string           { return "GetInvitationCode" }
-func (*getInvitationCodeContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*getInvitationCodeContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*getInvitationCodeContract) ContractName() string {
-	return "easyops.api.user_service.invitation_code.GetInvitationCode"
+var _GetInvitationCodeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.invitation_code.GetInvitationCode",
+		Version: "1.0",
+	},
+	ServiceName:  "invitation_code.rpc",
+	MethodName:   "GetInvitationCode",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*GetInvitationCodeResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/invitation/code",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getInvitationCodeContract) ContractVersion() string   { return "1.0" }
-func (*getInvitationCodeContract) Pattern() (string, string) { return "GET", "/api/v1/invitation/code" }
-func (*getInvitationCodeContract) Body() string              { return "" }
 
-var _ResetInvitationCodeContract = &resetInvitationCodeContract{}
-
-type resetInvitationCodeContract struct{}
-
-func (*resetInvitationCodeContract) ServiceName() string          { return "invitation_code.rpc" }
-func (*resetInvitationCodeContract) MethodName() string           { return "ResetInvitationCode" }
-func (*resetInvitationCodeContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*resetInvitationCodeContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*resetInvitationCodeContract) ContractName() string {
-	return "easyops.api.user_service.invitation_code.ResetInvitationCode"
+var _ResetInvitationCodeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.invitation_code.ResetInvitationCode",
+		Version: "1.0",
+	},
+	ServiceName:  "invitation_code.rpc",
+	MethodName:   "ResetInvitationCode",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*ResetInvitationCodeResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/v1/invitation/code/_reset",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*resetInvitationCodeContract) ContractVersion() string { return "1.0" }
-func (*resetInvitationCodeContract) Pattern() (string, string) {
-	return "PUT", "/api/v1/invitation/code/_reset"
-}
-func (*resetInvitationCodeContract) Body() string { return "" }

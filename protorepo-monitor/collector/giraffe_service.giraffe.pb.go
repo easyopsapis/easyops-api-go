@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -22,10 +22,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for collector service.
 //
@@ -46,7 +47,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) GetList(ctx context.Context, in *GetListRequest) (*GetListResponse, error) {
 	out := new(GetListResponse)
-	err := c.c.Invoke(ctx, _GetListContract, in, out)
+	err := c.c.Invoke(ctx, _GetListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -65,19 +66,24 @@ func _GetListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetListContract, _GetListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetListMethodDesc, _GetListEndpoint(srv))
 }
 
-// API Contract
-var _GetListContract = &getListContract{}
-
-type getListContract struct{}
-
-func (*getListContract) ServiceName() string          { return "collector.rpc" }
-func (*getListContract) MethodName() string           { return "GetList" }
-func (*getListContract) RequestMessage() interface{}  { return new(GetListRequest) }
-func (*getListContract) ResponseMessage() interface{} { return new(GetListRequest) }
-func (*getListContract) ContractName() string         { return "easyops.api.monitor.collector.GetList" }
-func (*getListContract) ContractVersion() string      { return "1.0" }
-func (*getListContract) Pattern() (string, string)    { return "GET", "/api/v1/collector/list/:table" }
-func (*getListContract) Body() string                 { return "" }
+// Method Description
+var _GetListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.monitor.collector.GetList",
+		Version: "1.0",
+	},
+	ServiceName:  "collector.rpc",
+	MethodName:   "GetList",
+	RequestType:  (*GetListRequest)(nil),
+	ResponseType: (*GetListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/collector/list/:table",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}

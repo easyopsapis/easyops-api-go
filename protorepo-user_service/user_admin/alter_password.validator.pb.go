@@ -19,11 +19,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_AlterPasswordRequest_Name = regexp.MustCompile(`^[a-zA-Z]\w{0,}$`)
+var _regex_AlterPasswordRequest_Name = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *AlterPasswordRequest) Validate() error {
 	if !_regex_AlterPasswordRequest_Name.MatchString(this.Name) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z]\\w{0,}$"`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Name))
 	}
 	return nil
 }

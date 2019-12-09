@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -22,10 +22,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for service_event service.
 //
@@ -46,7 +47,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateServiceEvent(ctx context.Context, in *CreateServiceEventRequest) (*CreateServiceEventResponse, error) {
 	out := new(CreateServiceEventResponse)
-	err := c.c.Invoke(ctx, _CreateServiceEventContract, in, out)
+	err := c.c.Invoke(ctx, _CreateServiceEventMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -65,23 +66,24 @@ func _CreateServiceEventEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateServiceEventContract, _CreateServiceEventEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateServiceEventMethodDesc, _CreateServiceEventEndpoint(srv))
 }
 
-// API Contract
-var _CreateServiceEventContract = &createServiceEventContract{}
-
-type createServiceEventContract struct{}
-
-func (*createServiceEventContract) ServiceName() string         { return "service_event.rpc" }
-func (*createServiceEventContract) MethodName() string          { return "CreateServiceEvent" }
-func (*createServiceEventContract) RequestMessage() interface{} { return new(CreateServiceEventRequest) }
-func (*createServiceEventContract) ResponseMessage() interface{} {
-	return new(CreateServiceEventRequest)
+// Method Description
+var _CreateServiceEventMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.service_event.CreateServiceEvent",
+		Version: "1.0",
+	},
+	ServiceName:  "service_event.rpc",
+	MethodName:   "CreateServiceEvent",
+	RequestType:  (*CreateServiceEventRequest)(nil),
+	ResponseType: (*CreateServiceEventResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/service/event",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createServiceEventContract) ContractName() string {
-	return "easyops.api.ops_automation.service_event.CreateServiceEvent"
-}
-func (*createServiceEventContract) ContractVersion() string   { return "1.0" }
-func (*createServiceEventContract) Pattern() (string, string) { return "POST", "/service/event" }
-func (*createServiceEventContract) Body() string              { return "" }

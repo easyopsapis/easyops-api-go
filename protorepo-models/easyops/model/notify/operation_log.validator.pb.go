@@ -42,5 +42,10 @@ func (this *OperationLog) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("ExtInfo", err)
 		}
 	}
+	if this.DeployInfo != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.DeployInfo); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("DeployInfo", err)
+		}
+	}
 	return nil
 }

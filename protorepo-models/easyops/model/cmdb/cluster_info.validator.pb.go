@@ -18,11 +18,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_ClusterInfo_ClusterId = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
+var _regex_ClusterInfo_ClusterId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
 
 func (this *ClusterInfo) Validate() error {
 	if !_regex_ClusterInfo_ClusterId.MatchString(this.ClusterId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ClusterId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, this.ClusterId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ClusterId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.ClusterId))
 	}
 	return nil
 }

@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	topology "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/topology"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for view service.
 //
@@ -53,7 +54,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateView(ctx context.Context, in *CreateViewRequest) (*CreateViewResponse, error) {
 	out := new(CreateViewResponse)
-	err := c.c.Invoke(ctx, _CreateViewContract, in, out)
+	err := c.c.Invoke(ctx, _CreateViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ func (c *client) CreateView(ctx context.Context, in *CreateViewRequest) (*Create
 
 func (c *client) DeleteView(ctx context.Context, in *DeleteViewRequest) (*DeleteViewResponse, error) {
 	out := new(DeleteViewResponse)
-	err := c.c.Invoke(ctx, _DeleteViewContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +72,7 @@ func (c *client) DeleteView(ctx context.Context, in *DeleteViewRequest) (*Delete
 
 func (c *client) FetchCmdbBusinessView(ctx context.Context, in *FetchCmdbBusinessViewRequest) (*topology.View, error) {
 	out := new(topology.View)
-	err := c.c.Invoke(ctx, _FetchCmdbBusinessViewContract, in, out)
+	err := c.c.Invoke(ctx, _FetchCmdbBusinessViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +81,7 @@ func (c *client) FetchCmdbBusinessView(ctx context.Context, in *FetchCmdbBusines
 
 func (c *client) FetchOriginView(ctx context.Context, in *FetchOriginViewRequest) (*topology.View, error) {
 	out := new(topology.View)
-	err := c.c.Invoke(ctx, _FetchOriginViewContract, in, out)
+	err := c.c.Invoke(ctx, _FetchOriginViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +90,7 @@ func (c *client) FetchOriginView(ctx context.Context, in *FetchOriginViewRequest
 
 func (c *client) GetView(ctx context.Context, in *GetViewRequest) (*topology.View, error) {
 	out := new(topology.View)
-	err := c.c.Invoke(ctx, _GetViewContract, in, out)
+	err := c.c.Invoke(ctx, _GetViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +99,7 @@ func (c *client) GetView(ctx context.Context, in *GetViewRequest) (*topology.Vie
 
 func (c *client) ListView(ctx context.Context, in *ListViewRequest) (*ListViewResponse, error) {
 	out := new(ListViewResponse)
-	err := c.c.Invoke(ctx, _ListViewContract, in, out)
+	err := c.c.Invoke(ctx, _ListViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +108,7 @@ func (c *client) ListView(ctx context.Context, in *ListViewRequest) (*ListViewRe
 
 func (c *client) UpdateView(ctx context.Context, in *UpdateViewRequest) (*UpdateViewResponse, error) {
 	out := new(UpdateViewResponse)
-	err := c.c.Invoke(ctx, _UpdateViewContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateViewMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -168,113 +169,138 @@ func _UpdateViewEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateViewContract, _CreateViewEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteViewContract, _DeleteViewEndpoint(srv))
-	s.RegisterUnaryEndpoint(_FetchCmdbBusinessViewContract, _FetchCmdbBusinessViewEndpoint(srv))
-	s.RegisterUnaryEndpoint(_FetchOriginViewContract, _FetchOriginViewEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetViewContract, _GetViewEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListViewContract, _ListViewEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateViewContract, _UpdateViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateViewMethodDesc, _CreateViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteViewMethodDesc, _DeleteViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_FetchCmdbBusinessViewMethodDesc, _FetchCmdbBusinessViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_FetchOriginViewMethodDesc, _FetchOriginViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetViewMethodDesc, _GetViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListViewMethodDesc, _ListViewEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateViewMethodDesc, _UpdateViewEndpoint(srv))
 }
 
-// API Contract
-var _CreateViewContract = &createViewContract{}
-
-type createViewContract struct{}
-
-func (*createViewContract) ServiceName() string          { return "view.rpc" }
-func (*createViewContract) MethodName() string           { return "CreateView" }
-func (*createViewContract) RequestMessage() interface{}  { return new(CreateViewRequest) }
-func (*createViewContract) ResponseMessage() interface{} { return new(CreateViewRequest) }
-func (*createViewContract) ContractName() string         { return "easyops.api.topology.view.CreateView" }
-func (*createViewContract) ContractVersion() string      { return "1.0" }
-func (*createViewContract) Pattern() (string, string)    { return "POST", "/api/v1/view" }
-func (*createViewContract) Body() string                 { return "" }
-
-var _DeleteViewContract = &deleteViewContract{}
-
-type deleteViewContract struct{}
-
-func (*deleteViewContract) ServiceName() string          { return "view.rpc" }
-func (*deleteViewContract) MethodName() string           { return "DeleteView" }
-func (*deleteViewContract) RequestMessage() interface{}  { return new(DeleteViewRequest) }
-func (*deleteViewContract) ResponseMessage() interface{} { return new(DeleteViewRequest) }
-func (*deleteViewContract) ContractName() string         { return "easyops.api.topology.view.DeleteView" }
-func (*deleteViewContract) ContractVersion() string      { return "1.0" }
-func (*deleteViewContract) Pattern() (string, string)    { return "DELETE", "/api/v1/view/:id" }
-func (*deleteViewContract) Body() string                 { return "" }
-
-var _FetchCmdbBusinessViewContract = &fetchCmdbBusinessViewContract{}
-
-type fetchCmdbBusinessViewContract struct{}
-
-func (*fetchCmdbBusinessViewContract) ServiceName() string { return "view.rpc" }
-func (*fetchCmdbBusinessViewContract) MethodName() string  { return "FetchCmdbBusinessView" }
-func (*fetchCmdbBusinessViewContract) RequestMessage() interface{} {
-	return new(FetchCmdbBusinessViewRequest)
+// Method Description
+var _CreateViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.CreateView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "CreateView",
+	RequestType:  (*CreateViewRequest)(nil),
+	ResponseType: (*CreateViewResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/view",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fetchCmdbBusinessViewContract) ResponseMessage() interface{} {
-	return new(FetchCmdbBusinessViewRequest)
+
+var _DeleteViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.DeleteView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "DeleteView",
+	RequestType:  (*DeleteViewRequest)(nil),
+	ResponseType: (*DeleteViewResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/v1/view/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fetchCmdbBusinessViewContract) ContractName() string {
-	return "easyops.api.topology.view.FetchCmdbBusinessView"
+
+var _FetchCmdbBusinessViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.FetchCmdbBusinessView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "FetchCmdbBusinessView",
+	RequestType:  (*FetchCmdbBusinessViewRequest)(nil),
+	ResponseType: (*topology.View)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/view/cmdb/business",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fetchCmdbBusinessViewContract) ContractVersion() string { return "1.0" }
-func (*fetchCmdbBusinessViewContract) Pattern() (string, string) {
-	return "POST", "/api/v1/view/cmdb/business"
+
+var _FetchOriginViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.FetchOriginView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "FetchOriginView",
+	RequestType:  (*FetchOriginViewRequest)(nil),
+	ResponseType: (*topology.View)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/view/origin",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fetchCmdbBusinessViewContract) Body() string { return "" }
 
-var _FetchOriginViewContract = &fetchOriginViewContract{}
-
-type fetchOriginViewContract struct{}
-
-func (*fetchOriginViewContract) ServiceName() string          { return "view.rpc" }
-func (*fetchOriginViewContract) MethodName() string           { return "FetchOriginView" }
-func (*fetchOriginViewContract) RequestMessage() interface{}  { return new(FetchOriginViewRequest) }
-func (*fetchOriginViewContract) ResponseMessage() interface{} { return new(FetchOriginViewRequest) }
-func (*fetchOriginViewContract) ContractName() string {
-	return "easyops.api.topology.view.FetchOriginView"
+var _GetViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.GetView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "GetView",
+	RequestType:  (*GetViewRequest)(nil),
+	ResponseType: (*topology.View)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/view/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fetchOriginViewContract) ContractVersion() string   { return "1.0" }
-func (*fetchOriginViewContract) Pattern() (string, string) { return "POST", "/api/v1/view/origin" }
-func (*fetchOriginViewContract) Body() string              { return "" }
 
-var _GetViewContract = &getViewContract{}
+var _ListViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.ListView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "ListView",
+	RequestType:  (*ListViewRequest)(nil),
+	ResponseType: (*ListViewResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/view",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type getViewContract struct{}
-
-func (*getViewContract) ServiceName() string          { return "view.rpc" }
-func (*getViewContract) MethodName() string           { return "GetView" }
-func (*getViewContract) RequestMessage() interface{}  { return new(GetViewRequest) }
-func (*getViewContract) ResponseMessage() interface{} { return new(GetViewRequest) }
-func (*getViewContract) ContractName() string         { return "easyops.api.topology.view.GetView" }
-func (*getViewContract) ContractVersion() string      { return "1.0" }
-func (*getViewContract) Pattern() (string, string)    { return "GET", "/api/v1/view/:id" }
-func (*getViewContract) Body() string                 { return "" }
-
-var _ListViewContract = &listViewContract{}
-
-type listViewContract struct{}
-
-func (*listViewContract) ServiceName() string          { return "view.rpc" }
-func (*listViewContract) MethodName() string           { return "ListView" }
-func (*listViewContract) RequestMessage() interface{}  { return new(ListViewRequest) }
-func (*listViewContract) ResponseMessage() interface{} { return new(ListViewRequest) }
-func (*listViewContract) ContractName() string         { return "easyops.api.topology.view.ListView" }
-func (*listViewContract) ContractVersion() string      { return "1.0" }
-func (*listViewContract) Pattern() (string, string)    { return "GET", "/api/v1/view" }
-func (*listViewContract) Body() string                 { return "" }
-
-var _UpdateViewContract = &updateViewContract{}
-
-type updateViewContract struct{}
-
-func (*updateViewContract) ServiceName() string          { return "view.rpc" }
-func (*updateViewContract) MethodName() string           { return "UpdateView" }
-func (*updateViewContract) RequestMessage() interface{}  { return new(UpdateViewRequest) }
-func (*updateViewContract) ResponseMessage() interface{} { return new(UpdateViewRequest) }
-func (*updateViewContract) ContractName() string         { return "easyops.api.topology.view.UpdateView" }
-func (*updateViewContract) ContractVersion() string      { return "1.0" }
-func (*updateViewContract) Pattern() (string, string)    { return "PUT", "/api/v1/view/:id" }
-func (*updateViewContract) Body() string                 { return "" }
+var _UpdateViewMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.view.UpdateView",
+		Version: "1.0",
+	},
+	ServiceName:  "view.rpc",
+	MethodName:   "UpdateView",
+	RequestType:  (*UpdateViewRequest)(nil),
+	ResponseType: (*UpdateViewResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/v1/view/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

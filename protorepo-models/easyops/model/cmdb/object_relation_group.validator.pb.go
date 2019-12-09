@@ -19,10 +19,10 @@ var _ = math.Inf
 
 func (this *ObjectRelationGroup) Validate() error {
 	if !(len(this.Id) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Id))
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Id))
 	}
 	if !(len(this.Name) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Name))
 	}
 	return nil
 }

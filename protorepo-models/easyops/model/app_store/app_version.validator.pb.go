@@ -19,7 +19,7 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_AppVersion_VersionId = regexp.MustCompile(`^[0-9a-z]{13}$`)
-var _regex_AppVersion_Name = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_AppVersion_Name = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 var _regex_AppVersion_VersionName = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 
 func (this *AppVersion) Validate() error {
@@ -27,10 +27,20 @@ func (this *AppVersion) Validate() error {
 		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.VersionId))
 	}
 	if !_regex_AppVersion_Name.MatchString(this.Name) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Name))
 	}
 	if !_regex_AppVersion_VersionName.MatchString(this.VersionName) {
 		return github_com_mwitkow_go_proto_validators.FieldError("VersionName", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.VersionName))
 	}
+	for _, item := range this.Dependencies {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("Dependencies", err)
+			}
+		}
+	}
+	return nil
+}
+func (this *AppVersion_Dependencies) Validate() error {
 	return nil
 }

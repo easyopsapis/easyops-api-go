@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	artifact "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/artifact"
@@ -24,19 +24,23 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for version service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	BatchDeleteVersions(ctx context.Context, in *BatchDeleteVersionsRequest) (*types.Empty, error)
 	CreateVersionWithSign(ctx context.Context, in *CreateVersionWithSignRequest) (*artifact.Version, error)
 	DeleteVersion(ctx context.Context, in *DeleteVersionRequest) (*DeleteVersionResponse, error)
-	GetVersionDetail(ctx context.Context, in *GetVersionDetailRequest) (*artifact.Version, error)
+	GetCleanVersionList(ctx context.Context, in *GetCleanVersionListRequest) (*GetCleanVersionListResponse, error)
+	GetVersionDetail(ctx context.Context, in *GetVersionDetailRequest) (*GetVersionDetailResponse, error)
 	GetVersionList(ctx context.Context, in *GetVersionListRequest) (*GetVersionListResponse, error)
+	GetVersionPermissionByIds(ctx context.Context, in *GetVersionPermissionByIdsRequest) (*GetVersionPermissionByIdsResponse, error)
 	GetVersionPermissionInfo(ctx context.Context, in *GetVersionPermissionInfoRequest) (*artifact.WhitePermissionUser, error)
 	Update(ctx context.Context, in *UpdateRequest) (*artifact.Version, error)
 	UpdateVersionEnvType(ctx context.Context, in *UpdateVersionEnvTypeRequest) (*artifact.Version, error)
@@ -53,9 +57,18 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) BatchDeleteVersions(ctx context.Context, in *BatchDeleteVersionsRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _BatchDeleteVersionsMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) CreateVersionWithSign(ctx context.Context, in *CreateVersionWithSignRequest) (*artifact.Version, error) {
 	out := new(artifact.Version)
-	err := c.c.Invoke(ctx, _CreateVersionWithSignContract, in, out)
+	err := c.c.Invoke(ctx, _CreateVersionWithSignMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -64,16 +77,25 @@ func (c *client) CreateVersionWithSign(ctx context.Context, in *CreateVersionWit
 
 func (c *client) DeleteVersion(ctx context.Context, in *DeleteVersionRequest) (*DeleteVersionResponse, error) {
 	out := new(DeleteVersionResponse)
-	err := c.c.Invoke(ctx, _DeleteVersionContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteVersionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) GetVersionDetail(ctx context.Context, in *GetVersionDetailRequest) (*artifact.Version, error) {
-	out := new(artifact.Version)
-	err := c.c.Invoke(ctx, _GetVersionDetailContract, in, out)
+func (c *client) GetCleanVersionList(ctx context.Context, in *GetCleanVersionListRequest) (*GetCleanVersionListResponse, error) {
+	out := new(GetCleanVersionListResponse)
+	err := c.c.Invoke(ctx, _GetCleanVersionListMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetVersionDetail(ctx context.Context, in *GetVersionDetailRequest) (*GetVersionDetailResponse, error) {
+	out := new(GetVersionDetailResponse)
+	err := c.c.Invoke(ctx, _GetVersionDetailMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +104,16 @@ func (c *client) GetVersionDetail(ctx context.Context, in *GetVersionDetailReque
 
 func (c *client) GetVersionList(ctx context.Context, in *GetVersionListRequest) (*GetVersionListResponse, error) {
 	out := new(GetVersionListResponse)
-	err := c.c.Invoke(ctx, _GetVersionListContract, in, out)
+	err := c.c.Invoke(ctx, _GetVersionListMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetVersionPermissionByIds(ctx context.Context, in *GetVersionPermissionByIdsRequest) (*GetVersionPermissionByIdsResponse, error) {
+	out := new(GetVersionPermissionByIdsResponse)
+	err := c.c.Invoke(ctx, _GetVersionPermissionByIdsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +122,7 @@ func (c *client) GetVersionList(ctx context.Context, in *GetVersionListRequest) 
 
 func (c *client) GetVersionPermissionInfo(ctx context.Context, in *GetVersionPermissionInfoRequest) (*artifact.WhitePermissionUser, error) {
 	out := new(artifact.WhitePermissionUser)
-	err := c.c.Invoke(ctx, _GetVersionPermissionInfoContract, in, out)
+	err := c.c.Invoke(ctx, _GetVersionPermissionInfoMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +131,7 @@ func (c *client) GetVersionPermissionInfo(ctx context.Context, in *GetVersionPer
 
 func (c *client) Update(ctx context.Context, in *UpdateRequest) (*artifact.Version, error) {
 	out := new(artifact.Version)
-	err := c.c.Invoke(ctx, _UpdateContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +140,7 @@ func (c *client) Update(ctx context.Context, in *UpdateRequest) (*artifact.Versi
 
 func (c *client) UpdateVersionEnvType(ctx context.Context, in *UpdateVersionEnvTypeRequest) (*artifact.Version, error) {
 	out := new(artifact.Version)
-	err := c.c.Invoke(ctx, _UpdateVersionEnvTypeContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateVersionEnvTypeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +149,7 @@ func (c *client) UpdateVersionEnvType(ctx context.Context, in *UpdateVersionEnvT
 
 func (c *client) UpdateVersionPermissionUsers(ctx context.Context, in *UpdateVersionPermissionUsersRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _UpdateVersionPermissionUsersContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateVersionPermissionUsersMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -127,14 +158,23 @@ func (c *client) UpdateVersionPermissionUsers(ctx context.Context, in *UpdateVer
 
 // Service is the server API for version service.
 type Service interface {
+	BatchDeleteVersions(context.Context, *BatchDeleteVersionsRequest) (*types.Empty, error)
 	CreateVersionWithSign(context.Context, *CreateVersionWithSignRequest) (*artifact.Version, error)
 	DeleteVersion(context.Context, *DeleteVersionRequest) (*DeleteVersionResponse, error)
-	GetVersionDetail(context.Context, *GetVersionDetailRequest) (*artifact.Version, error)
+	GetCleanVersionList(context.Context, *GetCleanVersionListRequest) (*GetCleanVersionListResponse, error)
+	GetVersionDetail(context.Context, *GetVersionDetailRequest) (*GetVersionDetailResponse, error)
 	GetVersionList(context.Context, *GetVersionListRequest) (*GetVersionListResponse, error)
+	GetVersionPermissionByIds(context.Context, *GetVersionPermissionByIdsRequest) (*GetVersionPermissionByIdsResponse, error)
 	GetVersionPermissionInfo(context.Context, *GetVersionPermissionInfoRequest) (*artifact.WhitePermissionUser, error)
 	Update(context.Context, *UpdateRequest) (*artifact.Version, error)
 	UpdateVersionEnvType(context.Context, *UpdateVersionEnvTypeRequest) (*artifact.Version, error)
 	UpdateVersionPermissionUsers(context.Context, *UpdateVersionPermissionUsersRequest) (*types.Empty, error)
+}
+
+func _BatchDeleteVersionsEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.BatchDeleteVersions(ctx, req.(*BatchDeleteVersionsRequest))
+	}
 }
 
 func _CreateVersionWithSignEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -149,6 +189,12 @@ func _DeleteVersionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _GetCleanVersionListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetCleanVersionList(ctx, req.(*GetCleanVersionListRequest))
+	}
+}
+
 func _GetVersionDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.GetVersionDetail(ctx, req.(*GetVersionDetailRequest))
@@ -158,6 +204,12 @@ func _GetVersionDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 func _GetVersionListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.GetVersionList(ctx, req.(*GetVersionListRequest))
+	}
+}
+
+func _GetVersionPermissionByIdsEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetVersionPermissionByIds(ctx, req.(*GetVersionPermissionByIdsRequest))
 	}
 }
 
@@ -186,155 +238,214 @@ func _UpdateVersionPermissionUsersEndpoint(s Service) giraffe_micro.UnaryEndpoin
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateVersionWithSignContract, _CreateVersionWithSignEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteVersionContract, _DeleteVersionEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetVersionDetailContract, _GetVersionDetailEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetVersionListContract, _GetVersionListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetVersionPermissionInfoContract, _GetVersionPermissionInfoEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContract, _UpdateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateVersionEnvTypeContract, _UpdateVersionEnvTypeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateVersionPermissionUsersContract, _UpdateVersionPermissionUsersEndpoint(srv))
+	s.RegisterUnaryEndpoint(_BatchDeleteVersionsMethodDesc, _BatchDeleteVersionsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateVersionWithSignMethodDesc, _CreateVersionWithSignEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteVersionMethodDesc, _DeleteVersionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetCleanVersionListMethodDesc, _GetCleanVersionListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetVersionDetailMethodDesc, _GetVersionDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetVersionListMethodDesc, _GetVersionListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetVersionPermissionByIdsMethodDesc, _GetVersionPermissionByIdsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetVersionPermissionInfoMethodDesc, _GetVersionPermissionInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateVersionEnvTypeMethodDesc, _UpdateVersionEnvTypeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateVersionPermissionUsersMethodDesc, _UpdateVersionPermissionUsersEndpoint(srv))
 }
 
-// API Contract
-var _CreateVersionWithSignContract = &createVersionWithSignContract{}
-
-type createVersionWithSignContract struct{}
-
-func (*createVersionWithSignContract) ServiceName() string { return "version.rpc" }
-func (*createVersionWithSignContract) MethodName() string  { return "CreateVersionWithSign" }
-func (*createVersionWithSignContract) RequestMessage() interface{} {
-	return new(CreateVersionWithSignRequest)
+// Method Description
+var _BatchDeleteVersionsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.BatchDeleteVersions",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "BatchDeleteVersions",
+	RequestType:  (*BatchDeleteVersionsRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/versions/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createVersionWithSignContract) ResponseMessage() interface{} {
-	return new(CreateVersionWithSignRequest)
+
+var _CreateVersionWithSignMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.CreateVersionWithSign",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "CreateVersionWithSign",
+	RequestType:  (*CreateVersionWithSignRequest)(nil),
+	ResponseType: (*artifact.Version)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/version/sign",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createVersionWithSignContract) ContractName() string {
-	return "easyops.api.artifact.version.CreateVersionWithSign"
+
+var _DeleteVersionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.DeleteVersion",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "DeleteVersion",
+	RequestType:  (*DeleteVersionRequest)(nil),
+	ResponseType: (*DeleteVersionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/v2/version/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createVersionWithSignContract) ContractVersion() string   { return "1.0" }
-func (*createVersionWithSignContract) Pattern() (string, string) { return "POST", "/version/sign" }
-func (*createVersionWithSignContract) Body() string              { return "" }
 
-var _DeleteVersionContract = &deleteVersionContract{}
-
-type deleteVersionContract struct{}
-
-func (*deleteVersionContract) ServiceName() string          { return "version.rpc" }
-func (*deleteVersionContract) MethodName() string           { return "DeleteVersion" }
-func (*deleteVersionContract) RequestMessage() interface{}  { return new(DeleteVersionRequest) }
-func (*deleteVersionContract) ResponseMessage() interface{} { return new(DeleteVersionRequest) }
-func (*deleteVersionContract) ContractName() string {
-	return "easyops.api.artifact.version.DeleteVersion"
+var _GetCleanVersionListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.GetCleanVersionList",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "GetCleanVersionList",
+	RequestType:  (*GetCleanVersionListRequest)(nil),
+	ResponseType: (*GetCleanVersionListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "version/clean/list",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteVersionContract) ContractVersion() string { return "1.0" }
-func (*deleteVersionContract) Pattern() (string, string) {
-	return "DELETE", "/v2/version/:packageId/:versionId"
+
+var _GetVersionDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.GetVersionDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "GetVersionDetail",
+	RequestType:  (*GetVersionDetailRequest)(nil),
+	ResponseType: (*GetVersionDetailResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/version/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteVersionContract) Body() string { return "" }
 
-var _GetVersionDetailContract = &getVersionDetailContract{}
-
-type getVersionDetailContract struct{}
-
-func (*getVersionDetailContract) ServiceName() string          { return "version.rpc" }
-func (*getVersionDetailContract) MethodName() string           { return "GetVersionDetail" }
-func (*getVersionDetailContract) RequestMessage() interface{}  { return new(GetVersionDetailRequest) }
-func (*getVersionDetailContract) ResponseMessage() interface{} { return new(GetVersionDetailRequest) }
-func (*getVersionDetailContract) ContractName() string {
-	return "easyops.api.artifact.version.GetVersionDetail"
+var _GetVersionListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.GetVersionList",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "GetVersionList",
+	RequestType:  (*GetVersionListRequest)(nil),
+	ResponseType: (*GetVersionListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/version/list",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getVersionDetailContract) ContractVersion() string   { return "1.0" }
-func (*getVersionDetailContract) Pattern() (string, string) { return "GET", "/version/:versionId" }
-func (*getVersionDetailContract) Body() string              { return "" }
 
-var _GetVersionListContract = &getVersionListContract{}
-
-type getVersionListContract struct{}
-
-func (*getVersionListContract) ServiceName() string          { return "version.rpc" }
-func (*getVersionListContract) MethodName() string           { return "GetVersionList" }
-func (*getVersionListContract) RequestMessage() interface{}  { return new(GetVersionListRequest) }
-func (*getVersionListContract) ResponseMessage() interface{} { return new(GetVersionListRequest) }
-func (*getVersionListContract) ContractName() string {
-	return "easyops.api.artifact.version.GetVersionList"
+var _GetVersionPermissionByIdsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.GetVersionPermissionByIds",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "GetVersionPermissionByIds",
+	RequestType:  (*GetVersionPermissionByIdsRequest)(nil),
+	ResponseType: (*GetVersionPermissionByIdsResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/permission/versions/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*getVersionListContract) ContractVersion() string   { return "1.0" }
-func (*getVersionListContract) Pattern() (string, string) { return "GET", "/version/list" }
-func (*getVersionListContract) Body() string              { return "" }
 
-var _GetVersionPermissionInfoContract = &getVersionPermissionInfoContract{}
+var _GetVersionPermissionInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.GetVersionPermissionInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "GetVersionPermissionInfo",
+	RequestType:  (*GetVersionPermissionInfoRequest)(nil),
+	ResponseType: (*artifact.WhitePermissionUser)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/permission/version/:packageId/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type getVersionPermissionInfoContract struct{}
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "Update",
+	RequestType:  (*UpdateRequest)(nil),
+	ResponseType: (*artifact.Version)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/version/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*getVersionPermissionInfoContract) ServiceName() string { return "version.rpc" }
-func (*getVersionPermissionInfoContract) MethodName() string  { return "GetVersionPermissionInfo" }
-func (*getVersionPermissionInfoContract) RequestMessage() interface{} {
-	return new(GetVersionPermissionInfoRequest)
+var _UpdateVersionEnvTypeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.UpdateVersionEnvType",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "UpdateVersionEnvType",
+	RequestType:  (*UpdateVersionEnvTypeRequest)(nil),
+	ResponseType: (*artifact.Version)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/version_env_type",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getVersionPermissionInfoContract) ResponseMessage() interface{} {
-	return new(GetVersionPermissionInfoRequest)
-}
-func (*getVersionPermissionInfoContract) ContractName() string {
-	return "easyops.api.artifact.version.GetVersionPermissionInfo"
-}
-func (*getVersionPermissionInfoContract) ContractVersion() string { return "1.0" }
-func (*getVersionPermissionInfoContract) Pattern() (string, string) {
-	return "GET", "/permission/version/:packageId/:versionId"
-}
-func (*getVersionPermissionInfoContract) Body() string { return "" }
 
-var _UpdateContract = &updateContract{}
-
-type updateContract struct{}
-
-func (*updateContract) ServiceName() string          { return "version.rpc" }
-func (*updateContract) MethodName() string           { return "Update" }
-func (*updateContract) RequestMessage() interface{}  { return new(UpdateRequest) }
-func (*updateContract) ResponseMessage() interface{} { return new(UpdateRequest) }
-func (*updateContract) ContractName() string         { return "easyops.api.artifact.version.Update" }
-func (*updateContract) ContractVersion() string      { return "1.0" }
-func (*updateContract) Pattern() (string, string)    { return "PUT", "/version/:versionId" }
-func (*updateContract) Body() string                 { return "" }
-
-var _UpdateVersionEnvTypeContract = &updateVersionEnvTypeContract{}
-
-type updateVersionEnvTypeContract struct{}
-
-func (*updateVersionEnvTypeContract) ServiceName() string { return "version.rpc" }
-func (*updateVersionEnvTypeContract) MethodName() string  { return "UpdateVersionEnvType" }
-func (*updateVersionEnvTypeContract) RequestMessage() interface{} {
-	return new(UpdateVersionEnvTypeRequest)
+var _UpdateVersionPermissionUsersMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.version.UpdateVersionPermissionUsers",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "UpdateVersionPermissionUsers",
+	RequestType:  (*UpdateVersionPermissionUsersRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/permission/version",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateVersionEnvTypeContract) ResponseMessage() interface{} {
-	return new(UpdateVersionEnvTypeRequest)
-}
-func (*updateVersionEnvTypeContract) ContractName() string {
-	return "easyops.api.artifact.version.UpdateVersionEnvType"
-}
-func (*updateVersionEnvTypeContract) ContractVersion() string   { return "1.0" }
-func (*updateVersionEnvTypeContract) Pattern() (string, string) { return "PUT", "/version_env_type" }
-func (*updateVersionEnvTypeContract) Body() string              { return "" }
-
-var _UpdateVersionPermissionUsersContract = &updateVersionPermissionUsersContract{}
-
-type updateVersionPermissionUsersContract struct{}
-
-func (*updateVersionPermissionUsersContract) ServiceName() string { return "version.rpc" }
-func (*updateVersionPermissionUsersContract) MethodName() string {
-	return "UpdateVersionPermissionUsers"
-}
-func (*updateVersionPermissionUsersContract) RequestMessage() interface{} {
-	return new(UpdateVersionPermissionUsersRequest)
-}
-func (*updateVersionPermissionUsersContract) ResponseMessage() interface{} {
-	return new(UpdateVersionPermissionUsersRequest)
-}
-func (*updateVersionPermissionUsersContract) ContractName() string {
-	return "easyops.api.artifact.version.UpdateVersionPermissionUsers"
-}
-func (*updateVersionPermissionUsersContract) ContractVersion() string { return "1.0" }
-func (*updateVersionPermissionUsersContract) Pattern() (string, string) {
-	return "POST", "/permission/version"
-}
-func (*updateVersionPermissionUsersContract) Body() string { return "" }

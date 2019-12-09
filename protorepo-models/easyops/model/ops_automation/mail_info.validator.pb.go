@@ -18,12 +18,12 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_MailInfo_Notifiers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_MailInfo_Notifiers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *MailInfo) Validate() error {
 	for _, item := range this.Notifiers {
 		if !_regex_MailInfo_Notifiers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Notifiers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("Notifiers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	return nil

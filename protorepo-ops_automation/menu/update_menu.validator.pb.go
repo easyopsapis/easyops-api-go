@@ -10,7 +10,6 @@ import (
 	_ "github.com/mwitkow/go-proto-validators"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	math "math"
-	regexp "regexp"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -18,25 +17,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_UpdateMenuRequest_Visitors = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_UpdateMenuRequest_Managers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-
-func (this *UpdateMenuRequest) Validate() error {
-	if !(len(this.Category) > -1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '-1'`, this.Category))
-	}
-	for _, item := range this.Visitors {
-		if !_regex_UpdateMenuRequest_Visitors.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Visitors", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
-		}
-	}
-	for _, item := range this.Managers {
-		if !_regex_UpdateMenuRequest_Managers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Managers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
-		}
-	}
-	return nil
-}
 func (this *UpdateMenuResponse) Validate() error {
 	return nil
 }

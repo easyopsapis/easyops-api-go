@@ -18,22 +18,26 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_Menu_Visitors = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_Menu_Managers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_Menu_Visitors = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_Menu_Managers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_Menu_Id = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *Menu) Validate() error {
 	if !(len(this.Category) > -1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '-1'`, this.Category))
+		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must have a length greater than '-1'`, this.Category))
 	}
 	for _, item := range this.Visitors {
 		if !_regex_Menu_Visitors.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Visitors", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("Visitors", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.Managers {
 		if !_regex_Menu_Managers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Managers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("Managers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
+	}
+	if !_regex_Menu_Id.MatchString(this.Id) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Id))
 	}
 	return nil
 }

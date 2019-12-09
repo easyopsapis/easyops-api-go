@@ -10,6 +10,7 @@ import (
 	_ "github.com/mwitkow/go-proto-validators"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	math "math"
+	regexp "regexp"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -17,18 +18,20 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+var _regex_Jobs_Id = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+
 func (this *Jobs) Validate() error {
 	if !(len(this.Name) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Name))
 	}
 	if !(len(this.Category) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Category))
+		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Category))
 	}
 	if !(len(this.MenuId) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must length be greater than '0'`, this.MenuId))
+		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.MenuId))
 	}
 	if !(len(this.MenuId) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must length be less than '34'`, this.MenuId))
+		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.MenuId))
 	}
 	if this.BindResource != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.BindResource); err != nil {
@@ -39,6 +42,9 @@ func (this *Jobs) Validate() error {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Mail); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Mail", err)
 		}
+	}
+	if !_regex_Jobs_Id.MatchString(this.Id) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Id))
 	}
 	return nil
 }

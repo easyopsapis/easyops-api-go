@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for instance_relation service.
 //
@@ -34,6 +35,8 @@ const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_m
 type Client interface {
 	Append(ctx context.Context, in *AppendRequest) (*types.Empty, error)
 	CountRelationInstance(ctx context.Context, in *CountRelationInstanceRequest) (*CountRelationInstanceResponse, error)
+	DiscoveryV2(ctx context.Context, in *DiscoveryV2Request) (*DiscoveryV2Response, error)
+	InstanceRelationSnapshot(ctx context.Context, in *InstanceRelationSnapshotRequest) (*InstanceRelationSnapshotResponse, error)
 	Remove(ctx context.Context, in *RemoveRequest) (*types.Empty, error)
 	Set(ctx context.Context, in *SetRequest) (*types.Empty, error)
 }
@@ -50,7 +53,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Append(ctx context.Context, in *AppendRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _AppendContract, in, out)
+	err := c.c.Invoke(ctx, _AppendMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +62,25 @@ func (c *client) Append(ctx context.Context, in *AppendRequest) (*types.Empty, e
 
 func (c *client) CountRelationInstance(ctx context.Context, in *CountRelationInstanceRequest) (*CountRelationInstanceResponse, error) {
 	out := new(CountRelationInstanceResponse)
-	err := c.c.Invoke(ctx, _CountRelationInstanceContract, in, out)
+	err := c.c.Invoke(ctx, _CountRelationInstanceMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) DiscoveryV2(ctx context.Context, in *DiscoveryV2Request) (*DiscoveryV2Response, error) {
+	out := new(DiscoveryV2Response)
+	err := c.c.Invoke(ctx, _DiscoveryV2MethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) InstanceRelationSnapshot(ctx context.Context, in *InstanceRelationSnapshotRequest) (*InstanceRelationSnapshotResponse, error) {
+	out := new(InstanceRelationSnapshotResponse)
+	err := c.c.Invoke(ctx, _InstanceRelationSnapshotMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +89,7 @@ func (c *client) CountRelationInstance(ctx context.Context, in *CountRelationIns
 
 func (c *client) Remove(ctx context.Context, in *RemoveRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _RemoveContract, in, out)
+	err := c.c.Invoke(ctx, _RemoveMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +98,7 @@ func (c *client) Remove(ctx context.Context, in *RemoveRequest) (*types.Empty, e
 
 func (c *client) Set(ctx context.Context, in *SetRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _SetContract, in, out)
+	err := c.c.Invoke(ctx, _SetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +109,8 @@ func (c *client) Set(ctx context.Context, in *SetRequest) (*types.Empty, error) 
 type Service interface {
 	Append(context.Context, *AppendRequest) (*types.Empty, error)
 	CountRelationInstance(context.Context, *CountRelationInstanceRequest) (*CountRelationInstanceResponse, error)
+	DiscoveryV2(context.Context, *DiscoveryV2Request) (*DiscoveryV2Response, error)
+	InstanceRelationSnapshot(context.Context, *InstanceRelationSnapshotRequest) (*InstanceRelationSnapshotResponse, error)
 	Remove(context.Context, *RemoveRequest) (*types.Empty, error)
 	Set(context.Context, *SetRequest) (*types.Empty, error)
 }
@@ -104,6 +127,18 @@ func _CountRelationInstanceEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _DiscoveryV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.DiscoveryV2(ctx, req.(*DiscoveryV2Request))
+	}
+}
+
+func _InstanceRelationSnapshotEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.InstanceRelationSnapshot(ctx, req.(*InstanceRelationSnapshotRequest))
+	}
+}
+
 func _RemoveEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.Remove(ctx, req.(*RemoveRequest))
@@ -117,75 +152,119 @@ func _SetEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_AppendContract, _AppendEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CountRelationInstanceContract, _CountRelationInstanceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_RemoveContract, _RemoveEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SetContract, _SetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AppendMethodDesc, _AppendEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CountRelationInstanceMethodDesc, _CountRelationInstanceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DiscoveryV2MethodDesc, _DiscoveryV2Endpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceRelationSnapshotMethodDesc, _InstanceRelationSnapshotEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RemoveMethodDesc, _RemoveEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SetMethodDesc, _SetEndpoint(srv))
 }
 
-// API Contract
-var _AppendContract = &appendContract{}
-
-type appendContract struct{}
-
-func (*appendContract) ServiceName() string          { return "instance_relation.rpc" }
-func (*appendContract) MethodName() string           { return "Append" }
-func (*appendContract) RequestMessage() interface{}  { return new(AppendRequest) }
-func (*appendContract) ResponseMessage() interface{} { return new(AppendRequest) }
-func (*appendContract) ContractName() string         { return "easyops.api.cmdb.instance_relation.Append" }
-func (*appendContract) ContractVersion() string      { return "1.0" }
-func (*appendContract) Pattern() (string, string) {
-	return "POST", "/object/:objectId/relation/:relationSideId/append"
+// Method Description
+var _AppendMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_relation.Append",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_relation.rpc",
+	MethodName:   "Append",
+	RequestType:  (*AppendRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/relation/:relationSideId/append",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*appendContract) Body() string { return "" }
 
-var _CountRelationInstanceContract = &countRelationInstanceContract{}
-
-type countRelationInstanceContract struct{}
-
-func (*countRelationInstanceContract) ServiceName() string { return "instance_relation.rpc" }
-func (*countRelationInstanceContract) MethodName() string  { return "CountRelationInstance" }
-func (*countRelationInstanceContract) RequestMessage() interface{} {
-	return new(CountRelationInstanceRequest)
+var _CountRelationInstanceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_relation.CountRelationInstance",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_relation.rpc",
+	MethodName:   "CountRelationInstance",
+	RequestType:  (*CountRelationInstanceRequest)(nil),
+	ResponseType: (*CountRelationInstanceResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object_relation/:relationId/relation_instance/_count_relation_instance",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*countRelationInstanceContract) ResponseMessage() interface{} {
-	return new(CountRelationInstanceRequest)
+
+var _DiscoveryV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_relation.DiscoveryV2",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_relation.rpc",
+	MethodName:   "DiscoveryV2",
+	RequestType:  (*DiscoveryV2Request)(nil),
+	ResponseType: (*DiscoveryV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/object_relation/:relationId/_autodiscovery/multi",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*countRelationInstanceContract) ContractName() string {
-	return "easyops.api.cmdb.instance_relation.CountRelationInstance"
+
+var _InstanceRelationSnapshotMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_relation.InstanceRelationSnapshot",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_relation.rpc",
+	MethodName:   "InstanceRelationSnapshot",
+	RequestType:  (*InstanceRelationSnapshotRequest)(nil),
+	ResponseType: (*InstanceRelationSnapshotResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/history/object_relation/:relation_id/relation_instance/:relation_instance_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*countRelationInstanceContract) ContractVersion() string { return "1.0" }
-func (*countRelationInstanceContract) Pattern() (string, string) {
-	return "GET", "/object_relation/:relationId/relation_instance/_count_relation_instance"
+
+var _RemoveMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_relation.Remove",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_relation.rpc",
+	MethodName:   "Remove",
+	RequestType:  (*RemoveRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/relation/:relationSideId/remove",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*countRelationInstanceContract) Body() string { return "" }
 
-var _RemoveContract = &removeContract{}
-
-type removeContract struct{}
-
-func (*removeContract) ServiceName() string          { return "instance_relation.rpc" }
-func (*removeContract) MethodName() string           { return "Remove" }
-func (*removeContract) RequestMessage() interface{}  { return new(RemoveRequest) }
-func (*removeContract) ResponseMessage() interface{} { return new(RemoveRequest) }
-func (*removeContract) ContractName() string         { return "easyops.api.cmdb.instance_relation.Remove" }
-func (*removeContract) ContractVersion() string      { return "1.0" }
-func (*removeContract) Pattern() (string, string) {
-	return "POST", "/object/:objectId/relation/:relationSideId/remove"
+var _SetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_relation.Set",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_relation.rpc",
+	MethodName:   "Set",
+	RequestType:  (*SetRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/relation/:relationSideId/set",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*removeContract) Body() string { return "" }
-
-var _SetContract = &setContract{}
-
-type setContract struct{}
-
-func (*setContract) ServiceName() string          { return "instance_relation.rpc" }
-func (*setContract) MethodName() string           { return "Set" }
-func (*setContract) RequestMessage() interface{}  { return new(SetRequest) }
-func (*setContract) ResponseMessage() interface{} { return new(SetRequest) }
-func (*setContract) ContractName() string         { return "easyops.api.cmdb.instance_relation.Set" }
-func (*setContract) ContractVersion() string      { return "1.0" }
-func (*setContract) Pattern() (string, string) {
-	return "POST", "/object/:objectId/relation/:relationSideId/set"
-}
-func (*setContract) Body() string { return "" }

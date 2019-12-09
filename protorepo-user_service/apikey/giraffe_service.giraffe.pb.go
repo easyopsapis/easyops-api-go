@@ -7,8 +7,9 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
 )
@@ -22,16 +23,22 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for apikey service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
 	CreateApiKey(ctx context.Context, in *CreateApiKeyRequest) (*CreateApiKeyResponse, error)
+	DeleteApiKey(ctx context.Context, in *DeleteApiKeyRequest) (*types.Empty, error)
+	DisableApiKey(ctx context.Context, in *DisableApiKeyRequest) (*types.Empty, error)
+	EnableApiKey(ctx context.Context, in *EnableApiKeyRequest) (*types.Empty, error)
+	GetApiKey(ctx context.Context, in *types.Empty) (*GetApiKeyResponse, error)
+	ListApiKey(ctx context.Context, in *ListApiKeyRequest) (*ListApiKeyResponse, error)
 	ResetApiKey(ctx context.Context, in *ResetApiKeyRequest) (*ResetApiKeyResponse, error)
 }
 
@@ -47,7 +54,52 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateApiKey(ctx context.Context, in *CreateApiKeyRequest) (*CreateApiKeyResponse, error) {
 	out := new(CreateApiKeyResponse)
-	err := c.c.Invoke(ctx, _CreateApiKeyContract, in, out)
+	err := c.c.Invoke(ctx, _CreateApiKeyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) DeleteApiKey(ctx context.Context, in *DeleteApiKeyRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _DeleteApiKeyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) DisableApiKey(ctx context.Context, in *DisableApiKeyRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _DisableApiKeyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) EnableApiKey(ctx context.Context, in *EnableApiKeyRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _EnableApiKeyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetApiKey(ctx context.Context, in *types.Empty) (*GetApiKeyResponse, error) {
+	out := new(GetApiKeyResponse)
+	err := c.c.Invoke(ctx, _GetApiKeyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListApiKey(ctx context.Context, in *ListApiKeyRequest) (*ListApiKeyResponse, error) {
+	out := new(ListApiKeyResponse)
+	err := c.c.Invoke(ctx, _ListApiKeyMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +108,7 @@ func (c *client) CreateApiKey(ctx context.Context, in *CreateApiKeyRequest) (*Cr
 
 func (c *client) ResetApiKey(ctx context.Context, in *ResetApiKeyRequest) (*ResetApiKeyResponse, error) {
 	out := new(ResetApiKeyResponse)
-	err := c.c.Invoke(ctx, _ResetApiKeyContract, in, out)
+	err := c.c.Invoke(ctx, _ResetApiKeyMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,12 +118,47 @@ func (c *client) ResetApiKey(ctx context.Context, in *ResetApiKeyRequest) (*Rese
 // Service is the server API for apikey service.
 type Service interface {
 	CreateApiKey(context.Context, *CreateApiKeyRequest) (*CreateApiKeyResponse, error)
+	DeleteApiKey(context.Context, *DeleteApiKeyRequest) (*types.Empty, error)
+	DisableApiKey(context.Context, *DisableApiKeyRequest) (*types.Empty, error)
+	EnableApiKey(context.Context, *EnableApiKeyRequest) (*types.Empty, error)
+	GetApiKey(context.Context, *types.Empty) (*GetApiKeyResponse, error)
+	ListApiKey(context.Context, *ListApiKeyRequest) (*ListApiKeyResponse, error)
 	ResetApiKey(context.Context, *ResetApiKeyRequest) (*ResetApiKeyResponse, error)
 }
 
 func _CreateApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.CreateApiKey(ctx, req.(*CreateApiKeyRequest))
+	}
+}
+
+func _DeleteApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.DeleteApiKey(ctx, req.(*DeleteApiKeyRequest))
+	}
+}
+
+func _DisableApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.DisableApiKey(ctx, req.(*DisableApiKeyRequest))
+	}
+}
+
+func _EnableApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.EnableApiKey(ctx, req.(*EnableApiKeyRequest))
+	}
+}
+
+func _GetApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetApiKey(ctx, req.(*types.Empty))
+	}
+}
+
+func _ListApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListApiKey(ctx, req.(*ListApiKeyRequest))
 	}
 }
 
@@ -82,37 +169,138 @@ func _ResetApiKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateApiKeyContract, _CreateApiKeyEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ResetApiKeyContract, _ResetApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateApiKeyMethodDesc, _CreateApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteApiKeyMethodDesc, _DeleteApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DisableApiKeyMethodDesc, _DisableApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_EnableApiKeyMethodDesc, _EnableApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetApiKeyMethodDesc, _GetApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListApiKeyMethodDesc, _ListApiKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ResetApiKeyMethodDesc, _ResetApiKeyEndpoint(srv))
 }
 
-// API Contract
-var _CreateApiKeyContract = &createApiKeyContract{}
-
-type createApiKeyContract struct{}
-
-func (*createApiKeyContract) ServiceName() string          { return "apikey.rpc" }
-func (*createApiKeyContract) MethodName() string           { return "CreateApiKey" }
-func (*createApiKeyContract) RequestMessage() interface{}  { return new(CreateApiKeyRequest) }
-func (*createApiKeyContract) ResponseMessage() interface{} { return new(CreateApiKeyRequest) }
-func (*createApiKeyContract) ContractName() string {
-	return "easyops.api.user_service.apikey.CreateApiKey"
+// Method Description
+var _CreateApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.CreateApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "CreateApiKey",
+	RequestType:  (*CreateApiKeyRequest)(nil),
+	ResponseType: (*CreateApiKeyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/apikey/:user",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createApiKeyContract) ContractVersion() string   { return "1.0" }
-func (*createApiKeyContract) Pattern() (string, string) { return "POST", "/api/v1/apikey/:user" }
-func (*createApiKeyContract) Body() string              { return "" }
 
-var _ResetApiKeyContract = &resetApiKeyContract{}
-
-type resetApiKeyContract struct{}
-
-func (*resetApiKeyContract) ServiceName() string          { return "apikey.rpc" }
-func (*resetApiKeyContract) MethodName() string           { return "ResetApiKey" }
-func (*resetApiKeyContract) RequestMessage() interface{}  { return new(ResetApiKeyRequest) }
-func (*resetApiKeyContract) ResponseMessage() interface{} { return new(ResetApiKeyRequest) }
-func (*resetApiKeyContract) ContractName() string {
-	return "easyops.api.user_service.apikey.ResetApiKey"
+var _DeleteApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.DeleteApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "DeleteApiKey",
+	RequestType:  (*DeleteApiKeyRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/v1/apikey/delete/:access_key",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*resetApiKeyContract) ContractVersion() string   { return "1.0" }
-func (*resetApiKeyContract) Pattern() (string, string) { return "PUT", "/api/v1/apikey/_reset/:user" }
-func (*resetApiKeyContract) Body() string              { return "" }
+
+var _DisableApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.DisableApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "DisableApiKey",
+	RequestType:  (*DisableApiKeyRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/v1/apikey/disable/:access_key",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _EnableApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.EnableApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "EnableApiKey",
+	RequestType:  (*EnableApiKeyRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/v1/apikey/enable/:access_key",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _GetApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.GetApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "GetApiKey",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*GetApiKeyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/profile/apikey",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ListApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.ListApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "ListApiKey",
+	RequestType:  (*ListApiKeyRequest)(nil),
+	ResponseType: (*ListApiKeyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/apikey",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ResetApiKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.apikey.ResetApiKey",
+		Version: "1.0",
+	},
+	ServiceName:  "apikey.rpc",
+	MethodName:   "ResetApiKey",
+	RequestType:  (*ResetApiKeyRequest)(nil),
+	ResponseType: (*ResetApiKeyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/v1/apikey/_reset/:user",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

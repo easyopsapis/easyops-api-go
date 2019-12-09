@@ -11,6 +11,7 @@ import (
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	_ "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/micro_app"
 	math "math"
+	regexp "regexp"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -18,6 +19,156 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+var _regex_CreateRequest_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
+var _regex_CreateRequest_CurrentVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_CreateRequest_AppVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_CreateRequest_Homepage = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+var _regex_CreateRequest_Owner = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_CreateRequest_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+var _regex_CreateRequest_Mtime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+
+func (this *CreateRequest) Validate() error {
+	if this.Container != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Container); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Container", err)
+		}
+	}
+	if !_regex_CreateRequest_InstanceId.MatchString(this.InstanceId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("InstanceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.InstanceId))
+	}
+	if this.Icons != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Icons); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Icons", err)
+		}
+	}
+	if !_regex_CreateRequest_CurrentVersion.MatchString(this.CurrentVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("CurrentVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.CurrentVersion))
+	}
+	if !_regex_CreateRequest_AppVersion.MatchString(this.AppVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("AppVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.AppVersion))
+	}
+	if !_regex_CreateRequest_Homepage.MatchString(this.Homepage) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Homepage", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Homepage))
+	}
+	if this.ClonedFrom != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ClonedFrom); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("ClonedFrom", err)
+		}
+	}
+	if !_regex_CreateRequest_Owner.MatchString(this.Owner) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Owner", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Owner))
+	}
+	if !_regex_CreateRequest_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
+	}
+	if !_regex_CreateRequest_Mtime.MatchString(this.Mtime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Mtime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Mtime))
+	}
+	if this.MenuIcon != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MenuIcon); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("MenuIcon", err)
+		}
+	}
+	return nil
+}
+func (this *CreateRequest_Container) Validate() error {
+	return nil
+}
+
+var _regex_CreateRequest_Icons_Large = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+
+func (this *CreateRequest_Icons) Validate() error {
+	if !_regex_CreateRequest_Icons_Large.MatchString(this.Large) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Large", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Large))
+	}
+	return nil
+}
+
+var _regex_CreateRequest_ClonedFrom_Version = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+
+func (this *CreateRequest_ClonedFrom) Validate() error {
+	if !_regex_CreateRequest_ClonedFrom_Version.MatchString(this.Version) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Version", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.Version))
+	}
+	return nil
+}
+func (this *CreateRequest_MenuIcon) Validate() error {
+	return nil
+}
+
+var _regex_CreateResponse_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
+var _regex_CreateResponse_CurrentVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_CreateResponse_AppVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_CreateResponse_Homepage = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+var _regex_CreateResponse_Owner = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_CreateResponse_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+var _regex_CreateResponse_Mtime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+
+func (this *CreateResponse) Validate() error {
+	if this.Container != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Container); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Container", err)
+		}
+	}
+	if !_regex_CreateResponse_InstanceId.MatchString(this.InstanceId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("InstanceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.InstanceId))
+	}
+	if this.Icons != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Icons); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Icons", err)
+		}
+	}
+	if !_regex_CreateResponse_CurrentVersion.MatchString(this.CurrentVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("CurrentVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.CurrentVersion))
+	}
+	if !_regex_CreateResponse_AppVersion.MatchString(this.AppVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("AppVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.AppVersion))
+	}
+	if !_regex_CreateResponse_Homepage.MatchString(this.Homepage) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Homepage", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Homepage))
+	}
+	if this.ClonedFrom != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ClonedFrom); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("ClonedFrom", err)
+		}
+	}
+	if !_regex_CreateResponse_Owner.MatchString(this.Owner) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Owner", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Owner))
+	}
+	if !_regex_CreateResponse_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
+	}
+	if !_regex_CreateResponse_Mtime.MatchString(this.Mtime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Mtime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Mtime))
+	}
+	if this.MenuIcon != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MenuIcon); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("MenuIcon", err)
+		}
+	}
+	return nil
+}
+
+var _regex_CreateResponse_Icons_Large = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+
+func (this *CreateResponse_Icons) Validate() error {
+	if !_regex_CreateResponse_Icons_Large.MatchString(this.Large) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Large", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Large))
+	}
+	return nil
+}
+
+var _regex_CreateResponse_ClonedFrom_Version = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+
+func (this *CreateResponse_ClonedFrom) Validate() error {
+	if !_regex_CreateResponse_ClonedFrom_Version.MatchString(this.Version) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Version", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.Version))
+	}
+	return nil
+}
+func (this *CreateResponse_MenuIcon) Validate() error {
+	return nil
+}
 func (this *CreateResponseWrapper) Validate() error {
 	if this.Data != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {

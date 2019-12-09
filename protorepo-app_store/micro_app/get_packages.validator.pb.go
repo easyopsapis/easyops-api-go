@@ -19,7 +19,7 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_GetRelatedPackagesRequest_AppId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_GetRelatedPackagesRequest_AppId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *GetRelatedPackagesRequest) Validate() error {
 	if !(this.Page > 0) {
@@ -29,7 +29,7 @@ func (this *GetRelatedPackagesRequest) Validate() error {
 		return github_com_mwitkow_go_proto_validators.FieldError("PageSize", fmt.Errorf(`value '%v' must be greater than '0'`, this.PageSize))
 	}
 	if !_regex_GetRelatedPackagesRequest_AppId.MatchString(this.AppId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AppId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.AppId))
+		return github_com_mwitkow_go_proto_validators.FieldError("AppId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.AppId))
 	}
 	return nil
 }

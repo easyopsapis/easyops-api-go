@@ -7,8 +7,9 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	msgsender "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/msgsender"
 	io "io"
 	math "math"
@@ -23,18 +24,20 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for custom_sender service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	SendMessage(ctx context.Context, in *msgsender.SendMessageRequest) (*msgsender.SendMessageResponse, error)
-	SendMessageForAlert(ctx context.Context, in *msgsender.SendMessageForAlertRequest) (*msgsender.SendMessageResponse, error)
-	SendMessageWithAppendix(ctx context.Context, in *msgsender.SendMessageWithAppendixRequest) (*msgsender.SendMessageResponse, error)
+	ListSupportInform(ctx context.Context, in *types.Empty) (*ListSupportInformResponse, error)
+	SendMessage(ctx context.Context, in *msgsender.SendMessageRequest) (*SendMessageResponse, error)
+	SendMessageForAlert(ctx context.Context, in *msgsender.SendMessageForAlertRequest) (*SendMessageForAlertResponse, error)
+	SendMessageWithAppendix(ctx context.Context, in *msgsender.SendMessageWithAppendixRequest) (*SendMessageWithAppendixResponse, error)
 }
 
 type client struct {
@@ -47,27 +50,36 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) SendMessage(ctx context.Context, in *msgsender.SendMessageRequest) (*msgsender.SendMessageResponse, error) {
-	out := new(msgsender.SendMessageResponse)
-	err := c.c.Invoke(ctx, _SendMessageContract, in, out)
+func (c *client) ListSupportInform(ctx context.Context, in *types.Empty) (*ListSupportInformResponse, error) {
+	out := new(ListSupportInformResponse)
+	err := c.c.Invoke(ctx, _ListSupportInformMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) SendMessageForAlert(ctx context.Context, in *msgsender.SendMessageForAlertRequest) (*msgsender.SendMessageResponse, error) {
-	out := new(msgsender.SendMessageResponse)
-	err := c.c.Invoke(ctx, _SendMessageForAlertContract, in, out)
+func (c *client) SendMessage(ctx context.Context, in *msgsender.SendMessageRequest) (*SendMessageResponse, error) {
+	out := new(SendMessageResponse)
+	err := c.c.Invoke(ctx, _SendMessageMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) SendMessageWithAppendix(ctx context.Context, in *msgsender.SendMessageWithAppendixRequest) (*msgsender.SendMessageResponse, error) {
-	out := new(msgsender.SendMessageResponse)
-	err := c.c.Invoke(ctx, _SendMessageWithAppendixContract, in, out)
+func (c *client) SendMessageForAlert(ctx context.Context, in *msgsender.SendMessageForAlertRequest) (*SendMessageForAlertResponse, error) {
+	out := new(SendMessageForAlertResponse)
+	err := c.c.Invoke(ctx, _SendMessageForAlertMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) SendMessageWithAppendix(ctx context.Context, in *msgsender.SendMessageWithAppendixRequest) (*SendMessageWithAppendixResponse, error) {
+	out := new(SendMessageWithAppendixResponse)
+	err := c.c.Invoke(ctx, _SendMessageWithAppendixMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -76,9 +88,16 @@ func (c *client) SendMessageWithAppendix(ctx context.Context, in *msgsender.Send
 
 // Service is the server API for custom_sender service.
 type Service interface {
-	SendMessage(context.Context, *msgsender.SendMessageRequest) (*msgsender.SendMessageResponse, error)
-	SendMessageForAlert(context.Context, *msgsender.SendMessageForAlertRequest) (*msgsender.SendMessageResponse, error)
-	SendMessageWithAppendix(context.Context, *msgsender.SendMessageWithAppendixRequest) (*msgsender.SendMessageResponse, error)
+	ListSupportInform(context.Context, *types.Empty) (*ListSupportInformResponse, error)
+	SendMessage(context.Context, *msgsender.SendMessageRequest) (*SendMessageResponse, error)
+	SendMessageForAlert(context.Context, *msgsender.SendMessageForAlertRequest) (*SendMessageForAlertResponse, error)
+	SendMessageWithAppendix(context.Context, *msgsender.SendMessageWithAppendixRequest) (*SendMessageWithAppendixResponse, error)
+}
+
+func _ListSupportInformEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListSupportInform(ctx, req.(*types.Empty))
+	}
 }
 
 func _SendMessageEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -100,67 +119,81 @@ func _SendMessageWithAppendixEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_SendMessageContract, _SendMessageEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SendMessageForAlertContract, _SendMessageForAlertEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SendMessageWithAppendixContract, _SendMessageWithAppendixEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListSupportInformMethodDesc, _ListSupportInformEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SendMessageMethodDesc, _SendMessageEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SendMessageForAlertMethodDesc, _SendMessageForAlertEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SendMessageWithAppendixMethodDesc, _SendMessageWithAppendixEndpoint(srv))
 }
 
-// API Contract
-var _SendMessageContract = &sendMessageContract{}
+// Method Description
+var _ListSupportInformMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.msgsender.custom_sender.ListSupportInform",
+		Version: "1.0",
+	},
+	ServiceName:  "custom_sender.rpc",
+	MethodName:   "ListSupportInform",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*ListSupportInformResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/message_sender/method",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
 
-type sendMessageContract struct{}
+var _SendMessageMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.msgsender.custom_sender.SendMessage",
+		Version: "1.0",
+	},
+	ServiceName:  "custom_sender.rpc",
+	MethodName:   "SendMessage",
+	RequestType:  (*msgsender.SendMessageRequest)(nil),
+	ResponseType: (*SendMessageResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/message_sender/send_message",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
 
-func (*sendMessageContract) ServiceName() string          { return "custom_sender.rpc" }
-func (*sendMessageContract) MethodName() string           { return "SendMessage" }
-func (*sendMessageContract) RequestMessage() interface{}  { return new(msgsender.SendMessageRequest) }
-func (*sendMessageContract) ResponseMessage() interface{} { return new(msgsender.SendMessageRequest) }
-func (*sendMessageContract) ContractName() string {
-	return "easyops.api.msgsender.custom_sender.SendMessage"
+var _SendMessageForAlertMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.msgsender.custom_sender.SendMessageForAlert",
+		Version: "1.0",
+	},
+	ServiceName:  "custom_sender.rpc",
+	MethodName:   "SendMessageForAlert",
+	RequestType:  (*msgsender.SendMessageForAlertRequest)(nil),
+	ResponseType: (*SendMessageForAlertResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/alert_adapter/receive",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*sendMessageContract) ContractVersion() string { return "1.0" }
-func (*sendMessageContract) Pattern() (string, string) {
-	return "POST", "/api/v1/message_sender/send_message"
-}
-func (*sendMessageContract) Body() string { return "" }
 
-var _SendMessageForAlertContract = &sendMessageForAlertContract{}
-
-type sendMessageForAlertContract struct{}
-
-func (*sendMessageForAlertContract) ServiceName() string { return "custom_sender.rpc" }
-func (*sendMessageForAlertContract) MethodName() string  { return "SendMessageForAlert" }
-func (*sendMessageForAlertContract) RequestMessage() interface{} {
-	return new(msgsender.SendMessageForAlertRequest)
+var _SendMessageWithAppendixMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.msgsender.custom_sender.SendMessageWithAppendix",
+		Version: "1.0",
+	},
+	ServiceName:  "custom_sender.rpc",
+	MethodName:   "SendMessageWithAppendix",
+	RequestType:  (*msgsender.SendMessageWithAppendixRequest)(nil),
+	ResponseType: (*SendMessageWithAppendixResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/message_sender/mail_with_appendix",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*sendMessageForAlertContract) ResponseMessage() interface{} {
-	return new(msgsender.SendMessageForAlertRequest)
-}
-func (*sendMessageForAlertContract) ContractName() string {
-	return "easyops.api.msgsender.custom_sender.SendMessageForAlert"
-}
-func (*sendMessageForAlertContract) ContractVersion() string { return "1.0" }
-func (*sendMessageForAlertContract) Pattern() (string, string) {
-	return "POST", "/api/v1/alert_adapter/receive"
-}
-func (*sendMessageForAlertContract) Body() string { return "" }
-
-var _SendMessageWithAppendixContract = &sendMessageWithAppendixContract{}
-
-type sendMessageWithAppendixContract struct{}
-
-func (*sendMessageWithAppendixContract) ServiceName() string { return "custom_sender.rpc" }
-func (*sendMessageWithAppendixContract) MethodName() string  { return "SendMessageWithAppendix" }
-func (*sendMessageWithAppendixContract) RequestMessage() interface{} {
-	return new(msgsender.SendMessageWithAppendixRequest)
-}
-func (*sendMessageWithAppendixContract) ResponseMessage() interface{} {
-	return new(msgsender.SendMessageWithAppendixRequest)
-}
-func (*sendMessageWithAppendixContract) ContractName() string {
-	return "easyops.api.msgsender.custom_sender.SendMessageWithAppendix"
-}
-func (*sendMessageWithAppendixContract) ContractVersion() string { return "1.0" }
-func (*sendMessageWithAppendixContract) Pattern() (string, string) {
-	return "POST", "/api/v1/message_sender/mail_with_appendix"
-}
-func (*sendMessageWithAppendixContract) Body() string { return "" }

@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	pipeline "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/pipeline"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for project service.
 //
@@ -38,6 +39,7 @@ type Client interface {
 	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
 	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
 	ListBranch(ctx context.Context, in *ListBranchRequest) (*ListBranchResponse, error)
+	ListVariable(ctx context.Context, in *types.Empty) (*ListVariableResponse, error)
 	Update(ctx context.Context, in *UpdateRequest) (*pipeline.Project, error)
 }
 
@@ -53,7 +55,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*CreateResponse, error) {
 	out := new(CreateResponse)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +64,7 @@ func (c *client) Create(ctx context.Context, in *CreateRequest) (*CreateResponse
 
 func (c *client) DeleteProject(ctx context.Context, in *DeleteProjectRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteProjectContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteProjectMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +73,7 @@ func (c *client) DeleteProject(ctx context.Context, in *DeleteProjectRequest) (*
 
 func (c *client) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
 	out := new(GetResponse)
-	err := c.c.Invoke(ctx, _GetContract, in, out)
+	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +82,7 @@ func (c *client) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) 
 
 func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.c.Invoke(ctx, _ListContract, in, out)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +91,16 @@ func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, erro
 
 func (c *client) ListBranch(ctx context.Context, in *ListBranchRequest) (*ListBranchResponse, error) {
 	out := new(ListBranchResponse)
-	err := c.c.Invoke(ctx, _ListBranchContract, in, out)
+	err := c.c.Invoke(ctx, _ListBranchMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListVariable(ctx context.Context, in *types.Empty) (*ListVariableResponse, error) {
+	out := new(ListVariableResponse)
+	err := c.c.Invoke(ctx, _ListVariableMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +109,7 @@ func (c *client) ListBranch(ctx context.Context, in *ListBranchRequest) (*ListBr
 
 func (c *client) Update(ctx context.Context, in *UpdateRequest) (*pipeline.Project, error) {
 	out := new(pipeline.Project)
-	err := c.c.Invoke(ctx, _UpdateContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -112,6 +123,7 @@ type Service interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	ListBranch(context.Context, *ListBranchRequest) (*ListBranchResponse, error)
+	ListVariable(context.Context, *types.Empty) (*ListVariableResponse, error)
 	Update(context.Context, *UpdateRequest) (*pipeline.Project, error)
 }
 
@@ -145,6 +157,12 @@ func _ListBranchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _ListVariableEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListVariable(ctx, req.(*types.Empty))
+	}
+}
+
 func _UpdateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.Update(ctx, req.(*UpdateRequest))
@@ -152,97 +170,138 @@ func _UpdateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteProjectContract, _DeleteProjectEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContract, _ListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListBranchContract, _ListBranchEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContract, _UpdateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteProjectMethodDesc, _DeleteProjectEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListBranchMethodDesc, _ListBranchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListVariableMethodDesc, _ListVariableEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "project.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(CreateRequest) }
-func (*createContract) ResponseMessage() interface{} { return new(CreateRequest) }
-func (*createContract) ContractName() string         { return "easyops.api.pipeline.project.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/api/pipeline/v1/projects" }
-func (*createContract) Body() string                 { return "" }
-
-var _DeleteProjectContract = &deleteProjectContract{}
-
-type deleteProjectContract struct{}
-
-func (*deleteProjectContract) ServiceName() string          { return "project.rpc" }
-func (*deleteProjectContract) MethodName() string           { return "DeleteProject" }
-func (*deleteProjectContract) RequestMessage() interface{}  { return new(DeleteProjectRequest) }
-func (*deleteProjectContract) ResponseMessage() interface{} { return new(DeleteProjectRequest) }
-func (*deleteProjectContract) ContractName() string {
-	return "easyops.api.pipeline.project.DeleteProject"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*CreateResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/projects",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteProjectContract) ContractVersion() string { return "1.0" }
-func (*deleteProjectContract) Pattern() (string, string) {
-	return "DELETE", "/api/pipeline/v1/projects/:project_id"
+
+var _DeleteProjectMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.DeleteProject",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "DeleteProject",
+	RequestType:  (*DeleteProjectRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/pipeline/v1/projects/:project_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteProjectContract) Body() string { return "" }
 
-var _GetContract = &getContract{}
-
-type getContract struct{}
-
-func (*getContract) ServiceName() string          { return "project.rpc" }
-func (*getContract) MethodName() string           { return "Get" }
-func (*getContract) RequestMessage() interface{}  { return new(GetRequest) }
-func (*getContract) ResponseMessage() interface{} { return new(GetRequest) }
-func (*getContract) ContractName() string         { return "easyops.api.pipeline.project.Get" }
-func (*getContract) ContractVersion() string      { return "1.0" }
-func (*getContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/projects/:project_id" }
-func (*getContract) Body() string                 { return "" }
-
-var _ListContract = &listContract{}
-
-type listContract struct{}
-
-func (*listContract) ServiceName() string          { return "project.rpc" }
-func (*listContract) MethodName() string           { return "List" }
-func (*listContract) RequestMessage() interface{}  { return new(ListRequest) }
-func (*listContract) ResponseMessage() interface{} { return new(ListRequest) }
-func (*listContract) ContractName() string         { return "easyops.api.pipeline.project.List" }
-func (*listContract) ContractVersion() string      { return "1.0" }
-func (*listContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/projects" }
-func (*listContract) Body() string                 { return "" }
-
-var _ListBranchContract = &listBranchContract{}
-
-type listBranchContract struct{}
-
-func (*listBranchContract) ServiceName() string          { return "project.rpc" }
-func (*listBranchContract) MethodName() string           { return "ListBranch" }
-func (*listBranchContract) RequestMessage() interface{}  { return new(ListBranchRequest) }
-func (*listBranchContract) ResponseMessage() interface{} { return new(ListBranchRequest) }
-func (*listBranchContract) ContractName() string         { return "easyops.api.pipeline.project.ListBranch" }
-func (*listBranchContract) ContractVersion() string      { return "1.0" }
-func (*listBranchContract) Pattern() (string, string) {
-	return "GET", "/api/pipeline/v1/projects/:project_id/branches"
+var _GetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.Get",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "Get",
+	RequestType:  (*GetRequest)(nil),
+	ResponseType: (*GetResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/projects/:project_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listBranchContract) Body() string { return "" }
 
-var _UpdateContract = &updateContract{}
-
-type updateContract struct{}
-
-func (*updateContract) ServiceName() string          { return "project.rpc" }
-func (*updateContract) MethodName() string           { return "Update" }
-func (*updateContract) RequestMessage() interface{}  { return new(UpdateRequest) }
-func (*updateContract) ResponseMessage() interface{} { return new(UpdateRequest) }
-func (*updateContract) ContractName() string         { return "easyops.api.pipeline.project.Update" }
-func (*updateContract) ContractVersion() string      { return "1.0" }
-func (*updateContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/projects/:project_id"
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.List",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "List",
+	RequestType:  (*ListRequest)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/projects",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateContract) Body() string { return "project" }
+
+var _ListBranchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.ListBranch",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "ListBranch",
+	RequestType:  (*ListBranchRequest)(nil),
+	ResponseType: (*ListBranchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/projects/:project_id/branches",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ListVariableMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.ListVariable",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "ListVariable",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*ListVariableResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/variables",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.project.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "project.rpc",
+	MethodName:   "Update",
+	RequestType:  (*UpdateRequest)(nil),
+	ResponseType: (*pipeline.Project)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/projects/:project_id",
+		},
+		Body:         "project",
+		ResponseBody: "data",
+	},
+}

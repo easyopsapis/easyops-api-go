@@ -23,13 +23,13 @@ var _regex_CreateRequest_InstallPath = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\
 
 func (this *CreateRequest) Validate() error {
 	if !(len(this.Name) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Name))
 	}
 	if !(len(this.Name) < 46) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be less than '46'`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length smaller than '46'`, this.Name))
 	}
 	if !(len(this.Memo) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Memo", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Memo))
+		return github_com_mwitkow_go_proto_validators.FieldError("Memo", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Memo))
 	}
 	if !_regex_CreateRequest_InstallPath.MatchString(this.InstallPath) {
 		return github_com_mwitkow_go_proto_validators.FieldError("InstallPath", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.InstallPath))

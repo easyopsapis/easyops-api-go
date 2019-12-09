@@ -18,26 +18,21 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_JobDetails_Creator = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_JobDetails_Creator = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_JobDetails_Id = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *JobDetails) Validate() error {
-	if !(len(this.Id) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Id))
-	}
-	if !(len(this.Id) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be less than '34'`, this.Id))
-	}
 	if !(this.Version > -1) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Version", fmt.Errorf(`value '%v' must be greater than '-1'`, this.Version))
 	}
 	if !(len(this.CreateTime) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("CreateTime", fmt.Errorf(`value '%v' must length be greater than '0'`, this.CreateTime))
+		return github_com_mwitkow_go_proto_validators.FieldError("CreateTime", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.CreateTime))
 	}
 	if !(len(this.UpdateTime) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("UpdateTime", fmt.Errorf(`value '%v' must length be greater than '0'`, this.UpdateTime))
+		return github_com_mwitkow_go_proto_validators.FieldError("UpdateTime", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.UpdateTime))
 	}
 	if !_regex_JobDetails_Creator.MatchString(this.Creator) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Creator))
+		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Creator))
 	}
 	if !(this.Org > 0) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Org", fmt.Errorf(`value '%v' must be greater than '0'`, this.Org))
@@ -48,16 +43,16 @@ func (this *JobDetails) Validate() error {
 		}
 	}
 	if !(len(this.Name) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Name))
 	}
 	if !(len(this.Category) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Category))
+		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Category))
 	}
 	if !(len(this.MenuId) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must length be greater than '0'`, this.MenuId))
+		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.MenuId))
 	}
 	if !(len(this.MenuId) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must length be less than '34'`, this.MenuId))
+		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.MenuId))
 	}
 	if this.BindResource != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.BindResource); err != nil {
@@ -68,6 +63,9 @@ func (this *JobDetails) Validate() error {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Mail); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Mail", err)
 		}
+	}
+	if !_regex_JobDetails_Id.MatchString(this.Id) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Id))
 	}
 	return nil
 }

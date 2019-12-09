@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -22,15 +22,18 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for business_instance service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	SearchAppInSystem(ctx context.Context, in *SearchAppInSystemRequest) (*SearchAppInSystemResponse, error)
+	SearchSubSystem(ctx context.Context, in *SearchSubSystemRequest) (*SearchSubSystemResponse, error)
 }
 
 type client struct {
@@ -43,11 +46,80 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) SearchAppInSystem(ctx context.Context, in *SearchAppInSystemRequest) (*SearchAppInSystemResponse, error) {
+	out := new(SearchAppInSystemResponse)
+	err := c.c.Invoke(ctx, _SearchAppInSystemMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) SearchSubSystem(ctx context.Context, in *SearchSubSystemRequest) (*SearchSubSystemResponse, error) {
+	out := new(SearchSubSystemResponse)
+	err := c.c.Invoke(ctx, _SearchSubSystemMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Service is the server API for business_instance service.
 type Service interface {
+	SearchAppInSystem(context.Context, *SearchAppInSystemRequest) (*SearchAppInSystemResponse, error)
+	SearchSubSystem(context.Context, *SearchSubSystemRequest) (*SearchSubSystemResponse, error)
+}
+
+func _SearchAppInSystemEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.SearchAppInSystem(ctx, req.(*SearchAppInSystemRequest))
+	}
+}
+
+func _SearchSubSystemEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.SearchSubSystem(ctx, req.(*SearchSubSystemRequest))
+	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
+	s.RegisterUnaryEndpoint(_SearchAppInSystemMethodDesc, _SearchAppInSystemEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SearchSubSystemMethodDesc, _SearchSubSystemEndpoint(srv))
 }
 
-// API Contract
+// Method Description
+var _SearchAppInSystemMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.business_instance.SearchAppInSystem",
+		Version: "1.0",
+	},
+	ServiceName:  "business_instance.rpc",
+	MethodName:   "SearchAppInSystem",
+	RequestType:  (*SearchAppInSystemRequest)(nil),
+	ResponseType: (*SearchAppInSystemResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/system/:systemInstanceId/_search_apps",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _SearchSubSystemMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.business_instance.SearchSubSystem",
+		Version: "1.0",
+	},
+	ServiceName:  "business_instance.rpc",
+	MethodName:   "SearchSubSystem",
+	RequestType:  (*SearchSubSystemRequest)(nil),
+	ResponseType: (*SearchSubSystemResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/system/:systemInstanceId/_search_subsystem",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

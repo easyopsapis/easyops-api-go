@@ -19,11 +19,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_GetDefaultValueTemplateRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_GetDefaultValueTemplateRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *GetDefaultValueTemplateRequest) Validate() error {
 	if !_regex_GetDefaultValueTemplateRequest_ObjectId.MatchString(this.ObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.ObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.ObjectId))
 	}
 	return nil
 }

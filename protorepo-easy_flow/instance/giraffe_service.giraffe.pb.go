@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -22,10 +22,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for instance service.
 //
@@ -47,7 +48,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error) {
 	out := new(PostSearchResponse)
-	err := c.c.Invoke(ctx, _PostSearchContract, in, out)
+	err := c.c.Invoke(ctx, _PostSearchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,7 @@ func (c *client) PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSe
 
 func (c *client) GetSearch(ctx context.Context, in *GetSearchRequest) (*GetSearchResponse, error) {
 	out := new(GetSearchResponse)
-	err := c.c.Invoke(ctx, _GetSearchContract, in, out)
+	err := c.c.Invoke(ctx, _GetSearchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -82,33 +83,43 @@ func _GetSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_PostSearchContract, _PostSearchEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetSearchContract, _GetSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_PostSearchMethodDesc, _PostSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetSearchMethodDesc, _GetSearchEndpoint(srv))
 }
 
-// API Contract
-var _PostSearchContract = &postSearchContract{}
+// Method Description
+var _PostSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.instance.PostSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "PostSearch",
+	RequestType:  (*PostSearchRequest)(nil),
+	ResponseType: (*PostSearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/instance/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type postSearchContract struct{}
-
-func (*postSearchContract) ServiceName() string          { return "instance.rpc" }
-func (*postSearchContract) MethodName() string           { return "PostSearch" }
-func (*postSearchContract) RequestMessage() interface{}  { return new(PostSearchRequest) }
-func (*postSearchContract) ResponseMessage() interface{} { return new(PostSearchRequest) }
-func (*postSearchContract) ContractName() string         { return "easyops.api.easy_flow.instance.PostSearch" }
-func (*postSearchContract) ContractVersion() string      { return "1.0" }
-func (*postSearchContract) Pattern() (string, string)    { return "GET", "/instance/search" }
-func (*postSearchContract) Body() string                 { return "" }
-
-var _GetSearchContract = &getSearchContract{}
-
-type getSearchContract struct{}
-
-func (*getSearchContract) ServiceName() string          { return "instance.rpc" }
-func (*getSearchContract) MethodName() string           { return "GetSearch" }
-func (*getSearchContract) RequestMessage() interface{}  { return new(GetSearchRequest) }
-func (*getSearchContract) ResponseMessage() interface{} { return new(GetSearchRequest) }
-func (*getSearchContract) ContractName() string         { return "easyops.api.easy_flow.instance.GetSearch" }
-func (*getSearchContract) ContractVersion() string      { return "1.0" }
-func (*getSearchContract) Pattern() (string, string)    { return "POST", "/instance/search" }
-func (*getSearchContract) Body() string                 { return "" }
+var _GetSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.instance.GetSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "GetSearch",
+	RequestType:  (*GetSearchRequest)(nil),
+	ResponseType: (*GetSearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/instance/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

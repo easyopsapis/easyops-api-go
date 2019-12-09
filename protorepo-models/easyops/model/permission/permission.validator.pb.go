@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	_ "github.com/mwitkow/go-proto-validators"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	math "math"
@@ -23,6 +24,11 @@ var _regex_Permission_Id = regexp.MustCompile(`^[0-9a-fA-F]{24}$`)
 func (this *Permission) Validate() error {
 	if !_regex_Permission_Id.MatchString(this.Id) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-fA-F]{24}$"`, this.Id))
+	}
+	if this.Resource != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Resource); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Resource", err)
+		}
 	}
 	return nil
 }

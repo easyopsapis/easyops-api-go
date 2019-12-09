@@ -19,18 +19,18 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_ListdirRequest_Path = regexp.MustCompile(`^\/(([^\/]+)(\/[^\/]+)*)?$`)
-var _regex_ListdirRequest_PackageId = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
-var _regex_ListdirRequest_VersionId = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
+var _regex_ListdirRequest_PackageId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
+var _regex_ListdirRequest_VersionId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
 
 func (this *ListdirRequest) Validate() error {
 	if !_regex_ListdirRequest_Path.MatchString(this.Path) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Path", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\/(([^\\/]+)(\\/[^\\/]+)*)?$"`, this.Path))
 	}
 	if !_regex_ListdirRequest_PackageId.MatchString(this.PackageId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, this.PackageId))
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.PackageId))
 	}
 	if !_regex_ListdirRequest_VersionId.MatchString(this.VersionId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, this.VersionId))
+		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.VersionId))
 	}
 	return nil
 }

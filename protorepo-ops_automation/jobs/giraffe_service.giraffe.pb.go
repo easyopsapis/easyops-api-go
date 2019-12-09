@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	ops_automation "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/ops_automation"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for jobs service.
 //
@@ -38,7 +39,7 @@ type Client interface {
 	GetJobs(ctx context.Context, in *GetJobsRequest) (*ops_automation.JobDetails, error)
 	GetJobChangeLog(ctx context.Context, in *GetJobChangeLogRequest) (*GetJobChangeLogResponse, error)
 	ListJobs(ctx context.Context, in *ListJobsRequest) (*ListJobsResponse, error)
-	UpdateJobs(ctx context.Context, in *UpdateJobsRequest) (*UpdateJobsResponse, error)
+	UpdateJobs(ctx context.Context, in *ops_automation.Jobs) (*UpdateJobsResponse, error)
 }
 
 type client struct {
@@ -53,7 +54,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateJobsExcution(ctx context.Context, in *CreateJobsExcutionRequest) (*CreateJobsExcutionResponse, error) {
 	out := new(CreateJobsExcutionResponse)
-	err := c.c.Invoke(ctx, _CreateJobsExcutionContract, in, out)
+	err := c.c.Invoke(ctx, _CreateJobsExcutionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ func (c *client) CreateJobsExcution(ctx context.Context, in *CreateJobsExcutionR
 
 func (c *client) CreateJobs(ctx context.Context, in *ops_automation.Jobs) (*CreateJobsResponse, error) {
 	out := new(CreateJobsResponse)
-	err := c.c.Invoke(ctx, _CreateJobsContract, in, out)
+	err := c.c.Invoke(ctx, _CreateJobsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +72,7 @@ func (c *client) CreateJobs(ctx context.Context, in *ops_automation.Jobs) (*Crea
 
 func (c *client) DeleteJobs(ctx context.Context, in *DeleteJobsRequest) (*DeleteJobsResponse, error) {
 	out := new(DeleteJobsResponse)
-	err := c.c.Invoke(ctx, _DeleteJobsContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteJobsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +81,7 @@ func (c *client) DeleteJobs(ctx context.Context, in *DeleteJobsRequest) (*Delete
 
 func (c *client) GetJobs(ctx context.Context, in *GetJobsRequest) (*ops_automation.JobDetails, error) {
 	out := new(ops_automation.JobDetails)
-	err := c.c.Invoke(ctx, _GetJobsContract, in, out)
+	err := c.c.Invoke(ctx, _GetJobsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +90,7 @@ func (c *client) GetJobs(ctx context.Context, in *GetJobsRequest) (*ops_automati
 
 func (c *client) GetJobChangeLog(ctx context.Context, in *GetJobChangeLogRequest) (*GetJobChangeLogResponse, error) {
 	out := new(GetJobChangeLogResponse)
-	err := c.c.Invoke(ctx, _GetJobChangeLogContract, in, out)
+	err := c.c.Invoke(ctx, _GetJobChangeLogMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -98,16 +99,16 @@ func (c *client) GetJobChangeLog(ctx context.Context, in *GetJobChangeLogRequest
 
 func (c *client) ListJobs(ctx context.Context, in *ListJobsRequest) (*ListJobsResponse, error) {
 	out := new(ListJobsResponse)
-	err := c.c.Invoke(ctx, _ListJobsContract, in, out)
+	err := c.c.Invoke(ctx, _ListJobsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) UpdateJobs(ctx context.Context, in *UpdateJobsRequest) (*UpdateJobsResponse, error) {
+func (c *client) UpdateJobs(ctx context.Context, in *ops_automation.Jobs) (*UpdateJobsResponse, error) {
 	out := new(UpdateJobsResponse)
-	err := c.c.Invoke(ctx, _UpdateJobsContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateJobsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +123,7 @@ type Service interface {
 	GetJobs(context.Context, *GetJobsRequest) (*ops_automation.JobDetails, error)
 	GetJobChangeLog(context.Context, *GetJobChangeLogRequest) (*GetJobChangeLogResponse, error)
 	ListJobs(context.Context, *ListJobsRequest) (*ListJobsResponse, error)
-	UpdateJobs(context.Context, *UpdateJobsRequest) (*UpdateJobsResponse, error)
+	UpdateJobs(context.Context, *ops_automation.Jobs) (*UpdateJobsResponse, error)
 }
 
 func _CreateJobsExcutionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -163,114 +164,143 @@ func _ListJobsEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 
 func _UpdateJobsEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.UpdateJobs(ctx, req.(*UpdateJobsRequest))
+		return s.UpdateJobs(ctx, req.(*ops_automation.Jobs))
 	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateJobsExcutionContract, _CreateJobsExcutionEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateJobsContract, _CreateJobsEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteJobsContract, _DeleteJobsEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetJobsContract, _GetJobsEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetJobChangeLogContract, _GetJobChangeLogEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListJobsContract, _ListJobsEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateJobsContract, _UpdateJobsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateJobsExcutionMethodDesc, _CreateJobsExcutionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateJobsMethodDesc, _CreateJobsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteJobsMethodDesc, _DeleteJobsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetJobsMethodDesc, _GetJobsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetJobChangeLogMethodDesc, _GetJobChangeLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListJobsMethodDesc, _ListJobsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateJobsMethodDesc, _UpdateJobsEndpoint(srv))
 }
 
-// API Contract
-var _CreateJobsExcutionContract = &createJobsExcutionContract{}
-
-type createJobsExcutionContract struct{}
-
-func (*createJobsExcutionContract) ServiceName() string         { return "jobs.rpc" }
-func (*createJobsExcutionContract) MethodName() string          { return "CreateJobsExcution" }
-func (*createJobsExcutionContract) RequestMessage() interface{} { return new(CreateJobsExcutionRequest) }
-func (*createJobsExcutionContract) ResponseMessage() interface{} {
-	return new(CreateJobsExcutionRequest)
+// Method Description
+var _CreateJobsExcutionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.CreateJobsExcution",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "CreateJobsExcution",
+	RequestType:  (*CreateJobsExcutionRequest)(nil),
+	ResponseType: (*CreateJobsExcutionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/jobs/execution",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createJobsExcutionContract) ContractName() string {
-	return "easyops.api.ops_automation.jobs.CreateJobsExcution"
+
+var _CreateJobsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.CreateJobs",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "CreateJobs",
+	RequestType:  (*ops_automation.Jobs)(nil),
+	ResponseType: (*CreateJobsResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/jobs",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createJobsExcutionContract) ContractVersion() string   { return "1.0" }
-func (*createJobsExcutionContract) Pattern() (string, string) { return "POST", "/jobs/execution" }
-func (*createJobsExcutionContract) Body() string              { return "" }
 
-var _CreateJobsContract = &createJobsContract{}
-
-type createJobsContract struct{}
-
-func (*createJobsContract) ServiceName() string          { return "jobs.rpc" }
-func (*createJobsContract) MethodName() string           { return "CreateJobs" }
-func (*createJobsContract) RequestMessage() interface{}  { return new(ops_automation.Jobs) }
-func (*createJobsContract) ResponseMessage() interface{} { return new(ops_automation.Jobs) }
-func (*createJobsContract) ContractName() string         { return "easyops.api.ops_automation.jobs.CreateJobs" }
-func (*createJobsContract) ContractVersion() string      { return "1.0" }
-func (*createJobsContract) Pattern() (string, string)    { return "POST", "/jobs" }
-func (*createJobsContract) Body() string                 { return "" }
-
-var _DeleteJobsContract = &deleteJobsContract{}
-
-type deleteJobsContract struct{}
-
-func (*deleteJobsContract) ServiceName() string          { return "jobs.rpc" }
-func (*deleteJobsContract) MethodName() string           { return "DeleteJobs" }
-func (*deleteJobsContract) RequestMessage() interface{}  { return new(DeleteJobsRequest) }
-func (*deleteJobsContract) ResponseMessage() interface{} { return new(DeleteJobsRequest) }
-func (*deleteJobsContract) ContractName() string         { return "easyops.api.ops_automation.jobs.DeleteJobs" }
-func (*deleteJobsContract) ContractVersion() string      { return "1.0" }
-func (*deleteJobsContract) Pattern() (string, string)    { return "DELETE", "/jobs/:jobId" }
-func (*deleteJobsContract) Body() string                 { return "" }
-
-var _GetJobsContract = &getJobsContract{}
-
-type getJobsContract struct{}
-
-func (*getJobsContract) ServiceName() string          { return "jobs.rpc" }
-func (*getJobsContract) MethodName() string           { return "GetJobs" }
-func (*getJobsContract) RequestMessage() interface{}  { return new(GetJobsRequest) }
-func (*getJobsContract) ResponseMessage() interface{} { return new(GetJobsRequest) }
-func (*getJobsContract) ContractName() string         { return "easyops.api.ops_automation.jobs.GetJobs" }
-func (*getJobsContract) ContractVersion() string      { return "1.0" }
-func (*getJobsContract) Pattern() (string, string)    { return "GET", "/jobs/:jobId" }
-func (*getJobsContract) Body() string                 { return "" }
-
-var _GetJobChangeLogContract = &getJobChangeLogContract{}
-
-type getJobChangeLogContract struct{}
-
-func (*getJobChangeLogContract) ServiceName() string          { return "jobs.rpc" }
-func (*getJobChangeLogContract) MethodName() string           { return "GetJobChangeLog" }
-func (*getJobChangeLogContract) RequestMessage() interface{}  { return new(GetJobChangeLogRequest) }
-func (*getJobChangeLogContract) ResponseMessage() interface{} { return new(GetJobChangeLogRequest) }
-func (*getJobChangeLogContract) ContractName() string {
-	return "easyops.api.ops_automation.jobs.GetJobChangeLog"
+var _DeleteJobsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.DeleteJobs",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "DeleteJobs",
+	RequestType:  (*DeleteJobsRequest)(nil),
+	ResponseType: (*DeleteJobsResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/ops_automation/v1/jobs/:jobId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getJobChangeLogContract) ContractVersion() string   { return "1.0" }
-func (*getJobChangeLogContract) Pattern() (string, string) { return "GET", "/jobs/@jobId/changeLog" }
-func (*getJobChangeLogContract) Body() string              { return "" }
 
-var _ListJobsContract = &listJobsContract{}
+var _GetJobsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.GetJobs",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "GetJobs",
+	RequestType:  (*GetJobsRequest)(nil),
+	ResponseType: (*ops_automation.JobDetails)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/jobs/:jobId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type listJobsContract struct{}
+var _GetJobChangeLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.GetJobChangeLog",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "GetJobChangeLog",
+	RequestType:  (*GetJobChangeLogRequest)(nil),
+	ResponseType: (*GetJobChangeLogResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/jobs/:jobId/changeLog",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*listJobsContract) ServiceName() string          { return "jobs.rpc" }
-func (*listJobsContract) MethodName() string           { return "ListJobs" }
-func (*listJobsContract) RequestMessage() interface{}  { return new(ListJobsRequest) }
-func (*listJobsContract) ResponseMessage() interface{} { return new(ListJobsRequest) }
-func (*listJobsContract) ContractName() string         { return "easyops.api.ops_automation.jobs.ListJobs" }
-func (*listJobsContract) ContractVersion() string      { return "1.0" }
-func (*listJobsContract) Pattern() (string, string)    { return "GET", "/jobs" }
-func (*listJobsContract) Body() string                 { return "" }
+var _ListJobsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.ListJobs",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "ListJobs",
+	RequestType:  (*ListJobsRequest)(nil),
+	ResponseType: (*ListJobsResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/jobs",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-var _UpdateJobsContract = &updateJobsContract{}
-
-type updateJobsContract struct{}
-
-func (*updateJobsContract) ServiceName() string          { return "jobs.rpc" }
-func (*updateJobsContract) MethodName() string           { return "UpdateJobs" }
-func (*updateJobsContract) RequestMessage() interface{}  { return new(UpdateJobsRequest) }
-func (*updateJobsContract) ResponseMessage() interface{} { return new(UpdateJobsRequest) }
-func (*updateJobsContract) ContractName() string         { return "easyops.api.ops_automation.jobs.UpdateJobs" }
-func (*updateJobsContract) ContractVersion() string      { return "1.0" }
-func (*updateJobsContract) Pattern() (string, string)    { return "PUT", "/jobs/:jobId" }
-func (*updateJobsContract) Body() string                 { return "" }
+var _UpdateJobsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.jobs.UpdateJobs",
+		Version: "1.0",
+	},
+	ServiceName:  "jobs.rpc",
+	MethodName:   "UpdateJobs",
+	RequestType:  (*ops_automation.Jobs)(nil),
+	ResponseType: (*UpdateJobsResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/ops_automation/v1/jobs/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

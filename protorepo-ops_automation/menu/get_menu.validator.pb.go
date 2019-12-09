@@ -22,37 +22,41 @@ func (this *GetMenuRequest) Validate() error {
 	return nil
 }
 
-var _regex_GetMenuResponse_Visitors = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_GetMenuResponse_Managers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_GetMenuResponse_Visitors = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_GetMenuResponse_Managers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_GetMenuResponse_Id = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *GetMenuResponse) Validate() error {
 	if !(len(this.CreateTime) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("CreateTime", fmt.Errorf(`value '%v' must length be greater than '1'`, this.CreateTime))
+		return github_com_mwitkow_go_proto_validators.FieldError("CreateTime", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.CreateTime))
 	}
 	if !(len(this.CreateTime) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("CreateTime", fmt.Errorf(`value '%v' must length be less than '34'`, this.CreateTime))
+		return github_com_mwitkow_go_proto_validators.FieldError("CreateTime", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.CreateTime))
 	}
 	if !(len(this.UpdateTime) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("UpdateTime", fmt.Errorf(`value '%v' must length be greater than '1'`, this.UpdateTime))
+		return github_com_mwitkow_go_proto_validators.FieldError("UpdateTime", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.UpdateTime))
 	}
 	if !(len(this.UpdateTime) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("UpdateTime", fmt.Errorf(`value '%v' must length be less than '34'`, this.UpdateTime))
+		return github_com_mwitkow_go_proto_validators.FieldError("UpdateTime", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.UpdateTime))
 	}
 	if !(this.Org > 0) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Org", fmt.Errorf(`value '%v' must be greater than '0'`, this.Org))
 	}
 	if !(len(this.Category) > -1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '-1'`, this.Category))
+		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must have a length greater than '-1'`, this.Category))
 	}
 	for _, item := range this.Visitors {
 		if !_regex_GetMenuResponse_Visitors.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Visitors", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("Visitors", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.Managers {
 		if !_regex_GetMenuResponse_Managers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Managers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("Managers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
+	}
+	if !_regex_GetMenuResponse_Id.MatchString(this.Id) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Id))
 	}
 	return nil
 }

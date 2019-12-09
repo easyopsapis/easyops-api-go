@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	easy_flow "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/easy_flow"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for deploy service.
 //
@@ -51,7 +52,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Callback(ctx context.Context, in *easy_flow.TaskRet) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _CallbackContract, in, out)
+	err := c.c.Invoke(ctx, _CallbackMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (c *client) Callback(ctx context.Context, in *easy_flow.TaskRet) (*types.Em
 
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*CreateResponse, error) {
 	out := new(CreateResponse)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +70,7 @@ func (c *client) Create(ctx context.Context, in *CreateRequest) (*CreateResponse
 
 func (c *client) Get(ctx context.Context, in *GetRequest) (*easy_flow.DeployRet, error) {
 	out := new(easy_flow.DeployRet)
-	err := c.c.Invoke(ctx, _GetContract, in, out)
+	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ func (c *client) Get(ctx context.Context, in *GetRequest) (*easy_flow.DeployRet,
 
 func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.c.Invoke(ctx, _ListContract, in, out)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -118,61 +119,81 @@ func _ListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CallbackContract, _CallbackEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContract, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CallbackMethodDesc, _CallbackEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
 }
 
-// API Contract
-var _CallbackContract = &callbackContract{}
+// Method Description
+var _CallbackMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.deploy.Callback",
+		Version: "1.0",
+	},
+	ServiceName:  "deploy.rpc",
+	MethodName:   "Callback",
+	RequestType:  (*easy_flow.TaskRet)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/deployTask/callback",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type callbackContract struct{}
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.deploy.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "deploy.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*CreateResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/deployTask",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*callbackContract) ServiceName() string          { return "deploy.rpc" }
-func (*callbackContract) MethodName() string           { return "Callback" }
-func (*callbackContract) RequestMessage() interface{}  { return new(easy_flow.TaskRet) }
-func (*callbackContract) ResponseMessage() interface{} { return new(easy_flow.TaskRet) }
-func (*callbackContract) ContractName() string         { return "easyops.api.easy_flow.deploy.Callback" }
-func (*callbackContract) ContractVersion() string      { return "1.0" }
-func (*callbackContract) Pattern() (string, string)    { return "POST", "/deployTask/callback" }
-func (*callbackContract) Body() string                 { return "" }
+var _GetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.deploy.Get",
+		Version: "1.0",
+	},
+	ServiceName:  "deploy.rpc",
+	MethodName:   "Get",
+	RequestType:  (*GetRequest)(nil),
+	ResponseType: (*easy_flow.DeployRet)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/deployTask/:taskId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "deploy.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(CreateRequest) }
-func (*createContract) ResponseMessage() interface{} { return new(CreateRequest) }
-func (*createContract) ContractName() string         { return "easyops.api.easy_flow.deploy.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/deployTask" }
-func (*createContract) Body() string                 { return "" }
-
-var _GetContract = &getContract{}
-
-type getContract struct{}
-
-func (*getContract) ServiceName() string          { return "deploy.rpc" }
-func (*getContract) MethodName() string           { return "Get" }
-func (*getContract) RequestMessage() interface{}  { return new(GetRequest) }
-func (*getContract) ResponseMessage() interface{} { return new(GetRequest) }
-func (*getContract) ContractName() string         { return "easyops.api.easy_flow.deploy.Get" }
-func (*getContract) ContractVersion() string      { return "1.0" }
-func (*getContract) Pattern() (string, string)    { return "GET", "/deployTask/:taskId" }
-func (*getContract) Body() string                 { return "" }
-
-var _ListContract = &listContract{}
-
-type listContract struct{}
-
-func (*listContract) ServiceName() string          { return "deploy.rpc" }
-func (*listContract) MethodName() string           { return "List" }
-func (*listContract) RequestMessage() interface{}  { return new(ListRequest) }
-func (*listContract) ResponseMessage() interface{} { return new(ListRequest) }
-func (*listContract) ContractName() string         { return "easyops.api.easy_flow.deploy.List" }
-func (*listContract) ContractVersion() string      { return "1.0" }
-func (*listContract) Pattern() (string, string)    { return "GET", "/deployTaskList/:taskIdList" }
-func (*listContract) Body() string                 { return "" }
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.deploy.List",
+		Version: "1.0",
+	},
+	ServiceName:  "deploy.rpc",
+	MethodName:   "List",
+	RequestType:  (*ListRequest)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/deployTaskList/:taskIdList",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}

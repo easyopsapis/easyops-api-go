@@ -11,6 +11,7 @@ import (
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	_ "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/ops_automation"
 	math "math"
+	regexp "regexp"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -43,23 +44,29 @@ func (this *ListJobsResponse) Validate() error {
 	}
 	return nil
 }
+
+var _regex_ListJobsResponse_List_Id = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+
 func (this *ListJobsResponse_List) Validate() error {
 	if this.Scheduler != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Scheduler); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Scheduler", err)
 		}
 	}
-	if !(len(this.Id) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Id))
-	}
-	if !(len(this.Id) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be less than '34'`, this.Id))
+	if !_regex_ListJobsResponse_List_Id.MatchString(this.Id) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Id))
 	}
 	if !(len(this.Name) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Name))
 	}
 	if !(len(this.Category) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Category))
+		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.Category))
+	}
+	if !(len(this.MenuId) > 0) {
+		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.MenuId))
+	}
+	if !(len(this.MenuId) < 34) {
+		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.MenuId))
 	}
 	return nil
 }

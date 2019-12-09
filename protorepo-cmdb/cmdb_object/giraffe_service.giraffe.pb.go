@@ -7,9 +7,8 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
-	types "github.com/gogo/protobuf/types"
 	cmdb "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/cmdb"
 	io "io"
 	math "math"
@@ -24,17 +23,28 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for cmdb_object service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	BatchListRelationQueryStrategyV2Request(ctx context.Context, in *BatchListRelationQueryStrategyV2RequestRequest) (*BatchListRelationQueryStrategyV2RequestResponse, error)
+	Create(ctx context.Context, in *CreateRequest) (*cmdb.CmdbObject, error)
 	GetDetail(ctx context.Context, in *GetDetailRequest) (*cmdb.CmdbObject, error)
-	List(ctx context.Context, in *types.Empty) (*ListResponse, error)
+	GetObjectAll(ctx context.Context, in *GetObjectAllRequest) (*GetObjectAllResponse, error)
+	ObjectSnapshot(ctx context.Context, in *ObjectSnapshotRequest) (*ObjectSnapshotResponse, error)
+	ImportCheck(ctx context.Context, in *ImportCheckRequest) (*ImportCheckResponse, error)
+	ImportCheckV2(ctx context.Context, in *ImportCheckV2Request) (*ImportCheckV2Response, error)
+	ImportObject(ctx context.Context, in *ImportObjectRequest) (*ImportObjectResponse, error)
+	ImportV2(ctx context.Context, in *ImportV2Request) (*ImportV2Response, error)
+	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
+	ListRelationQueryStrategyV2Request(ctx context.Context, in *ListRelationQueryStrategyV2RequestRequest) (*ListRelationQueryStrategyV2RequestResponse, error)
+	Update(ctx context.Context, in *UpdateRequest) (*cmdb.CmdbObject, error)
 }
 
 type client struct {
@@ -47,18 +57,108 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) GetDetail(ctx context.Context, in *GetDetailRequest) (*cmdb.CmdbObject, error) {
-	out := new(cmdb.CmdbObject)
-	err := c.c.Invoke(ctx, _GetDetailContract, in, out)
+func (c *client) BatchListRelationQueryStrategyV2Request(ctx context.Context, in *BatchListRelationQueryStrategyV2RequestRequest) (*BatchListRelationQueryStrategyV2RequestResponse, error) {
+	out := new(BatchListRelationQueryStrategyV2RequestResponse)
+	err := c.c.Invoke(ctx, _BatchListRelationQueryStrategyV2RequestMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) List(ctx context.Context, in *types.Empty) (*ListResponse, error) {
+func (c *client) Create(ctx context.Context, in *CreateRequest) (*cmdb.CmdbObject, error) {
+	out := new(cmdb.CmdbObject)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetDetail(ctx context.Context, in *GetDetailRequest) (*cmdb.CmdbObject, error) {
+	out := new(cmdb.CmdbObject)
+	err := c.c.Invoke(ctx, _GetDetailMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetObjectAll(ctx context.Context, in *GetObjectAllRequest) (*GetObjectAllResponse, error) {
+	out := new(GetObjectAllResponse)
+	err := c.c.Invoke(ctx, _GetObjectAllMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ObjectSnapshot(ctx context.Context, in *ObjectSnapshotRequest) (*ObjectSnapshotResponse, error) {
+	out := new(ObjectSnapshotResponse)
+	err := c.c.Invoke(ctx, _ObjectSnapshotMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ImportCheck(ctx context.Context, in *ImportCheckRequest) (*ImportCheckResponse, error) {
+	out := new(ImportCheckResponse)
+	err := c.c.Invoke(ctx, _ImportCheckMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ImportCheckV2(ctx context.Context, in *ImportCheckV2Request) (*ImportCheckV2Response, error) {
+	out := new(ImportCheckV2Response)
+	err := c.c.Invoke(ctx, _ImportCheckV2MethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ImportObject(ctx context.Context, in *ImportObjectRequest) (*ImportObjectResponse, error) {
+	out := new(ImportObjectResponse)
+	err := c.c.Invoke(ctx, _ImportObjectMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ImportV2(ctx context.Context, in *ImportV2Request) (*ImportV2Response, error) {
+	out := new(ImportV2Response)
+	err := c.c.Invoke(ctx, _ImportV2MethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.c.Invoke(ctx, _ListContract, in, out)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListRelationQueryStrategyV2Request(ctx context.Context, in *ListRelationQueryStrategyV2RequestRequest) (*ListRelationQueryStrategyV2RequestResponse, error) {
+	out := new(ListRelationQueryStrategyV2RequestResponse)
+	err := c.c.Invoke(ctx, _ListRelationQueryStrategyV2RequestMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) Update(ctx context.Context, in *UpdateRequest) (*cmdb.CmdbObject, error) {
+	out := new(cmdb.CmdbObject)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +167,30 @@ func (c *client) List(ctx context.Context, in *types.Empty) (*ListResponse, erro
 
 // Service is the server API for cmdb_object service.
 type Service interface {
+	BatchListRelationQueryStrategyV2Request(context.Context, *BatchListRelationQueryStrategyV2RequestRequest) (*BatchListRelationQueryStrategyV2RequestResponse, error)
+	Create(context.Context, *CreateRequest) (*cmdb.CmdbObject, error)
 	GetDetail(context.Context, *GetDetailRequest) (*cmdb.CmdbObject, error)
-	List(context.Context, *types.Empty) (*ListResponse, error)
+	GetObjectAll(context.Context, *GetObjectAllRequest) (*GetObjectAllResponse, error)
+	ObjectSnapshot(context.Context, *ObjectSnapshotRequest) (*ObjectSnapshotResponse, error)
+	ImportCheck(context.Context, *ImportCheckRequest) (*ImportCheckResponse, error)
+	ImportCheckV2(context.Context, *ImportCheckV2Request) (*ImportCheckV2Response, error)
+	ImportObject(context.Context, *ImportObjectRequest) (*ImportObjectResponse, error)
+	ImportV2(context.Context, *ImportV2Request) (*ImportV2Response, error)
+	List(context.Context, *ListRequest) (*ListResponse, error)
+	ListRelationQueryStrategyV2Request(context.Context, *ListRelationQueryStrategyV2RequestRequest) (*ListRelationQueryStrategyV2RequestResponse, error)
+	Update(context.Context, *UpdateRequest) (*cmdb.CmdbObject, error)
+}
+
+func _BatchListRelationQueryStrategyV2RequestEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.BatchListRelationQueryStrategyV2Request(ctx, req.(*BatchListRelationQueryStrategyV2RequestRequest))
+	}
+}
+
+func _CreateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.Create(ctx, req.(*CreateRequest))
+	}
 }
 
 func _GetDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -77,40 +199,288 @@ func _GetDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _GetObjectAllEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetObjectAll(ctx, req.(*GetObjectAllRequest))
+	}
+}
+
+func _ObjectSnapshotEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ObjectSnapshot(ctx, req.(*ObjectSnapshotRequest))
+	}
+}
+
+func _ImportCheckEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ImportCheck(ctx, req.(*ImportCheckRequest))
+	}
+}
+
+func _ImportCheckV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ImportCheckV2(ctx, req.(*ImportCheckV2Request))
+	}
+}
+
+func _ImportObjectEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ImportObject(ctx, req.(*ImportObjectRequest))
+	}
+}
+
+func _ImportV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ImportV2(ctx, req.(*ImportV2Request))
+	}
+}
+
 func _ListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.List(ctx, req.(*types.Empty))
+		return s.List(ctx, req.(*ListRequest))
+	}
+}
+
+func _ListRelationQueryStrategyV2RequestEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListRelationQueryStrategyV2Request(ctx, req.(*ListRelationQueryStrategyV2RequestRequest))
+	}
+}
+
+func _UpdateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.Update(ctx, req.(*UpdateRequest))
 	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetDetailContract, _GetDetailEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContract, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_BatchListRelationQueryStrategyV2RequestMethodDesc, _BatchListRelationQueryStrategyV2RequestEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetDetailMethodDesc, _GetDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetObjectAllMethodDesc, _GetObjectAllEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ObjectSnapshotMethodDesc, _ObjectSnapshotEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ImportCheckMethodDesc, _ImportCheckEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ImportCheckV2MethodDesc, _ImportCheckV2Endpoint(srv))
+	s.RegisterUnaryEndpoint(_ImportObjectMethodDesc, _ImportObjectEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ImportV2MethodDesc, _ImportV2Endpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListRelationQueryStrategyV2RequestMethodDesc, _ListRelationQueryStrategyV2RequestEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
 }
 
-// API Contract
-var _GetDetailContract = &getDetailContract{}
+// Method Description
+var _BatchListRelationQueryStrategyV2RequestMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.BatchListRelationQueryStrategyV2Request",
+		Version: "2.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "BatchListRelationQueryStrategyV2Request",
+	RequestType:  (*BatchListRelationQueryStrategyV2RequestRequest)(nil),
+	ResponseType: (*BatchListRelationQueryStrategyV2RequestResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/v2/batch/object/relation_query_strategy",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type getDetailContract struct{}
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*cmdb.CmdbObject)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*getDetailContract) ServiceName() string          { return "cmdb_object.rpc" }
-func (*getDetailContract) MethodName() string           { return "GetDetail" }
-func (*getDetailContract) RequestMessage() interface{}  { return new(GetDetailRequest) }
-func (*getDetailContract) ResponseMessage() interface{} { return new(GetDetailRequest) }
-func (*getDetailContract) ContractName() string         { return "easyops.api.cmdb.cmdb_object.GetDetail" }
-func (*getDetailContract) ContractVersion() string      { return "1.0" }
-func (*getDetailContract) Pattern() (string, string)    { return "GET", "/object/:objectId" }
-func (*getDetailContract) Body() string                 { return "" }
+var _GetDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.GetDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "GetDetail",
+	RequestType:  (*GetDetailRequest)(nil),
+	ResponseType: (*cmdb.CmdbObject)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:objectId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-var _ListContract = &listContract{}
+var _GetObjectAllMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.GetObjectAll",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "GetObjectAll",
+	RequestType:  (*GetObjectAllRequest)(nil),
+	ResponseType: (*GetObjectAllResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object_all",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
 
-type listContract struct{}
+var _ObjectSnapshotMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.ObjectSnapshot",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "ObjectSnapshot",
+	RequestType:  (*ObjectSnapshotRequest)(nil),
+	ResponseType: (*ObjectSnapshotResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/history/object/:object_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*listContract) ServiceName() string          { return "cmdb_object.rpc" }
-func (*listContract) MethodName() string           { return "List" }
-func (*listContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*listContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*listContract) ContractName() string         { return "easyops.api.cmdb.cmdb_object.List" }
-func (*listContract) ContractVersion() string      { return "1.0" }
-func (*listContract) Pattern() (string, string)    { return "GET", "/object" }
-func (*listContract) Body() string                 { return "" }
+var _ImportCheckMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.ImportCheck",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "ImportCheck",
+	RequestType:  (*ImportCheckRequest)(nil),
+	ResponseType: (*ImportCheckResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object_import_check",
+		},
+		Body:         "body",
+		ResponseBody: "",
+	},
+}
+
+var _ImportCheckV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.ImportCheckV2",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "ImportCheckV2",
+	RequestType:  (*ImportCheckV2Request)(nil),
+	ResponseType: (*ImportCheckV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/object_import_check",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ImportObjectMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.ImportObject",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "ImportObject",
+	RequestType:  (*ImportObjectRequest)(nil),
+	ResponseType: (*ImportObjectResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object_import",
+		},
+		Body:         "body",
+		ResponseBody: "",
+	},
+}
+
+var _ImportV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.ImportV2",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "ImportV2",
+	RequestType:  (*ImportV2Request)(nil),
+	ResponseType: (*ImportV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/object_import",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.List",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "List",
+	RequestType:  (*ListRequest)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ListRelationQueryStrategyV2RequestMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.ListRelationQueryStrategyV2Request",
+		Version: "2.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "ListRelationQueryStrategyV2Request",
+	RequestType:  (*ListRelationQueryStrategyV2RequestRequest)(nil),
+	ResponseType: (*ListRelationQueryStrategyV2RequestResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/v2/object/:object_id/relation_query_strategy",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
+
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.cmdb_object.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_object.rpc",
+	MethodName:   "Update",
+	RequestType:  (*UpdateRequest)(nil),
+	ResponseType: (*cmdb.CmdbObject)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/object/:objectId",
+		},
+		Body:         "body",
+		ResponseBody: "data",
+	},
+}

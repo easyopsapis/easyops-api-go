@@ -44,11 +44,11 @@ func (this *ListMenusResponse) Validate() error {
 	return nil
 }
 
-var _regex_ListMenusResponse_List_Creator = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_ListMenusResponse_List_Creator = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *ListMenusResponse_List) Validate() error {
 	if !_regex_ListMenusResponse_List_Creator.MatchString(this.Creator) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Creator))
+		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Creator))
 	}
 	return nil
 }

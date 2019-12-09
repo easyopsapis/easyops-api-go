@@ -19,14 +19,14 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_AutoDiscoveryInstance_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
-var _regex_AutoDiscoveryInstance_XObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_AutoDiscoveryInstance_XObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *AutoDiscoveryInstance) Validate() error {
 	if !_regex_AutoDiscoveryInstance_InstanceId.MatchString(this.InstanceId) {
 		return github_com_mwitkow_go_proto_validators.FieldError("InstanceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.InstanceId))
 	}
 	if !_regex_AutoDiscoveryInstance_XObjectId.MatchString(this.XObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("XObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.XObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("XObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.XObjectId))
 	}
 	return nil
 }

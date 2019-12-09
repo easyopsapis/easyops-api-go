@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	easy_flow "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/easy_flow"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for strategy service.
 //
@@ -35,6 +36,7 @@ const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_m
 type Client interface {
 	Create(ctx context.Context, in *CreateRequest) (*easy_flow.DeployStrategy, error)
 	DeleteStrategy(ctx context.Context, in *DeleteStrategyRequest) (*types.Empty, error)
+	StrategyDeployment(ctx context.Context, in *StrategyDeploymentRequest) (*StrategyDeploymentResponse, error)
 	Get(ctx context.Context, in *GetRequest) (*easy_flow.DeployStrategy, error)
 	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
 	Update(ctx context.Context, in *UpdateRequest) (*easy_flow.DeployStrategy, error)
@@ -52,7 +54,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*easy_flow.DeployStrategy, error) {
 	out := new(easy_flow.DeployStrategy)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +63,16 @@ func (c *client) Create(ctx context.Context, in *CreateRequest) (*easy_flow.Depl
 
 func (c *client) DeleteStrategy(ctx context.Context, in *DeleteStrategyRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteStrategyContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteStrategyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) StrategyDeployment(ctx context.Context, in *StrategyDeploymentRequest) (*StrategyDeploymentResponse, error) {
+	out := new(StrategyDeploymentResponse)
+	err := c.c.Invoke(ctx, _StrategyDeploymentMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +81,7 @@ func (c *client) DeleteStrategy(ctx context.Context, in *DeleteStrategyRequest) 
 
 func (c *client) Get(ctx context.Context, in *GetRequest) (*easy_flow.DeployStrategy, error) {
 	out := new(easy_flow.DeployStrategy)
-	err := c.c.Invoke(ctx, _GetContract, in, out)
+	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +90,7 @@ func (c *client) Get(ctx context.Context, in *GetRequest) (*easy_flow.DeployStra
 
 func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.c.Invoke(ctx, _ListContract, in, out)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +99,7 @@ func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, erro
 
 func (c *client) Update(ctx context.Context, in *UpdateRequest) (*easy_flow.DeployStrategy, error) {
 	out := new(easy_flow.DeployStrategy)
-	err := c.c.Invoke(ctx, _UpdateContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -99,6 +110,7 @@ func (c *client) Update(ctx context.Context, in *UpdateRequest) (*easy_flow.Depl
 type Service interface {
 	Create(context.Context, *CreateRequest) (*easy_flow.DeployStrategy, error)
 	DeleteStrategy(context.Context, *DeleteStrategyRequest) (*types.Empty, error)
+	StrategyDeployment(context.Context, *StrategyDeploymentRequest) (*StrategyDeploymentResponse, error)
 	Get(context.Context, *GetRequest) (*easy_flow.DeployStrategy, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	Update(context.Context, *UpdateRequest) (*easy_flow.DeployStrategy, error)
@@ -113,6 +125,12 @@ func _CreateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 func _DeleteStrategyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.DeleteStrategy(ctx, req.(*DeleteStrategyRequest))
+	}
+}
+
+func _StrategyDeploymentEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.StrategyDeployment(ctx, req.(*StrategyDeploymentRequest))
 	}
 }
 
@@ -135,79 +153,119 @@ func _UpdateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteStrategyContract, _DeleteStrategyEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContract, _ListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContract, _UpdateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteStrategyMethodDesc, _DeleteStrategyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_StrategyDeploymentMethodDesc, _StrategyDeploymentEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "strategy.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(CreateRequest) }
-func (*createContract) ResponseMessage() interface{} { return new(CreateRequest) }
-func (*createContract) ContractName() string         { return "easyops.api.easy_flow.strategy.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/deployStrategy" }
-func (*createContract) Body() string                 { return "" }
-
-var _DeleteStrategyContract = &deleteStrategyContract{}
-
-type deleteStrategyContract struct{}
-
-func (*deleteStrategyContract) ServiceName() string          { return "strategy.rpc" }
-func (*deleteStrategyContract) MethodName() string           { return "DeleteStrategy" }
-func (*deleteStrategyContract) RequestMessage() interface{}  { return new(DeleteStrategyRequest) }
-func (*deleteStrategyContract) ResponseMessage() interface{} { return new(DeleteStrategyRequest) }
-func (*deleteStrategyContract) ContractName() string {
-	return "easyops.api.easy_flow.strategy.DeleteStrategy"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.strategy.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "strategy.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*easy_flow.DeployStrategy)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/deployStrategy",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteStrategyContract) ContractVersion() string { return "1.0" }
-func (*deleteStrategyContract) Pattern() (string, string) {
-	return "DELETE", "/deployStrategy/:strategyID"
+
+var _DeleteStrategyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.strategy.DeleteStrategy",
+		Version: "1.0",
+	},
+	ServiceName:  "strategy.rpc",
+	MethodName:   "DeleteStrategy",
+	RequestType:  (*DeleteStrategyRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/deployStrategy/:strategyID",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteStrategyContract) Body() string { return "" }
 
-var _GetContract = &getContract{}
+var _StrategyDeploymentMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.strategy.StrategyDeployment",
+		Version: "1.0",
+	},
+	ServiceName:  "strategy.rpc",
+	MethodName:   "StrategyDeployment",
+	RequestType:  (*StrategyDeploymentRequest)(nil),
+	ResponseType: (*StrategyDeploymentResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/deployStrategy/exec/:strategyID",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
 
-type getContract struct{}
+var _GetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.strategy.Get",
+		Version: "1.0",
+	},
+	ServiceName:  "strategy.rpc",
+	MethodName:   "Get",
+	RequestType:  (*GetRequest)(nil),
+	ResponseType: (*easy_flow.DeployStrategy)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/deployStrategy/:strategyID",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*getContract) ServiceName() string          { return "strategy.rpc" }
-func (*getContract) MethodName() string           { return "Get" }
-func (*getContract) RequestMessage() interface{}  { return new(GetRequest) }
-func (*getContract) ResponseMessage() interface{} { return new(GetRequest) }
-func (*getContract) ContractName() string         { return "easyops.api.easy_flow.strategy.Get" }
-func (*getContract) ContractVersion() string      { return "1.0" }
-func (*getContract) Pattern() (string, string)    { return "GET", "/deployStrategy/:strategyID" }
-func (*getContract) Body() string                 { return "" }
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.strategy.List",
+		Version: "1.0",
+	},
+	ServiceName:  "strategy.rpc",
+	MethodName:   "List",
+	RequestType:  (*ListRequest)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/deployStrategy",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
 
-var _ListContract = &listContract{}
-
-type listContract struct{}
-
-func (*listContract) ServiceName() string          { return "strategy.rpc" }
-func (*listContract) MethodName() string           { return "List" }
-func (*listContract) RequestMessage() interface{}  { return new(ListRequest) }
-func (*listContract) ResponseMessage() interface{} { return new(ListRequest) }
-func (*listContract) ContractName() string         { return "easyops.api.easy_flow.strategy.List" }
-func (*listContract) ContractVersion() string      { return "1.0" }
-func (*listContract) Pattern() (string, string)    { return "GET", "/deployStrategy" }
-func (*listContract) Body() string                 { return "" }
-
-var _UpdateContract = &updateContract{}
-
-type updateContract struct{}
-
-func (*updateContract) ServiceName() string          { return "strategy.rpc" }
-func (*updateContract) MethodName() string           { return "Update" }
-func (*updateContract) RequestMessage() interface{}  { return new(UpdateRequest) }
-func (*updateContract) ResponseMessage() interface{} { return new(UpdateRequest) }
-func (*updateContract) ContractName() string         { return "easyops.api.easy_flow.strategy.Update" }
-func (*updateContract) ContractVersion() string      { return "1.0" }
-func (*updateContract) Pattern() (string, string)    { return "PUT", "/deployStrategy/:strategyID" }
-func (*updateContract) Body() string                 { return "" }
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.strategy.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "strategy.rpc",
+	MethodName:   "Update",
+	RequestType:  (*UpdateRequest)(nil),
+	ResponseType: (*easy_flow.DeployStrategy)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/deployStrategy/:strategyID",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

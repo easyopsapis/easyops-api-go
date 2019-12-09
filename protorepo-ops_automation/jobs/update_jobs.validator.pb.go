@@ -18,31 +18,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-func (this *UpdateJobsRequest) Validate() error {
-	if !(len(this.Name) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Name))
-	}
-	if !(len(this.Category) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Category", fmt.Errorf(`value '%v' must length be greater than '0'`, this.Category))
-	}
-	if !(len(this.MenuId) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must length be greater than '0'`, this.MenuId))
-	}
-	if !(len(this.MenuId) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenuId", fmt.Errorf(`value '%v' must length be less than '34'`, this.MenuId))
-	}
-	if this.BindResource != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.BindResource); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("BindResource", err)
-		}
-	}
-	if this.Mail != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Mail); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Mail", err)
-		}
-	}
-	return nil
-}
 func (this *UpdateJobsResponse) Validate() error {
 	return nil
 }

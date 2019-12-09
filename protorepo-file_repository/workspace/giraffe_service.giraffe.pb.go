@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for workspace service.
 //
@@ -35,6 +36,7 @@ type Client interface {
 	CheckWorkspaceBase(ctx context.Context, in *CheckWorkspaceBaseRequest) (*CheckWorkspaceBaseResponse, error)
 	Clear(ctx context.Context, in *ClearRequest) (*types.Empty, error)
 	CommitWorkspace(ctx context.Context, in *CommitWorkspaceRequest) (*CommitWorkspaceResponse, error)
+	CommitWorkspaceV2(ctx context.Context, in *CommitWorkspaceV2Request) (*CommitWorkspaceV2Response, error)
 	FileCompare(ctx context.Context, in *FileCompareRequest) (*FileCompareResponse, error)
 	CompareWorkspaceWithVersion(ctx context.Context, in *CompareWorkspaceWithVersionRequest) (*CompareWorkspaceWithVersionResponse, error)
 	GetFileInfo(ctx context.Context, in *GetFileInfoRequest) (*GetFileInfoResponse, error)
@@ -56,7 +58,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CheckWorkspaceBase(ctx context.Context, in *CheckWorkspaceBaseRequest) (*CheckWorkspaceBaseResponse, error) {
 	out := new(CheckWorkspaceBaseResponse)
-	err := c.c.Invoke(ctx, _CheckWorkspaceBaseContract, in, out)
+	err := c.c.Invoke(ctx, _CheckWorkspaceBaseMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +67,7 @@ func (c *client) CheckWorkspaceBase(ctx context.Context, in *CheckWorkspaceBaseR
 
 func (c *client) Clear(ctx context.Context, in *ClearRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _ClearContract, in, out)
+	err := c.c.Invoke(ctx, _ClearMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +76,16 @@ func (c *client) Clear(ctx context.Context, in *ClearRequest) (*types.Empty, err
 
 func (c *client) CommitWorkspace(ctx context.Context, in *CommitWorkspaceRequest) (*CommitWorkspaceResponse, error) {
 	out := new(CommitWorkspaceResponse)
-	err := c.c.Invoke(ctx, _CommitWorkspaceContract, in, out)
+	err := c.c.Invoke(ctx, _CommitWorkspaceMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) CommitWorkspaceV2(ctx context.Context, in *CommitWorkspaceV2Request) (*CommitWorkspaceV2Response, error) {
+	out := new(CommitWorkspaceV2Response)
+	err := c.c.Invoke(ctx, _CommitWorkspaceV2MethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +94,7 @@ func (c *client) CommitWorkspace(ctx context.Context, in *CommitWorkspaceRequest
 
 func (c *client) FileCompare(ctx context.Context, in *FileCompareRequest) (*FileCompareResponse, error) {
 	out := new(FileCompareResponse)
-	err := c.c.Invoke(ctx, _FileCompareContract, in, out)
+	err := c.c.Invoke(ctx, _FileCompareMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +103,7 @@ func (c *client) FileCompare(ctx context.Context, in *FileCompareRequest) (*File
 
 func (c *client) CompareWorkspaceWithVersion(ctx context.Context, in *CompareWorkspaceWithVersionRequest) (*CompareWorkspaceWithVersionResponse, error) {
 	out := new(CompareWorkspaceWithVersionResponse)
-	err := c.c.Invoke(ctx, _CompareWorkspaceWithVersionContract, in, out)
+	err := c.c.Invoke(ctx, _CompareWorkspaceWithVersionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +112,7 @@ func (c *client) CompareWorkspaceWithVersion(ctx context.Context, in *CompareWor
 
 func (c *client) GetFileInfo(ctx context.Context, in *GetFileInfoRequest) (*GetFileInfoResponse, error) {
 	out := new(GetFileInfoResponse)
-	err := c.c.Invoke(ctx, _GetFileInfoContract, in, out)
+	err := c.c.Invoke(ctx, _GetFileInfoMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +121,7 @@ func (c *client) GetFileInfo(ctx context.Context, in *GetFileInfoRequest) (*GetF
 
 func (c *client) GetFileList(ctx context.Context, in *GetFileListRequest) (*GetFileListResponse, error) {
 	out := new(GetFileListResponse)
-	err := c.c.Invoke(ctx, _GetFileListContract, in, out)
+	err := c.c.Invoke(ctx, _GetFileListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +130,7 @@ func (c *client) GetFileList(ctx context.Context, in *GetFileListRequest) (*GetF
 
 func (c *client) Init(ctx context.Context, in *InitRequest) (*InitResponse, error) {
 	out := new(InitResponse)
-	err := c.c.Invoke(ctx, _InitContract, in, out)
+	err := c.c.Invoke(ctx, _InitMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +139,7 @@ func (c *client) Init(ctx context.Context, in *InitRequest) (*InitResponse, erro
 
 func (c *client) SafeCommitWorkspace(ctx context.Context, in *SafeCommitWorkspaceRequest) (*SafeCommitWorkspaceResponse, error) {
 	out := new(SafeCommitWorkspaceResponse)
-	err := c.c.Invoke(ctx, _SafeCommitWorkspaceContract, in, out)
+	err := c.c.Invoke(ctx, _SafeCommitWorkspaceMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +148,7 @@ func (c *client) SafeCommitWorkspace(ctx context.Context, in *SafeCommitWorkspac
 
 func (c *client) UpdateFile(ctx context.Context, in *UpdateFileRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _UpdateFileContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateFileMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -149,6 +160,7 @@ type Service interface {
 	CheckWorkspaceBase(context.Context, *CheckWorkspaceBaseRequest) (*CheckWorkspaceBaseResponse, error)
 	Clear(context.Context, *ClearRequest) (*types.Empty, error)
 	CommitWorkspace(context.Context, *CommitWorkspaceRequest) (*CommitWorkspaceResponse, error)
+	CommitWorkspaceV2(context.Context, *CommitWorkspaceV2Request) (*CommitWorkspaceV2Response, error)
 	FileCompare(context.Context, *FileCompareRequest) (*FileCompareResponse, error)
 	CompareWorkspaceWithVersion(context.Context, *CompareWorkspaceWithVersionRequest) (*CompareWorkspaceWithVersionResponse, error)
 	GetFileInfo(context.Context, *GetFileInfoRequest) (*GetFileInfoResponse, error)
@@ -173,6 +185,12 @@ func _ClearEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 func _CommitWorkspaceEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.CommitWorkspace(ctx, req.(*CommitWorkspaceRequest))
+	}
+}
+
+func _CommitWorkspaceV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.CommitWorkspaceV2(ctx, req.(*CommitWorkspaceV2Request))
 	}
 }
 
@@ -219,179 +237,214 @@ func _UpdateFileEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CheckWorkspaceBaseContract, _CheckWorkspaceBaseEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ClearContract, _ClearEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CommitWorkspaceContract, _CommitWorkspaceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_FileCompareContract, _FileCompareEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CompareWorkspaceWithVersionContract, _CompareWorkspaceWithVersionEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetFileInfoContract, _GetFileInfoEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetFileListContract, _GetFileListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InitContract, _InitEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SafeCommitWorkspaceContract, _SafeCommitWorkspaceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateFileContract, _UpdateFileEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CheckWorkspaceBaseMethodDesc, _CheckWorkspaceBaseEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ClearMethodDesc, _ClearEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CommitWorkspaceMethodDesc, _CommitWorkspaceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CommitWorkspaceV2MethodDesc, _CommitWorkspaceV2Endpoint(srv))
+	s.RegisterUnaryEndpoint(_FileCompareMethodDesc, _FileCompareEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CompareWorkspaceWithVersionMethodDesc, _CompareWorkspaceWithVersionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetFileInfoMethodDesc, _GetFileInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetFileListMethodDesc, _GetFileListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InitMethodDesc, _InitEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SafeCommitWorkspaceMethodDesc, _SafeCommitWorkspaceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateFileMethodDesc, _UpdateFileEndpoint(srv))
 }
 
-// API Contract
-var _CheckWorkspaceBaseContract = &checkWorkspaceBaseContract{}
-
-type checkWorkspaceBaseContract struct{}
-
-func (*checkWorkspaceBaseContract) ServiceName() string         { return "workspace.rpc" }
-func (*checkWorkspaceBaseContract) MethodName() string          { return "CheckWorkspaceBase" }
-func (*checkWorkspaceBaseContract) RequestMessage() interface{} { return new(CheckWorkspaceBaseRequest) }
-func (*checkWorkspaceBaseContract) ResponseMessage() interface{} {
-	return new(CheckWorkspaceBaseRequest)
+// Method Description
+var _CheckWorkspaceBaseMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.CheckWorkspaceBase",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "CheckWorkspaceBase",
+	RequestType:  (*CheckWorkspaceBaseRequest)(nil),
+	ResponseType: (*CheckWorkspaceBaseResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/workspace/check/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*checkWorkspaceBaseContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.CheckWorkspaceBase"
+
+var _ClearMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.Clear",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "Clear",
+	RequestType:  (*ClearRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/workspace/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*checkWorkspaceBaseContract) ContractVersion() string { return "1.0" }
-func (*checkWorkspaceBaseContract) Pattern() (string, string) {
-	return "GET", "/workspace/check/@packageId"
+
+var _CommitWorkspaceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.CommitWorkspace",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "CommitWorkspace",
+	RequestType:  (*CommitWorkspaceRequest)(nil),
+	ResponseType: (*CommitWorkspaceResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/workspace/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*checkWorkspaceBaseContract) Body() string { return "" }
 
-var _ClearContract = &clearContract{}
-
-type clearContract struct{}
-
-func (*clearContract) ServiceName() string          { return "workspace.rpc" }
-func (*clearContract) MethodName() string           { return "Clear" }
-func (*clearContract) RequestMessage() interface{}  { return new(ClearRequest) }
-func (*clearContract) ResponseMessage() interface{} { return new(ClearRequest) }
-func (*clearContract) ContractName() string         { return "easyops.api.file_repository.workspace.Clear" }
-func (*clearContract) ContractVersion() string      { return "1.0" }
-func (*clearContract) Pattern() (string, string)    { return "DELETE", "/workspace/@packageId" }
-func (*clearContract) Body() string                 { return "" }
-
-var _CommitWorkspaceContract = &commitWorkspaceContract{}
-
-type commitWorkspaceContract struct{}
-
-func (*commitWorkspaceContract) ServiceName() string          { return "workspace.rpc" }
-func (*commitWorkspaceContract) MethodName() string           { return "CommitWorkspace" }
-func (*commitWorkspaceContract) RequestMessage() interface{}  { return new(CommitWorkspaceRequest) }
-func (*commitWorkspaceContract) ResponseMessage() interface{} { return new(CommitWorkspaceRequest) }
-func (*commitWorkspaceContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.CommitWorkspace"
+var _CommitWorkspaceV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.CommitWorkspaceV2",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "CommitWorkspaceV2",
+	RequestType:  (*CommitWorkspaceV2Request)(nil),
+	ResponseType: (*CommitWorkspaceV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/workspace/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*commitWorkspaceContract) ContractVersion() string   { return "1.0" }
-func (*commitWorkspaceContract) Pattern() (string, string) { return "POST", "/workspace/:packageId" }
-func (*commitWorkspaceContract) Body() string              { return "" }
 
-var _FileCompareContract = &fileCompareContract{}
-
-type fileCompareContract struct{}
-
-func (*fileCompareContract) ServiceName() string          { return "workspace.rpc" }
-func (*fileCompareContract) MethodName() string           { return "FileCompare" }
-func (*fileCompareContract) RequestMessage() interface{}  { return new(FileCompareRequest) }
-func (*fileCompareContract) ResponseMessage() interface{} { return new(FileCompareRequest) }
-func (*fileCompareContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.FileCompare"
+var _FileCompareMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.FileCompare",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "FileCompare",
+	RequestType:  (*FileCompareRequest)(nil),
+	ResponseType: (*FileCompareResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/workspace/:packageId/file/compare",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fileCompareContract) ContractVersion() string { return "1.0" }
-func (*fileCompareContract) Pattern() (string, string) {
-	return "POST", "/workspace/@packageId/file/compare"
+
+var _CompareWorkspaceWithVersionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.CompareWorkspaceWithVersion",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "CompareWorkspaceWithVersion",
+	RequestType:  (*CompareWorkspaceWithVersionRequest)(nil),
+	ResponseType: (*CompareWorkspaceWithVersionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/workspace/:packageId/compareWithVersion",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*fileCompareContract) Body() string { return "" }
 
-var _CompareWorkspaceWithVersionContract = &compareWorkspaceWithVersionContract{}
-
-type compareWorkspaceWithVersionContract struct{}
-
-func (*compareWorkspaceWithVersionContract) ServiceName() string { return "workspace.rpc" }
-func (*compareWorkspaceWithVersionContract) MethodName() string  { return "CompareWorkspaceWithVersion" }
-func (*compareWorkspaceWithVersionContract) RequestMessage() interface{} {
-	return new(CompareWorkspaceWithVersionRequest)
+var _GetFileInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.GetFileInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "GetFileInfo",
+	RequestType:  (*GetFileInfoRequest)(nil),
+	ResponseType: (*GetFileInfoResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/workspace/:packageId/file",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*compareWorkspaceWithVersionContract) ResponseMessage() interface{} {
-	return new(CompareWorkspaceWithVersionRequest)
+
+var _GetFileListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.GetFileList",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "GetFileList",
+	RequestType:  (*GetFileListRequest)(nil),
+	ResponseType: (*GetFileListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/workspace/:packageId/file",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*compareWorkspaceWithVersionContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.CompareWorkspaceWithVersion"
+
+var _InitMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.Init",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "Init",
+	RequestType:  (*InitRequest)(nil),
+	ResponseType: (*InitResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/workspace/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*compareWorkspaceWithVersionContract) ContractVersion() string { return "1.0" }
-func (*compareWorkspaceWithVersionContract) Pattern() (string, string) {
-	return "GET", "/workspace/@packageId/compareWithVersion"
+
+var _SafeCommitWorkspaceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.SafeCommitWorkspace",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "SafeCommitWorkspace",
+	RequestType:  (*SafeCommitWorkspaceRequest)(nil),
+	ResponseType: (*SafeCommitWorkspaceResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/workspace/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*compareWorkspaceWithVersionContract) Body() string { return "" }
 
-var _GetFileInfoContract = &getFileInfoContract{}
-
-type getFileInfoContract struct{}
-
-func (*getFileInfoContract) ServiceName() string          { return "workspace.rpc" }
-func (*getFileInfoContract) MethodName() string           { return "GetFileInfo" }
-func (*getFileInfoContract) RequestMessage() interface{}  { return new(GetFileInfoRequest) }
-func (*getFileInfoContract) ResponseMessage() interface{} { return new(GetFileInfoRequest) }
-func (*getFileInfoContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.GetFileInfo"
+var _UpdateFileMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.file_repository.workspace.UpdateFile",
+		Version: "1.0",
+	},
+	ServiceName:  "workspace.rpc",
+	MethodName:   "UpdateFile",
+	RequestType:  (*UpdateFileRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/workspace/:packageId/file",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getFileInfoContract) ContractVersion() string   { return "1.0" }
-func (*getFileInfoContract) Pattern() (string, string) { return "POST", "/v2/workspace/:packageId/file" }
-func (*getFileInfoContract) Body() string              { return "" }
-
-var _GetFileListContract = &getFileListContract{}
-
-type getFileListContract struct{}
-
-func (*getFileListContract) ServiceName() string          { return "workspace.rpc" }
-func (*getFileListContract) MethodName() string           { return "GetFileList" }
-func (*getFileListContract) RequestMessage() interface{}  { return new(GetFileListRequest) }
-func (*getFileListContract) ResponseMessage() interface{} { return new(GetFileListRequest) }
-func (*getFileListContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.GetFileList"
-}
-func (*getFileListContract) ContractVersion() string   { return "1.0" }
-func (*getFileListContract) Pattern() (string, string) { return "POST", "/v2/workspace/:packageId/file" }
-func (*getFileListContract) Body() string              { return "" }
-
-var _InitContract = &initContract{}
-
-type initContract struct{}
-
-func (*initContract) ServiceName() string          { return "workspace.rpc" }
-func (*initContract) MethodName() string           { return "Init" }
-func (*initContract) RequestMessage() interface{}  { return new(InitRequest) }
-func (*initContract) ResponseMessage() interface{} { return new(InitRequest) }
-func (*initContract) ContractName() string         { return "easyops.api.file_repository.workspace.Init" }
-func (*initContract) ContractVersion() string      { return "1.0" }
-func (*initContract) Pattern() (string, string)    { return "PUT", "/workspace/@packageId" }
-func (*initContract) Body() string                 { return "" }
-
-var _SafeCommitWorkspaceContract = &safeCommitWorkspaceContract{}
-
-type safeCommitWorkspaceContract struct{}
-
-func (*safeCommitWorkspaceContract) ServiceName() string { return "workspace.rpc" }
-func (*safeCommitWorkspaceContract) MethodName() string  { return "SafeCommitWorkspace" }
-func (*safeCommitWorkspaceContract) RequestMessage() interface{} {
-	return new(SafeCommitWorkspaceRequest)
-}
-func (*safeCommitWorkspaceContract) ResponseMessage() interface{} {
-	return new(SafeCommitWorkspaceRequest)
-}
-func (*safeCommitWorkspaceContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.SafeCommitWorkspace"
-}
-func (*safeCommitWorkspaceContract) ContractVersion() string { return "1.0" }
-func (*safeCommitWorkspaceContract) Pattern() (string, string) {
-	return "POST", "/v2/workspace/:packageId"
-}
-func (*safeCommitWorkspaceContract) Body() string { return "" }
-
-var _UpdateFileContract = &updateFileContract{}
-
-type updateFileContract struct{}
-
-func (*updateFileContract) ServiceName() string          { return "workspace.rpc" }
-func (*updateFileContract) MethodName() string           { return "UpdateFile" }
-func (*updateFileContract) RequestMessage() interface{}  { return new(UpdateFileRequest) }
-func (*updateFileContract) ResponseMessage() interface{} { return new(UpdateFileRequest) }
-func (*updateFileContract) ContractName() string {
-	return "easyops.api.file_repository.workspace.UpdateFile"
-}
-func (*updateFileContract) ContractVersion() string   { return "1.0" }
-func (*updateFileContract) Pattern() (string, string) { return "POST", "/v2/workspace/:packageId/file" }
-func (*updateFileContract) Body() string              { return "" }

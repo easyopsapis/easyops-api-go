@@ -7,8 +7,9 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	ops_automation "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/ops_automation"
 	io "io"
 	math "math"
 )
@@ -22,16 +23,19 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for job_task service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	GetJobTasksDetail(ctx context.Context, in *GetJobTasksDetailRequest) (*GetJobTasksDetailResponse, error)
+	GetJobTasksDetail(ctx context.Context, in *GetJobTasksDetailRequest) (*ops_automation.JobTasks, error)
+	JobTasksFlowCallback(ctx context.Context, in *JobTasksFlowCallbackRequest) (*JobTasksFlowCallbackResponse, error)
+	JobTasksToolCallback(ctx context.Context, in *JobTasksToolCallbackRequest) (*JobTasksToolCallbackResponse, error)
 	ListJobTasks(ctx context.Context, in *ListJobTasksRequest) (*ListJobTasksResponse, error)
 }
 
@@ -45,9 +49,27 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) GetJobTasksDetail(ctx context.Context, in *GetJobTasksDetailRequest) (*GetJobTasksDetailResponse, error) {
-	out := new(GetJobTasksDetailResponse)
-	err := c.c.Invoke(ctx, _GetJobTasksDetailContract, in, out)
+func (c *client) GetJobTasksDetail(ctx context.Context, in *GetJobTasksDetailRequest) (*ops_automation.JobTasks, error) {
+	out := new(ops_automation.JobTasks)
+	err := c.c.Invoke(ctx, _GetJobTasksDetailMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) JobTasksFlowCallback(ctx context.Context, in *JobTasksFlowCallbackRequest) (*JobTasksFlowCallbackResponse, error) {
+	out := new(JobTasksFlowCallbackResponse)
+	err := c.c.Invoke(ctx, _JobTasksFlowCallbackMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) JobTasksToolCallback(ctx context.Context, in *JobTasksToolCallbackRequest) (*JobTasksToolCallbackResponse, error) {
+	out := new(JobTasksToolCallbackResponse)
+	err := c.c.Invoke(ctx, _JobTasksToolCallbackMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +78,7 @@ func (c *client) GetJobTasksDetail(ctx context.Context, in *GetJobTasksDetailReq
 
 func (c *client) ListJobTasks(ctx context.Context, in *ListJobTasksRequest) (*ListJobTasksResponse, error) {
 	out := new(ListJobTasksResponse)
-	err := c.c.Invoke(ctx, _ListJobTasksContract, in, out)
+	err := c.c.Invoke(ctx, _ListJobTasksMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -65,13 +87,27 @@ func (c *client) ListJobTasks(ctx context.Context, in *ListJobTasksRequest) (*Li
 
 // Service is the server API for job_task service.
 type Service interface {
-	GetJobTasksDetail(context.Context, *GetJobTasksDetailRequest) (*GetJobTasksDetailResponse, error)
+	GetJobTasksDetail(context.Context, *GetJobTasksDetailRequest) (*ops_automation.JobTasks, error)
+	JobTasksFlowCallback(context.Context, *JobTasksFlowCallbackRequest) (*JobTasksFlowCallbackResponse, error)
+	JobTasksToolCallback(context.Context, *JobTasksToolCallbackRequest) (*JobTasksToolCallbackResponse, error)
 	ListJobTasks(context.Context, *ListJobTasksRequest) (*ListJobTasksResponse, error)
 }
 
 func _GetJobTasksDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.GetJobTasksDetail(ctx, req.(*GetJobTasksDetailRequest))
+	}
+}
+
+func _JobTasksFlowCallbackEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.JobTasksFlowCallback(ctx, req.(*JobTasksFlowCallbackRequest))
+	}
+}
+
+func _JobTasksToolCallbackEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.JobTasksToolCallback(ctx, req.(*JobTasksToolCallbackRequest))
 	}
 }
 
@@ -82,37 +118,81 @@ func _ListJobTasksEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetJobTasksDetailContract, _GetJobTasksDetailEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListJobTasksContract, _ListJobTasksEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetJobTasksDetailMethodDesc, _GetJobTasksDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_JobTasksFlowCallbackMethodDesc, _JobTasksFlowCallbackEndpoint(srv))
+	s.RegisterUnaryEndpoint(_JobTasksToolCallbackMethodDesc, _JobTasksToolCallbackEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListJobTasksMethodDesc, _ListJobTasksEndpoint(srv))
 }
 
-// API Contract
-var _GetJobTasksDetailContract = &getJobTasksDetailContract{}
-
-type getJobTasksDetailContract struct{}
-
-func (*getJobTasksDetailContract) ServiceName() string          { return "job_task.rpc" }
-func (*getJobTasksDetailContract) MethodName() string           { return "GetJobTasksDetail" }
-func (*getJobTasksDetailContract) RequestMessage() interface{}  { return new(GetJobTasksDetailRequest) }
-func (*getJobTasksDetailContract) ResponseMessage() interface{} { return new(GetJobTasksDetailRequest) }
-func (*getJobTasksDetailContract) ContractName() string {
-	return "easyops.api.ops_automation.job_task.GetJobTasksDetail"
+// Method Description
+var _GetJobTasksDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.job_task.GetJobTasksDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "job_task.rpc",
+	MethodName:   "GetJobTasksDetail",
+	RequestType:  (*GetJobTasksDetailRequest)(nil),
+	ResponseType: (*ops_automation.JobTasks)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/jobTasks/:jobTaskId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getJobTasksDetailContract) ContractVersion() string   { return "1.0" }
-func (*getJobTasksDetailContract) Pattern() (string, string) { return "GET", "/jobTasks/:jobTaskId" }
-func (*getJobTasksDetailContract) Body() string              { return "" }
 
-var _ListJobTasksContract = &listJobTasksContract{}
-
-type listJobTasksContract struct{}
-
-func (*listJobTasksContract) ServiceName() string          { return "job_task.rpc" }
-func (*listJobTasksContract) MethodName() string           { return "ListJobTasks" }
-func (*listJobTasksContract) RequestMessage() interface{}  { return new(ListJobTasksRequest) }
-func (*listJobTasksContract) ResponseMessage() interface{} { return new(ListJobTasksRequest) }
-func (*listJobTasksContract) ContractName() string {
-	return "easyops.api.ops_automation.job_task.ListJobTasks"
+var _JobTasksFlowCallbackMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.job_task.JobTasksFlowCallback",
+		Version: "1.0",
+	},
+	ServiceName:  "job_task.rpc",
+	MethodName:   "JobTasksFlowCallback",
+	RequestType:  (*JobTasksFlowCallbackRequest)(nil),
+	ResponseType: (*JobTasksFlowCallbackResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/jobTasks/flow/callback",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listJobTasksContract) ContractVersion() string   { return "1.0" }
-func (*listJobTasksContract) Pattern() (string, string) { return "GET", "/jobTasks" }
-func (*listJobTasksContract) Body() string              { return "" }
+
+var _JobTasksToolCallbackMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.job_task.JobTasksToolCallback",
+		Version: "1.0",
+	},
+	ServiceName:  "job_task.rpc",
+	MethodName:   "JobTasksToolCallback",
+	RequestType:  (*JobTasksToolCallbackRequest)(nil),
+	ResponseType: (*JobTasksToolCallbackResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/jobTasks/tool/callback",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ListJobTasksMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.job_task.ListJobTasks",
+		Version: "1.0",
+	},
+	ServiceName:  "job_task.rpc",
+	MethodName:   "ListJobTasks",
+	RequestType:  (*ListJobTasksRequest)(nil),
+	ResponseType: (*ListJobTasksResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/jobTasks",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

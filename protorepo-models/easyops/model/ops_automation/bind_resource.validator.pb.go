@@ -20,16 +20,16 @@ var _ = math.Inf
 
 func (this *BindResource) Validate() error {
 	if !(len(this.Id) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be greater than '1'`, this.Id))
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.Id))
 	}
 	if !(len(this.Id) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must length be less than '34'`, this.Id))
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.Id))
 	}
 	if !(len(this.VId) > -1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("VId", fmt.Errorf(`value '%v' must length be greater than '-1'`, this.VId))
+		return github_com_mwitkow_go_proto_validators.FieldError("VId", fmt.Errorf(`value '%v' must have a length greater than '-1'`, this.VId))
 	}
 	if !(len(this.VId) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("VId", fmt.Errorf(`value '%v' must length be less than '34'`, this.VId))
+		return github_com_mwitkow_go_proto_validators.FieldError("VId", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.VId))
 	}
 	if this.DefaultInputs != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.DefaultInputs); err != nil {

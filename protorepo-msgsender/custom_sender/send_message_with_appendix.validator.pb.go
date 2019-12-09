@@ -9,7 +9,6 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
-	_ "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/msgsender"
 	math "math"
 )
 
@@ -18,6 +17,14 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+func (this *SendMessageWithAppendixResponse) Validate() error {
+	if this.Data != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Data", err)
+		}
+	}
+	return nil
+}
 func (this *SendMessageWithAppendixResponseWrapper) Validate() error {
 	if this.Data != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {

@@ -18,11 +18,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_GetUserRoleRequest_User = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_GetUserRoleRequest_User = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *GetUserRoleRequest) Validate() error {
 	if !_regex_GetUserRoleRequest_User.MatchString(this.User) {
-		return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.User))
+		return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.User))
 	}
 	return nil
 }

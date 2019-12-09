@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	artifact "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/artifact"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for pkg service.
 //
@@ -40,7 +41,7 @@ type Client interface {
 	InitPackagePermission(ctx context.Context, in *types.Empty) (*types.Empty, error)
 	Search(ctx context.Context, in *SearchRequest) (*SearchResponse, error)
 	UpInsertGlobalVariables(ctx context.Context, in *UpInsertGlobalVariablesRequest) (*types.Empty, error)
-	Update(ctx context.Context, in *UpdateRequest) (*artifact.Package, error)
+	Update(ctx context.Context, in *UpdateRequest) (*UpdateResponse, error)
 	UpdatePackagePermission(ctx context.Context, in *UpdatePackagePermissionRequest) (*types.Empty, error)
 }
 
@@ -56,7 +57,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*artifact.Package, error) {
 	out := new(artifact.Package)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +66,7 @@ func (c *client) Create(ctx context.Context, in *CreateRequest) (*artifact.Packa
 
 func (c *client) DeletePackage(ctx context.Context, in *DeletePackageRequest) (*DeletePackageResponse, error) {
 	out := new(DeletePackageResponse)
-	err := c.c.Invoke(ctx, _DeletePackageContract, in, out)
+	err := c.c.Invoke(ctx, _DeletePackageMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +75,7 @@ func (c *client) DeletePackage(ctx context.Context, in *DeletePackageRequest) (*
 
 func (c *client) GetPackageDetail(ctx context.Context, in *GetPackageDetailRequest) (*GetPackageDetailResponse, error) {
 	out := new(GetPackageDetailResponse)
-	err := c.c.Invoke(ctx, _GetPackageDetailContract, in, out)
+	err := c.c.Invoke(ctx, _GetPackageDetailMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +84,7 @@ func (c *client) GetPackageDetail(ctx context.Context, in *GetPackageDetailReque
 
 func (c *client) GetPackagePermission(ctx context.Context, in *GetPackagePermissionRequest) (*artifact.Package, error) {
 	out := new(artifact.Package)
-	err := c.c.Invoke(ctx, _GetPackagePermissionContract, in, out)
+	err := c.c.Invoke(ctx, _GetPackagePermissionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +93,7 @@ func (c *client) GetPackagePermission(ctx context.Context, in *GetPackagePermiss
 
 func (c *client) InitPackagePermission(ctx context.Context, in *types.Empty) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _InitPackagePermissionContract, in, out)
+	err := c.c.Invoke(ctx, _InitPackagePermissionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +102,7 @@ func (c *client) InitPackagePermission(ctx context.Context, in *types.Empty) (*t
 
 func (c *client) Search(ctx context.Context, in *SearchRequest) (*SearchResponse, error) {
 	out := new(SearchResponse)
-	err := c.c.Invoke(ctx, _SearchContract, in, out)
+	err := c.c.Invoke(ctx, _SearchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -110,16 +111,16 @@ func (c *client) Search(ctx context.Context, in *SearchRequest) (*SearchResponse
 
 func (c *client) UpInsertGlobalVariables(ctx context.Context, in *UpInsertGlobalVariablesRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _UpInsertGlobalVariablesContract, in, out)
+	err := c.c.Invoke(ctx, _UpInsertGlobalVariablesMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) Update(ctx context.Context, in *UpdateRequest) (*artifact.Package, error) {
-	out := new(artifact.Package)
-	err := c.c.Invoke(ctx, _UpdateContract, in, out)
+func (c *client) Update(ctx context.Context, in *UpdateRequest) (*UpdateResponse, error) {
+	out := new(UpdateResponse)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +129,7 @@ func (c *client) Update(ctx context.Context, in *UpdateRequest) (*artifact.Packa
 
 func (c *client) UpdatePackagePermission(ctx context.Context, in *UpdatePackagePermissionRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _UpdatePackagePermissionContract, in, out)
+	err := c.c.Invoke(ctx, _UpdatePackagePermissionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +145,7 @@ type Service interface {
 	InitPackagePermission(context.Context, *types.Empty) (*types.Empty, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	UpInsertGlobalVariables(context.Context, *UpInsertGlobalVariablesRequest) (*types.Empty, error)
-	Update(context.Context, *UpdateRequest) (*artifact.Package, error)
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	UpdatePackagePermission(context.Context, *UpdatePackagePermissionRequest) (*types.Empty, error)
 }
 
@@ -203,161 +204,176 @@ func _UpdatePackagePermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeletePackageContract, _DeletePackageEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetPackageDetailContract, _GetPackageDetailEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetPackagePermissionContract, _GetPackagePermissionEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InitPackagePermissionContract, _InitPackagePermissionEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SearchContract, _SearchEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpInsertGlobalVariablesContract, _UpInsertGlobalVariablesEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContract, _UpdateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdatePackagePermissionContract, _UpdatePackagePermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeletePackageMethodDesc, _DeletePackageEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetPackageDetailMethodDesc, _GetPackageDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetPackagePermissionMethodDesc, _GetPackagePermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InitPackagePermissionMethodDesc, _InitPackagePermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SearchMethodDesc, _SearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpInsertGlobalVariablesMethodDesc, _UpInsertGlobalVariablesEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdatePackagePermissionMethodDesc, _UpdatePackagePermissionEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "pkg.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(CreateRequest) }
-func (*createContract) ResponseMessage() interface{} { return new(CreateRequest) }
-func (*createContract) ContractName() string         { return "easyops.api.artifact.pkg.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/package" }
-func (*createContract) Body() string                 { return "" }
-
-var _DeletePackageContract = &deletePackageContract{}
-
-type deletePackageContract struct{}
-
-func (*deletePackageContract) ServiceName() string          { return "pkg.rpc" }
-func (*deletePackageContract) MethodName() string           { return "DeletePackage" }
-func (*deletePackageContract) RequestMessage() interface{}  { return new(DeletePackageRequest) }
-func (*deletePackageContract) ResponseMessage() interface{} { return new(DeletePackageRequest) }
-func (*deletePackageContract) ContractName() string         { return "easyops.api.artifact.pkg.DeletePackage" }
-func (*deletePackageContract) ContractVersion() string      { return "1.0" }
-func (*deletePackageContract) Pattern() (string, string) {
-	return "DELETE", "/package/package/:packageId"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*artifact.Package)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/package",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deletePackageContract) Body() string { return "" }
 
-var _GetPackageDetailContract = &getPackageDetailContract{}
-
-type getPackageDetailContract struct{}
-
-func (*getPackageDetailContract) ServiceName() string          { return "pkg.rpc" }
-func (*getPackageDetailContract) MethodName() string           { return "GetPackageDetail" }
-func (*getPackageDetailContract) RequestMessage() interface{}  { return new(GetPackageDetailRequest) }
-func (*getPackageDetailContract) ResponseMessage() interface{} { return new(GetPackageDetailRequest) }
-func (*getPackageDetailContract) ContractName() string {
-	return "easyops.api.artifact.pkg.GetPackageDetail"
+var _DeletePackageMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.DeletePackage",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "DeletePackage",
+	RequestType:  (*DeletePackageRequest)(nil),
+	ResponseType: (*DeletePackageResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/package/package/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getPackageDetailContract) ContractVersion() string   { return "1.0" }
-func (*getPackageDetailContract) Pattern() (string, string) { return "GET", "/package/:packageId" }
-func (*getPackageDetailContract) Body() string              { return "" }
 
-var _GetPackagePermissionContract = &getPackagePermissionContract{}
-
-type getPackagePermissionContract struct{}
-
-func (*getPackagePermissionContract) ServiceName() string { return "pkg.rpc" }
-func (*getPackagePermissionContract) MethodName() string  { return "GetPackagePermission" }
-func (*getPackagePermissionContract) RequestMessage() interface{} {
-	return new(GetPackagePermissionRequest)
+var _GetPackageDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.GetPackageDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "GetPackageDetail",
+	RequestType:  (*GetPackageDetailRequest)(nil),
+	ResponseType: (*GetPackageDetailResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/package/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getPackagePermissionContract) ResponseMessage() interface{} {
-	return new(GetPackagePermissionRequest)
+
+var _GetPackagePermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.GetPackagePermission",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "GetPackagePermission",
+	RequestType:  (*GetPackagePermissionRequest)(nil),
+	ResponseType: (*artifact.Package)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/permission/package/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getPackagePermissionContract) ContractName() string {
-	return "easyops.api.artifact.pkg.GetPackagePermission"
+
+var _InitPackagePermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.InitPackagePermission",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "InitPackagePermission",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/operation/InitPermissionDb",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getPackagePermissionContract) ContractVersion() string { return "1.0" }
-func (*getPackagePermissionContract) Pattern() (string, string) {
-	return "GET", "/permission/package/:packageId"
+
+var _SearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.Search",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "Search",
+	RequestType:  (*SearchRequest)(nil),
+	ResponseType: (*SearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/package/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getPackagePermissionContract) Body() string { return "" }
 
-var _InitPackagePermissionContract = &initPackagePermissionContract{}
-
-type initPackagePermissionContract struct{}
-
-func (*initPackagePermissionContract) ServiceName() string          { return "pkg.rpc" }
-func (*initPackagePermissionContract) MethodName() string           { return "InitPackagePermission" }
-func (*initPackagePermissionContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*initPackagePermissionContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*initPackagePermissionContract) ContractName() string {
-	return "easyops.api.artifact.pkg.InitPackagePermission"
+var _UpInsertGlobalVariablesMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.UpInsertGlobalVariables",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "UpInsertGlobalVariables",
+	RequestType:  (*UpInsertGlobalVariablesRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/userGlobalVars",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*initPackagePermissionContract) ContractVersion() string { return "1.0" }
-func (*initPackagePermissionContract) Pattern() (string, string) {
-	return "POST", "/operation/InitPermissionDb"
+
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "Update",
+	RequestType:  (*UpdateRequest)(nil),
+	ResponseType: (*UpdateResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/package/:packageId",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*initPackagePermissionContract) Body() string { return "" }
 
-var _SearchContract = &searchContract{}
-
-type searchContract struct{}
-
-func (*searchContract) ServiceName() string          { return "pkg.rpc" }
-func (*searchContract) MethodName() string           { return "Search" }
-func (*searchContract) RequestMessage() interface{}  { return new(SearchRequest) }
-func (*searchContract) ResponseMessage() interface{} { return new(SearchRequest) }
-func (*searchContract) ContractName() string         { return "easyops.api.artifact.pkg.Search" }
-func (*searchContract) ContractVersion() string      { return "1.0" }
-func (*searchContract) Pattern() (string, string)    { return "GET", "/package/search" }
-func (*searchContract) Body() string                 { return "" }
-
-var _UpInsertGlobalVariablesContract = &upInsertGlobalVariablesContract{}
-
-type upInsertGlobalVariablesContract struct{}
-
-func (*upInsertGlobalVariablesContract) ServiceName() string { return "pkg.rpc" }
-func (*upInsertGlobalVariablesContract) MethodName() string  { return "UpInsertGlobalVariables" }
-func (*upInsertGlobalVariablesContract) RequestMessage() interface{} {
-	return new(UpInsertGlobalVariablesRequest)
+var _UpdatePackagePermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.artifact.pkg.UpdatePackagePermission",
+		Version: "1.0",
+	},
+	ServiceName:  "pkg.rpc",
+	MethodName:   "UpdatePackagePermission",
+	RequestType:  (*UpdatePackagePermissionRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/permission/package",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*upInsertGlobalVariablesContract) ResponseMessage() interface{} {
-	return new(UpInsertGlobalVariablesRequest)
-}
-func (*upInsertGlobalVariablesContract) ContractName() string {
-	return "easyops.api.artifact.pkg.UpInsertGlobalVariables"
-}
-func (*upInsertGlobalVariablesContract) ContractVersion() string   { return "1.0" }
-func (*upInsertGlobalVariablesContract) Pattern() (string, string) { return "POST", "/userGlobalVars" }
-func (*upInsertGlobalVariablesContract) Body() string              { return "" }
-
-var _UpdateContract = &updateContract{}
-
-type updateContract struct{}
-
-func (*updateContract) ServiceName() string          { return "pkg.rpc" }
-func (*updateContract) MethodName() string           { return "Update" }
-func (*updateContract) RequestMessage() interface{}  { return new(UpdateRequest) }
-func (*updateContract) ResponseMessage() interface{} { return new(UpdateRequest) }
-func (*updateContract) ContractName() string         { return "easyops.api.artifact.pkg.Update" }
-func (*updateContract) ContractVersion() string      { return "1.0" }
-func (*updateContract) Pattern() (string, string)    { return "PUT", "/package/:packageId" }
-func (*updateContract) Body() string                 { return "" }
-
-var _UpdatePackagePermissionContract = &updatePackagePermissionContract{}
-
-type updatePackagePermissionContract struct{}
-
-func (*updatePackagePermissionContract) ServiceName() string { return "pkg.rpc" }
-func (*updatePackagePermissionContract) MethodName() string  { return "UpdatePackagePermission" }
-func (*updatePackagePermissionContract) RequestMessage() interface{} {
-	return new(UpdatePackagePermissionRequest)
-}
-func (*updatePackagePermissionContract) ResponseMessage() interface{} {
-	return new(UpdatePackagePermissionRequest)
-}
-func (*updatePackagePermissionContract) ContractName() string {
-	return "easyops.api.artifact.pkg.UpdatePackagePermission"
-}
-func (*updatePackagePermissionContract) ContractVersion() string { return "1.0" }
-func (*updatePackagePermissionContract) Pattern() (string, string) {
-	return "POST", "/permission/package"
-}
-func (*updatePackagePermissionContract) Body() string { return "" }

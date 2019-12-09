@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	micro_app "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/micro_app"
@@ -24,20 +24,24 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for installed_micro_app service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	Create(ctx context.Context, in *micro_app.InstalledMicroApp) (*micro_app.InstalledMicroApp, error)
+	Create(ctx context.Context, in *CreateRequest) (*CreateResponse, error)
 	DeleteMicroApp(ctx context.Context, in *DeleteMicroAppRequest) (*types.Empty, error)
-	GetInstalledMicroApp(ctx context.Context, in *GetInstalledMicroAppRequest) (*micro_app.InstalledMicroApp, error)
+	GetInstalledMicroApp(ctx context.Context, in *GetInstalledMicroAppRequest) (*GetInstalledMicroAppResponse, error)
 	ListMicroApp(ctx context.Context, in *ListMicroAppRequest) (*ListMicroAppResponse, error)
-	UpdateInstalledMicroApp(ctx context.Context, in *UpdateInstalledMicroAppRequest) (*micro_app.InstalledMicroApp, error)
+	SearchInstalledMicroApp(ctx context.Context, in *SearchInstalledMicroAppRequest) (*SearchInstalledMicroAppResponse, error)
+	SearchInstalledMicroAppWithUniqKey(ctx context.Context, in *SearchInstalledMicroAppWithUniqKeyRequest) (*SearchInstalledMicroAppWithUniqKeyResponse, error)
+	UpdateInstalledMicroApp(ctx context.Context, in *UpdateInstalledMicroAppRequest) (*UpdateInstalledMicroAppResponse, error)
+	UpdateInstalledMicroAppStatus(ctx context.Context, in *UpdateInstalledMicroAppStatusRequest) (*micro_app.InstalledMicroApp, error)
 }
 
 type client struct {
@@ -50,9 +54,9 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) Create(ctx context.Context, in *micro_app.InstalledMicroApp) (*micro_app.InstalledMicroApp, error) {
-	out := new(micro_app.InstalledMicroApp)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+func (c *client) Create(ctx context.Context, in *CreateRequest) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -61,16 +65,16 @@ func (c *client) Create(ctx context.Context, in *micro_app.InstalledMicroApp) (*
 
 func (c *client) DeleteMicroApp(ctx context.Context, in *DeleteMicroAppRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteMicroAppContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteMicroAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) GetInstalledMicroApp(ctx context.Context, in *GetInstalledMicroAppRequest) (*micro_app.InstalledMicroApp, error) {
-	out := new(micro_app.InstalledMicroApp)
-	err := c.c.Invoke(ctx, _GetInstalledMicroAppContract, in, out)
+func (c *client) GetInstalledMicroApp(ctx context.Context, in *GetInstalledMicroAppRequest) (*GetInstalledMicroAppResponse, error) {
+	out := new(GetInstalledMicroAppResponse)
+	err := c.c.Invoke(ctx, _GetInstalledMicroAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -79,16 +83,43 @@ func (c *client) GetInstalledMicroApp(ctx context.Context, in *GetInstalledMicro
 
 func (c *client) ListMicroApp(ctx context.Context, in *ListMicroAppRequest) (*ListMicroAppResponse, error) {
 	out := new(ListMicroAppResponse)
-	err := c.c.Invoke(ctx, _ListMicroAppContract, in, out)
+	err := c.c.Invoke(ctx, _ListMicroAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) UpdateInstalledMicroApp(ctx context.Context, in *UpdateInstalledMicroAppRequest) (*micro_app.InstalledMicroApp, error) {
+func (c *client) SearchInstalledMicroApp(ctx context.Context, in *SearchInstalledMicroAppRequest) (*SearchInstalledMicroAppResponse, error) {
+	out := new(SearchInstalledMicroAppResponse)
+	err := c.c.Invoke(ctx, _SearchInstalledMicroAppMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) SearchInstalledMicroAppWithUniqKey(ctx context.Context, in *SearchInstalledMicroAppWithUniqKeyRequest) (*SearchInstalledMicroAppWithUniqKeyResponse, error) {
+	out := new(SearchInstalledMicroAppWithUniqKeyResponse)
+	err := c.c.Invoke(ctx, _SearchInstalledMicroAppWithUniqKeyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) UpdateInstalledMicroApp(ctx context.Context, in *UpdateInstalledMicroAppRequest) (*UpdateInstalledMicroAppResponse, error) {
+	out := new(UpdateInstalledMicroAppResponse)
+	err := c.c.Invoke(ctx, _UpdateInstalledMicroAppMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) UpdateInstalledMicroAppStatus(ctx context.Context, in *UpdateInstalledMicroAppStatusRequest) (*micro_app.InstalledMicroApp, error) {
 	out := new(micro_app.InstalledMicroApp)
-	err := c.c.Invoke(ctx, _UpdateInstalledMicroAppContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateInstalledMicroAppStatusMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -97,16 +128,19 @@ func (c *client) UpdateInstalledMicroApp(ctx context.Context, in *UpdateInstalle
 
 // Service is the server API for installed_micro_app service.
 type Service interface {
-	Create(context.Context, *micro_app.InstalledMicroApp) (*micro_app.InstalledMicroApp, error)
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	DeleteMicroApp(context.Context, *DeleteMicroAppRequest) (*types.Empty, error)
-	GetInstalledMicroApp(context.Context, *GetInstalledMicroAppRequest) (*micro_app.InstalledMicroApp, error)
+	GetInstalledMicroApp(context.Context, *GetInstalledMicroAppRequest) (*GetInstalledMicroAppResponse, error)
 	ListMicroApp(context.Context, *ListMicroAppRequest) (*ListMicroAppResponse, error)
-	UpdateInstalledMicroApp(context.Context, *UpdateInstalledMicroAppRequest) (*micro_app.InstalledMicroApp, error)
+	SearchInstalledMicroApp(context.Context, *SearchInstalledMicroAppRequest) (*SearchInstalledMicroAppResponse, error)
+	SearchInstalledMicroAppWithUniqKey(context.Context, *SearchInstalledMicroAppWithUniqKeyRequest) (*SearchInstalledMicroAppWithUniqKeyResponse, error)
+	UpdateInstalledMicroApp(context.Context, *UpdateInstalledMicroAppRequest) (*UpdateInstalledMicroAppResponse, error)
+	UpdateInstalledMicroAppStatus(context.Context, *UpdateInstalledMicroAppStatusRequest) (*micro_app.InstalledMicroApp, error)
 }
 
 func _CreateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.Create(ctx, req.(*micro_app.InstalledMicroApp))
+		return s.Create(ctx, req.(*CreateRequest))
 	}
 }
 
@@ -128,110 +162,182 @@ func _ListMicroAppEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _SearchInstalledMicroAppEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.SearchInstalledMicroApp(ctx, req.(*SearchInstalledMicroAppRequest))
+	}
+}
+
+func _SearchInstalledMicroAppWithUniqKeyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.SearchInstalledMicroAppWithUniqKey(ctx, req.(*SearchInstalledMicroAppWithUniqKeyRequest))
+	}
+}
+
 func _UpdateInstalledMicroAppEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.UpdateInstalledMicroApp(ctx, req.(*UpdateInstalledMicroAppRequest))
 	}
 }
 
+func _UpdateInstalledMicroAppStatusEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.UpdateInstalledMicroAppStatus(ctx, req.(*UpdateInstalledMicroAppStatusRequest))
+	}
+}
+
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteMicroAppContract, _DeleteMicroAppEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetInstalledMicroAppContract, _GetInstalledMicroAppEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListMicroAppContract, _ListMicroAppEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateInstalledMicroAppContract, _UpdateInstalledMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteMicroAppMethodDesc, _DeleteMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetInstalledMicroAppMethodDesc, _GetInstalledMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMicroAppMethodDesc, _ListMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SearchInstalledMicroAppMethodDesc, _SearchInstalledMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SearchInstalledMicroAppWithUniqKeyMethodDesc, _SearchInstalledMicroAppWithUniqKeyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateInstalledMicroAppMethodDesc, _UpdateInstalledMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateInstalledMicroAppStatusMethodDesc, _UpdateInstalledMicroAppStatusEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "installed_micro_app.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(micro_app.InstalledMicroApp) }
-func (*createContract) ResponseMessage() interface{} { return new(micro_app.InstalledMicroApp) }
-func (*createContract) ContractName() string {
-	return "easyops.api.micro_app.installed_micro_app.Create"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*CreateResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/micro_app/v1/installed_micro_app",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createContract) ContractVersion() string { return "1.0" }
-func (*createContract) Pattern() (string, string) {
-	return "POST", "/api/micro_app/v1/installed_micro_app"
-}
-func (*createContract) Body() string { return "" }
 
-var _DeleteMicroAppContract = &deleteMicroAppContract{}
+var _DeleteMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.DeleteMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "DeleteMicroApp",
+	RequestType:  (*DeleteMicroAppRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/micro_app/v1/installed_micro_app/:app_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type deleteMicroAppContract struct{}
+var _GetInstalledMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.GetInstalledMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "GetInstalledMicroApp",
+	RequestType:  (*GetInstalledMicroAppRequest)(nil),
+	ResponseType: (*GetInstalledMicroAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/micro_app/v1/installed_micro_app/:app_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*deleteMicroAppContract) ServiceName() string          { return "installed_micro_app.rpc" }
-func (*deleteMicroAppContract) MethodName() string           { return "DeleteMicroApp" }
-func (*deleteMicroAppContract) RequestMessage() interface{}  { return new(DeleteMicroAppRequest) }
-func (*deleteMicroAppContract) ResponseMessage() interface{} { return new(DeleteMicroAppRequest) }
-func (*deleteMicroAppContract) ContractName() string {
-	return "easyops.api.micro_app.installed_micro_app.DeleteMicroApp"
+var _ListMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.ListMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "ListMicroApp",
+	RequestType:  (*ListMicroAppRequest)(nil),
+	ResponseType: (*ListMicroAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/micro_app/v1/installed_micro_app",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteMicroAppContract) ContractVersion() string { return "1.0" }
-func (*deleteMicroAppContract) Pattern() (string, string) {
-	return "DELETE", "/api/micro_app/v1/installed_micro_app/:app_id"
-}
-func (*deleteMicroAppContract) Body() string { return "" }
 
-var _GetInstalledMicroAppContract = &getInstalledMicroAppContract{}
+var _SearchInstalledMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.SearchInstalledMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "SearchInstalledMicroApp",
+	RequestType:  (*SearchInstalledMicroAppRequest)(nil),
+	ResponseType: (*SearchInstalledMicroAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/micro_app/v1/installed_micro_app/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type getInstalledMicroAppContract struct{}
+var _SearchInstalledMicroAppWithUniqKeyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.SearchInstalledMicroAppWithUniqKey",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "SearchInstalledMicroAppWithUniqKey",
+	RequestType:  (*SearchInstalledMicroAppWithUniqKeyRequest)(nil),
+	ResponseType: (*SearchInstalledMicroAppWithUniqKeyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/micro_app/v1/installed_micro_app/search/uniq_key",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*getInstalledMicroAppContract) ServiceName() string { return "installed_micro_app.rpc" }
-func (*getInstalledMicroAppContract) MethodName() string  { return "GetInstalledMicroApp" }
-func (*getInstalledMicroAppContract) RequestMessage() interface{} {
-	return new(GetInstalledMicroAppRequest)
+var _UpdateInstalledMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.UpdateInstalledMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "UpdateInstalledMicroApp",
+	RequestType:  (*UpdateInstalledMicroAppRequest)(nil),
+	ResponseType: (*UpdateInstalledMicroAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/micro_app/v1/installed_micro_app/:app_id",
+		},
+		Body:         "micro_app",
+		ResponseBody: "data",
+	},
 }
-func (*getInstalledMicroAppContract) ResponseMessage() interface{} {
-	return new(GetInstalledMicroAppRequest)
-}
-func (*getInstalledMicroAppContract) ContractName() string {
-	return "easyops.api.micro_app.installed_micro_app.GetInstalledMicroApp"
-}
-func (*getInstalledMicroAppContract) ContractVersion() string { return "1.0" }
-func (*getInstalledMicroAppContract) Pattern() (string, string) {
-	return "GET", "/api/micro_app/v1/installed_micro_app/:app_id"
-}
-func (*getInstalledMicroAppContract) Body() string { return "" }
 
-var _ListMicroAppContract = &listMicroAppContract{}
-
-type listMicroAppContract struct{}
-
-func (*listMicroAppContract) ServiceName() string          { return "installed_micro_app.rpc" }
-func (*listMicroAppContract) MethodName() string           { return "ListMicroApp" }
-func (*listMicroAppContract) RequestMessage() interface{}  { return new(ListMicroAppRequest) }
-func (*listMicroAppContract) ResponseMessage() interface{} { return new(ListMicroAppRequest) }
-func (*listMicroAppContract) ContractName() string {
-	return "easyops.api.micro_app.installed_micro_app.ListMicroApp"
+var _UpdateInstalledMicroAppStatusMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.micro_app.installed_micro_app.UpdateInstalledMicroAppStatus",
+		Version: "1.0",
+	},
+	ServiceName:  "installed_micro_app.rpc",
+	MethodName:   "UpdateInstalledMicroAppStatus",
+	RequestType:  (*UpdateInstalledMicroAppStatusRequest)(nil),
+	ResponseType: (*micro_app.InstalledMicroApp)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/micro_app/v1/installed_micro_app/:app_id/status",
+		},
+		Body:         "micro_app",
+		ResponseBody: "data",
+	},
 }
-func (*listMicroAppContract) ContractVersion() string { return "1.0" }
-func (*listMicroAppContract) Pattern() (string, string) {
-	return "GET", "/api/micro_app/v1/installed_micro_app"
-}
-func (*listMicroAppContract) Body() string { return "" }
-
-var _UpdateInstalledMicroAppContract = &updateInstalledMicroAppContract{}
-
-type updateInstalledMicroAppContract struct{}
-
-func (*updateInstalledMicroAppContract) ServiceName() string { return "installed_micro_app.rpc" }
-func (*updateInstalledMicroAppContract) MethodName() string  { return "UpdateInstalledMicroApp" }
-func (*updateInstalledMicroAppContract) RequestMessage() interface{} {
-	return new(UpdateInstalledMicroAppRequest)
-}
-func (*updateInstalledMicroAppContract) ResponseMessage() interface{} {
-	return new(UpdateInstalledMicroAppRequest)
-}
-func (*updateInstalledMicroAppContract) ContractName() string {
-	return "easyops.api.micro_app.installed_micro_app.UpdateInstalledMicroApp"
-}
-func (*updateInstalledMicroAppContract) ContractVersion() string { return "1.0" }
-func (*updateInstalledMicroAppContract) Pattern() (string, string) {
-	return "PUT", "/api/micro_app/v1/installed_micro_app/:app_id"
-}
-func (*updateInstalledMicroAppContract) Body() string { return "micro_app" }

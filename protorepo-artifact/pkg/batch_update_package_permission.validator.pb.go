@@ -18,28 +18,28 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_BatchUpdatePackagePermissionRequest_Authorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_BatchUpdatePackagePermissionRequest_PackageIds = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
+var _regex_BatchUpdatePackagePermissionRequest_Authorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_BatchUpdatePackagePermissionRequest_PackageIds = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
 
 func (this *BatchUpdatePackagePermissionRequest) Validate() error {
 	for _, item := range this.Authorizers {
 		if !_regex_BatchUpdatePackagePermissionRequest_Authorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("Authorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("Authorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.PackageIds {
 		if !_regex_BatchUpdatePackagePermissionRequest_PackageIds.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("PackageIds", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("PackageIds", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, item))
 		}
 	}
 	return nil
 }
 
-var _regex_BatchUpdatePackagePermissionResponse_PackageId = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
+var _regex_BatchUpdatePackagePermissionResponse_PackageId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
 
 func (this *BatchUpdatePackagePermissionResponse) Validate() error {
 	if !_regex_BatchUpdatePackagePermissionResponse_PackageId.MatchString(this.PackageId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, this.PackageId))
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.PackageId))
 	}
 	return nil
 }

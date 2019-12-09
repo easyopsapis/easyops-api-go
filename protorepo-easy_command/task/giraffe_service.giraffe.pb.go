@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	easy_command "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/easy_command"
 	io "io"
@@ -23,15 +23,17 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for task service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	CreateAsyncTask(ctx context.Context, in *easy_command.TaskSpec) (*CreateAsyncTaskResponse, error)
 	CreateSyncTask(ctx context.Context, in *easy_command.TaskSpec) (*easy_command.TaskDetail, error)
 	GetTaskDetail(ctx context.Context, in *GetTaskDetailRequest) (*easy_command.TaskDetail, error)
 }
@@ -46,9 +48,18 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) CreateAsyncTask(ctx context.Context, in *easy_command.TaskSpec) (*CreateAsyncTaskResponse, error) {
+	out := new(CreateAsyncTaskResponse)
+	err := c.c.Invoke(ctx, _CreateAsyncTaskMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) CreateSyncTask(ctx context.Context, in *easy_command.TaskSpec) (*easy_command.TaskDetail, error) {
 	out := new(easy_command.TaskDetail)
-	err := c.c.Invoke(ctx, _CreateSyncTaskContract, in, out)
+	err := c.c.Invoke(ctx, _CreateSyncTaskMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +68,7 @@ func (c *client) CreateSyncTask(ctx context.Context, in *easy_command.TaskSpec) 
 
 func (c *client) GetTaskDetail(ctx context.Context, in *GetTaskDetailRequest) (*easy_command.TaskDetail, error) {
 	out := new(easy_command.TaskDetail)
-	err := c.c.Invoke(ctx, _GetTaskDetailContract, in, out)
+	err := c.c.Invoke(ctx, _GetTaskDetailMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,8 +77,15 @@ func (c *client) GetTaskDetail(ctx context.Context, in *GetTaskDetailRequest) (*
 
 // Service is the server API for task service.
 type Service interface {
+	CreateAsyncTask(context.Context, *easy_command.TaskSpec) (*CreateAsyncTaskResponse, error)
 	CreateSyncTask(context.Context, *easy_command.TaskSpec) (*easy_command.TaskDetail, error)
 	GetTaskDetail(context.Context, *GetTaskDetailRequest) (*easy_command.TaskDetail, error)
+}
+
+func _CreateAsyncTaskEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.CreateAsyncTask(ctx, req.(*easy_command.TaskSpec))
+	}
 }
 
 func _CreateSyncTaskEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -83,37 +101,62 @@ func _GetTaskDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateSyncTaskContract, _CreateSyncTaskEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetTaskDetailContract, _GetTaskDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateAsyncTaskMethodDesc, _CreateAsyncTaskEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateSyncTaskMethodDesc, _CreateSyncTaskEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetTaskDetailMethodDesc, _GetTaskDetailEndpoint(srv))
 }
 
-// API Contract
-var _CreateSyncTaskContract = &createSyncTaskContract{}
-
-type createSyncTaskContract struct{}
-
-func (*createSyncTaskContract) ServiceName() string          { return "task.rpc" }
-func (*createSyncTaskContract) MethodName() string           { return "CreateSyncTask" }
-func (*createSyncTaskContract) RequestMessage() interface{}  { return new(easy_command.TaskSpec) }
-func (*createSyncTaskContract) ResponseMessage() interface{} { return new(easy_command.TaskSpec) }
-func (*createSyncTaskContract) ContractName() string {
-	return "easyops.api.easy_command.task.CreateSyncTask"
+// Method Description
+var _CreateAsyncTaskMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_command.task.CreateAsyncTask",
+		Version: "1.0",
+	},
+	ServiceName:  "task.rpc",
+	MethodName:   "CreateAsyncTask",
+	RequestType:  (*easy_command.TaskSpec)(nil),
+	ResponseType: (*CreateAsyncTaskResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/cmd",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createSyncTaskContract) ContractVersion() string   { return "1.0" }
-func (*createSyncTaskContract) Pattern() (string, string) { return "POST", "/cmd/sync" }
-func (*createSyncTaskContract) Body() string              { return "" }
 
-var _GetTaskDetailContract = &getTaskDetailContract{}
-
-type getTaskDetailContract struct{}
-
-func (*getTaskDetailContract) ServiceName() string          { return "task.rpc" }
-func (*getTaskDetailContract) MethodName() string           { return "GetTaskDetail" }
-func (*getTaskDetailContract) RequestMessage() interface{}  { return new(GetTaskDetailRequest) }
-func (*getTaskDetailContract) ResponseMessage() interface{} { return new(GetTaskDetailRequest) }
-func (*getTaskDetailContract) ContractName() string {
-	return "easyops.api.easy_command.task.GetTaskDetail"
+var _CreateSyncTaskMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_command.task.CreateSyncTask",
+		Version: "1.0",
+	},
+	ServiceName:  "task.rpc",
+	MethodName:   "CreateSyncTask",
+	RequestType:  (*easy_command.TaskSpec)(nil),
+	ResponseType: (*easy_command.TaskDetail)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/cmd/sync",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getTaskDetailContract) ContractVersion() string   { return "1.0" }
-func (*getTaskDetailContract) Pattern() (string, string) { return "GET", "/cmd/detail/:taskId" }
-func (*getTaskDetailContract) Body() string              { return "" }
+
+var _GetTaskDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_command.task.GetTaskDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "task.rpc",
+	MethodName:   "GetTaskDetail",
+	RequestType:  (*GetTaskDetailRequest)(nil),
+	ResponseType: (*easy_command.TaskDetail)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/cmd/detail/:taskId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

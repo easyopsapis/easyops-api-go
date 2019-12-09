@@ -19,7 +19,7 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_Role_Id = regexp.MustCompile(`^[0-9a-fA-F]{24}$`)
-var _regex_Role_User = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_Role_User = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 var _regex_Role_Permission = regexp.MustCompile(`^[0-9a-fA-F]{24}$`)
 
 func (this *Role) Validate() error {
@@ -31,7 +31,7 @@ func (this *Role) Validate() error {
 	}
 	for _, item := range this.User {
 		if !_regex_Role_User.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.Permission {

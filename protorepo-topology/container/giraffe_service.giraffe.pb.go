@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	topology "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/topology"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for container service.
 //
@@ -51,7 +52,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateContainer(ctx context.Context, in *CreateContainerRequest) (*CreateContainerResponse, error) {
 	out := new(CreateContainerResponse)
-	err := c.c.Invoke(ctx, _CreateContainerContract, in, out)
+	err := c.c.Invoke(ctx, _CreateContainerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (c *client) CreateContainer(ctx context.Context, in *CreateContainerRequest
 
 func (c *client) DeleteContainer(ctx context.Context, in *DeleteContainerRequest) (*DeleteContainerResponse, error) {
 	out := new(DeleteContainerResponse)
-	err := c.c.Invoke(ctx, _DeleteContainerContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteContainerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +70,7 @@ func (c *client) DeleteContainer(ctx context.Context, in *DeleteContainerRequest
 
 func (c *client) GetContainer(ctx context.Context, in *GetContainerRequest) (*topology.Container, error) {
 	out := new(topology.Container)
-	err := c.c.Invoke(ctx, _GetContainerContract, in, out)
+	err := c.c.Invoke(ctx, _GetContainerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ func (c *client) GetContainer(ctx context.Context, in *GetContainerRequest) (*to
 
 func (c *client) ListContainer(ctx context.Context, in *ListContainerRequest) (*ListContainerResponse, error) {
 	out := new(ListContainerResponse)
-	err := c.c.Invoke(ctx, _ListContainerContract, in, out)
+	err := c.c.Invoke(ctx, _ListContainerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +88,7 @@ func (c *client) ListContainer(ctx context.Context, in *ListContainerRequest) (*
 
 func (c *client) UpdateContainer(ctx context.Context, in *UpdateContainerRequest) (*UpdateContainerResponse, error) {
 	out := new(UpdateContainerResponse)
-	err := c.c.Invoke(ctx, _UpdateContainerContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateContainerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -134,85 +135,100 @@ func _UpdateContainerEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContainerContract, _CreateContainerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteContainerContract, _DeleteContainerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContainerContract, _GetContainerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContainerContract, _ListContainerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContainerContract, _UpdateContainerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateContainerMethodDesc, _CreateContainerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteContainerMethodDesc, _DeleteContainerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetContainerMethodDesc, _GetContainerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListContainerMethodDesc, _ListContainerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateContainerMethodDesc, _UpdateContainerEndpoint(srv))
 }
 
-// API Contract
-var _CreateContainerContract = &createContainerContract{}
-
-type createContainerContract struct{}
-
-func (*createContainerContract) ServiceName() string          { return "container.rpc" }
-func (*createContainerContract) MethodName() string           { return "CreateContainer" }
-func (*createContainerContract) RequestMessage() interface{}  { return new(CreateContainerRequest) }
-func (*createContainerContract) ResponseMessage() interface{} { return new(CreateContainerRequest) }
-func (*createContainerContract) ContractName() string {
-	return "easyops.api.topology.container.CreateContainer"
+// Method Description
+var _CreateContainerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.container.CreateContainer",
+		Version: "1.0",
+	},
+	ServiceName:  "container.rpc",
+	MethodName:   "CreateContainer",
+	RequestType:  (*CreateContainerRequest)(nil),
+	ResponseType: (*CreateContainerResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/container",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createContainerContract) ContractVersion() string   { return "1.0" }
-func (*createContainerContract) Pattern() (string, string) { return "POST", "/api/v1/container" }
-func (*createContainerContract) Body() string              { return "" }
 
-var _DeleteContainerContract = &deleteContainerContract{}
-
-type deleteContainerContract struct{}
-
-func (*deleteContainerContract) ServiceName() string          { return "container.rpc" }
-func (*deleteContainerContract) MethodName() string           { return "DeleteContainer" }
-func (*deleteContainerContract) RequestMessage() interface{}  { return new(DeleteContainerRequest) }
-func (*deleteContainerContract) ResponseMessage() interface{} { return new(DeleteContainerRequest) }
-func (*deleteContainerContract) ContractName() string {
-	return "easyops.api.topology.container.DeleteContainer"
+var _DeleteContainerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.container.DeleteContainer",
+		Version: "1.0",
+	},
+	ServiceName:  "container.rpc",
+	MethodName:   "DeleteContainer",
+	RequestType:  (*DeleteContainerRequest)(nil),
+	ResponseType: (*DeleteContainerResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/v1/container/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteContainerContract) ContractVersion() string   { return "1.0" }
-func (*deleteContainerContract) Pattern() (string, string) { return "DELETE", "/api/v1/container/:id" }
-func (*deleteContainerContract) Body() string              { return "" }
 
-var _GetContainerContract = &getContainerContract{}
-
-type getContainerContract struct{}
-
-func (*getContainerContract) ServiceName() string          { return "container.rpc" }
-func (*getContainerContract) MethodName() string           { return "GetContainer" }
-func (*getContainerContract) RequestMessage() interface{}  { return new(GetContainerRequest) }
-func (*getContainerContract) ResponseMessage() interface{} { return new(GetContainerRequest) }
-func (*getContainerContract) ContractName() string {
-	return "easyops.api.topology.container.GetContainer"
+var _GetContainerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.container.GetContainer",
+		Version: "1.0",
+	},
+	ServiceName:  "container.rpc",
+	MethodName:   "GetContainer",
+	RequestType:  (*GetContainerRequest)(nil),
+	ResponseType: (*topology.Container)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/container/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getContainerContract) ContractVersion() string   { return "1.0" }
-func (*getContainerContract) Pattern() (string, string) { return "GET", "/api/v1/container/:id" }
-func (*getContainerContract) Body() string              { return "" }
 
-var _ListContainerContract = &listContainerContract{}
-
-type listContainerContract struct{}
-
-func (*listContainerContract) ServiceName() string          { return "container.rpc" }
-func (*listContainerContract) MethodName() string           { return "ListContainer" }
-func (*listContainerContract) RequestMessage() interface{}  { return new(ListContainerRequest) }
-func (*listContainerContract) ResponseMessage() interface{} { return new(ListContainerRequest) }
-func (*listContainerContract) ContractName() string {
-	return "easyops.api.topology.container.ListContainer"
+var _ListContainerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.container.ListContainer",
+		Version: "1.0",
+	},
+	ServiceName:  "container.rpc",
+	MethodName:   "ListContainer",
+	RequestType:  (*ListContainerRequest)(nil),
+	ResponseType: (*ListContainerResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/container",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listContainerContract) ContractVersion() string   { return "1.0" }
-func (*listContainerContract) Pattern() (string, string) { return "GET", "/api/v1/container" }
-func (*listContainerContract) Body() string              { return "" }
 
-var _UpdateContainerContract = &updateContainerContract{}
-
-type updateContainerContract struct{}
-
-func (*updateContainerContract) ServiceName() string          { return "container.rpc" }
-func (*updateContainerContract) MethodName() string           { return "UpdateContainer" }
-func (*updateContainerContract) RequestMessage() interface{}  { return new(UpdateContainerRequest) }
-func (*updateContainerContract) ResponseMessage() interface{} { return new(UpdateContainerRequest) }
-func (*updateContainerContract) ContractName() string {
-	return "easyops.api.topology.container.UpdateContainer"
+var _UpdateContainerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.topology.container.UpdateContainer",
+		Version: "1.0",
+	},
+	ServiceName:  "container.rpc",
+	MethodName:   "UpdateContainer",
+	RequestType:  (*UpdateContainerRequest)(nil),
+	ResponseType: (*UpdateContainerResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/v1/container/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateContainerContract) ContractVersion() string   { return "1.0" }
-func (*updateContainerContract) Pattern() (string, string) { return "PUT", "/api/v1/container/:id" }
-func (*updateContainerContract) Body() string              { return "" }

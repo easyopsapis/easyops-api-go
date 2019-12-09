@@ -19,17 +19,19 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_GetAppStoreMicroAppRequest_AppId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_GetAppStoreMicroAppRequest_AppId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *GetAppStoreMicroAppRequest) Validate() error {
 	if !_regex_GetAppStoreMicroAppRequest_AppId.MatchString(this.AppId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AppId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.AppId))
+		return github_com_mwitkow_go_proto_validators.FieldError("AppId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.AppId))
 	}
 	return nil
 }
 
-var _regex_GetAppStoreMicroAppResponse_Name = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-var _regex_GetAppStoreMicroAppResponse_Id = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_GetAppStoreMicroAppResponse_Name = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_GetAppStoreMicroAppResponse_Id = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_GetAppStoreMicroAppResponse_Intro = regexp.MustCompile(`^.{0,200}$`)
+var _regex_GetAppStoreMicroAppResponse_Homepage = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
 
 func (this *GetAppStoreMicroAppResponse) Validate() error {
 	if this.CurrentVersion != nil {
@@ -37,11 +39,45 @@ func (this *GetAppStoreMicroAppResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("CurrentVersion", err)
 		}
 	}
+	for _, item := range this.ProductLines {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("ProductLines", err)
+			}
+		}
+	}
+	for _, item := range this.Solutions {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("Solutions", err)
+			}
+		}
+	}
 	if !_regex_GetAppStoreMicroAppResponse_Name.MatchString(this.Name) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Name))
 	}
 	if !_regex_GetAppStoreMicroAppResponse_Id.MatchString(this.Id) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.Id))
+		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Id))
+	}
+	if this.Icons != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Icons); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Icons", err)
+		}
+	}
+	if !_regex_GetAppStoreMicroAppResponse_Intro.MatchString(this.Intro) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Intro", fmt.Errorf(`value '%v' must be a string conforming to regex "^.{0,200}$"`, this.Intro))
+	}
+	if !_regex_GetAppStoreMicroAppResponse_Homepage.MatchString(this.Homepage) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Homepage", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Homepage))
+	}
+	return nil
+}
+
+var _regex_GetAppStoreMicroAppResponse_Icons_Large = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+
+func (this *GetAppStoreMicroAppResponse_Icons) Validate() error {
+	if !_regex_GetAppStoreMicroAppResponse_Icons_Large.MatchString(this.Large) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Large", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Large))
 	}
 	return nil
 }

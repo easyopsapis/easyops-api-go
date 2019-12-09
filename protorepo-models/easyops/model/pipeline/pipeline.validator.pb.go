@@ -19,26 +19,26 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_Pipeline_YamlPath = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
-var _regex_Pipeline_YamlUrl = regexp.MustCompile(`^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$`)
-var _regex_Pipeline_Creator = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_Pipeline_YamlUrl = regexp.MustCompile(`(\b(https?|ftp|file)://)?[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`)
+var _regex_Pipeline_Creator = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 var _regex_Pipeline_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
 var _regex_Pipeline_Mtime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
 
 func (this *Pipeline) Validate() error {
 	if !(len(this.AliasName) > 3) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AliasName", fmt.Errorf(`value '%v' must length be greater than '3'`, this.AliasName))
+		return github_com_mwitkow_go_proto_validators.FieldError("AliasName", fmt.Errorf(`value '%v' must have a length greater than '3'`, this.AliasName))
 	}
 	if !(len(this.AliasName) < 201) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AliasName", fmt.Errorf(`value '%v' must length be less than '201'`, this.AliasName))
+		return github_com_mwitkow_go_proto_validators.FieldError("AliasName", fmt.Errorf(`value '%v' must have a length smaller than '201'`, this.AliasName))
 	}
 	if !_regex_Pipeline_YamlPath.MatchString(this.YamlPath) {
 		return github_com_mwitkow_go_proto_validators.FieldError("YamlPath", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.YamlPath))
 	}
 	if !(len(this.YamlString) > 0) {
-		return github_com_mwitkow_go_proto_validators.FieldError("YamlString", fmt.Errorf(`value '%v' must length be greater than '0'`, this.YamlString))
+		return github_com_mwitkow_go_proto_validators.FieldError("YamlString", fmt.Errorf(`value '%v' must have a length greater than '0'`, this.YamlString))
 	}
 	if !_regex_Pipeline_YamlUrl.MatchString(this.YamlUrl) {
-		return github_com_mwitkow_go_proto_validators.FieldError("YamlUrl", fmt.Errorf(`value '%v' must be a string conforming to regex "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$"`, this.YamlUrl))
+		return github_com_mwitkow_go_proto_validators.FieldError("YamlUrl", fmt.Errorf(`value '%v' must be a string conforming to regex "(\\b(https?|ftp|file)://)?[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"`, this.YamlUrl))
 	}
 	for _, item := range this.Variables {
 		if item != nil {
@@ -48,7 +48,7 @@ func (this *Pipeline) Validate() error {
 		}
 	}
 	if !_regex_Pipeline_Creator.MatchString(this.Creator) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Creator))
+		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Creator))
 	}
 	if !_regex_Pipeline_Ctime.MatchString(this.Ctime) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
@@ -59,11 +59,11 @@ func (this *Pipeline) Validate() error {
 	return nil
 }
 func (this *Pipeline_Variables) Validate() error {
-	if !(len(this.Key) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Key", fmt.Errorf(`value '%v' must length be greater than '1'`, this.Key))
+	if !(len(this.Name) > 1) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.Name))
 	}
-	if !(len(this.Key) < 201) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Key", fmt.Errorf(`value '%v' must length be less than '201'`, this.Key))
+	if !(len(this.Name) < 201) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must have a length smaller than '201'`, this.Name))
 	}
 	return nil
 }

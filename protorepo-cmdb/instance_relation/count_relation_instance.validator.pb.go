@@ -18,11 +18,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_CountRelationInstanceRequest_RelationId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_CountRelationInstanceRequest_RelationId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]*$`)
 
 func (this *CountRelationInstanceRequest) Validate() error {
 	if !_regex_CountRelationInstanceRequest_RelationId.MatchString(this.RelationId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("RelationId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.RelationId))
+		return github_com_mwitkow_go_proto_validators.FieldError("RelationId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]*$"`, this.RelationId))
 	}
 	return nil
 }

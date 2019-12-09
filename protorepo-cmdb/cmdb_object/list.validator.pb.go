@@ -18,6 +18,15 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+func (this *ListRequest) Validate() error {
+	if !(this.Page > 0) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Page", fmt.Errorf(`value '%v' must be greater than '0'`, this.Page))
+	}
+	if !(this.PageSize > 0) {
+		return github_com_mwitkow_go_proto_validators.FieldError("PageSize", fmt.Errorf(`value '%v' must be greater than '0'`, this.PageSize))
+	}
+	return nil
+}
 func (this *ListResponse) Validate() error {
 	if !(this.Page > 0) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Page", fmt.Errorf(`value '%v' must be greater than '0'`, this.Page))

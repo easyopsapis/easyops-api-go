@@ -20,7 +20,7 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-func (this *POSTRequest) Validate() error {
+func (this *ListRequest) Validate() error {
 	if !(this.Page > 0) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Page", fmt.Errorf(`value '%v' must be greater than '0'`, this.Page))
 	}
@@ -39,15 +39,7 @@ func (this *POSTRequest) Validate() error {
 	}
 	return nil
 }
-func (this *POSTResponse) Validate() error {
-	if this.Data != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Data", err)
-		}
-	}
-	return nil
-}
-func (this *POSTResponse_Data) Validate() error {
+func (this *ListResponse) Validate() error {
 	if !(this.Page > 0) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Page", fmt.Errorf(`value '%v' must be greater than '0'`, this.Page))
 	}
@@ -64,10 +56,10 @@ func (this *POSTResponse_Data) Validate() error {
 	return nil
 }
 
-var _regex_POSTResponse_Data_List_Id = regexp.MustCompile(`^[0-9a-z]{13}$`)
-var _regex_POSTResponse_Data_List_Sender = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_ListResponse_List_Id = regexp.MustCompile(`^[0-9a-z]{13}$`)
+var _regex_ListResponse_List_Sender = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
-func (this *POSTResponse_Data_List) Validate() error {
+func (this *ListResponse_List) Validate() error {
 	if this.Project != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Project); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Project", err)
@@ -85,7 +77,7 @@ func (this *POSTResponse_Data_List) Validate() error {
 			}
 		}
 	}
-	if !_regex_POSTResponse_Data_List_Id.MatchString(this.Id) {
+	if !_regex_ListResponse_List_Id.MatchString(this.Id) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.Id))
 	}
 	if this.GitMeta != nil {
@@ -93,8 +85,13 @@ func (this *POSTResponse_Data_List) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("GitMeta", err)
 		}
 	}
-	if !_regex_POSTResponse_Data_List_Sender.MatchString(this.Sender) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Sender", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Sender))
+	if !_regex_ListResponse_List_Sender.MatchString(this.Sender) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Sender", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Sender))
+	}
+	if this.Artifact != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Artifact); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Artifact", err)
+		}
 	}
 	if this.Status != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Status); err != nil {
@@ -103,7 +100,24 @@ func (this *POSTResponse_Data_List) Validate() error {
 	}
 	return nil
 }
-func (this *POSTResponseWrapper) Validate() error {
+
+var _regex_ListResponse_List_Artifact_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+var _regex_ListResponse_List_Artifact_PackageId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
+var _regex_ListResponse_List_Artifact_VersionId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
+
+func (this *ListResponse_List_Artifact) Validate() error {
+	if !_regex_ListResponse_List_Artifact_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
+	}
+	if !_regex_ListResponse_List_Artifact_PackageId.MatchString(this.PackageId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.PackageId))
+	}
+	if !_regex_ListResponse_List_Artifact_VersionId.MatchString(this.VersionId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.VersionId))
+	}
+	return nil
+}
+func (this *ListResponseWrapper) Validate() error {
 	if this.Data != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Data", err)

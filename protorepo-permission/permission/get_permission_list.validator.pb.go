@@ -9,8 +9,8 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/mwitkow/go-proto-validators"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
+	_ "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/permission"
 	math "math"
-	regexp "regexp"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -40,15 +40,6 @@ func (this *GetPermissionListResponse) Validate() error {
 				return github_com_mwitkow_go_proto_validators.FieldError("Data", err)
 			}
 		}
-	}
-	return nil
-}
-
-var _regex_GetPermissionListResponse_Data_Id = regexp.MustCompile(`^[0-9a-fA-F]{24}$`)
-
-func (this *GetPermissionListResponse_Data) Validate() error {
-	if !_regex_GetPermissionListResponse_Data_Id.MatchString(this.Id) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Id", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-fA-F]{24}$"`, this.Id))
 	}
 	return nil
 }

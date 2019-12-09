@@ -7,8 +7,9 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	micro_app "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/micro_app"
 	io "io"
 	math "math"
 )
@@ -22,15 +23,18 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for desktop service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	Clone(ctx context.Context, in *CloneRequest) (*micro_app.InstalledMicroApp, error)
+	GetAppDependencies(ctx context.Context, in *GetAppDependenciesRequest) (*GetAppDependenciesResponse, error)
 	GetTaskStatus(ctx context.Context, in *GetTaskStatusRequest) (*GetTaskStatusResponse, error)
 	InstallApp(ctx context.Context, in *InstallAppRequest) (*InstallAppResponse, error)
 	UninstallApp(ctx context.Context, in *UninstallAppRequest) (*UninstallAppResponse, error)
@@ -46,9 +50,27 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) Clone(ctx context.Context, in *CloneRequest) (*micro_app.InstalledMicroApp, error) {
+	out := new(micro_app.InstalledMicroApp)
+	err := c.c.Invoke(ctx, _CloneMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetAppDependencies(ctx context.Context, in *GetAppDependenciesRequest) (*GetAppDependenciesResponse, error) {
+	out := new(GetAppDependenciesResponse)
+	err := c.c.Invoke(ctx, _GetAppDependenciesMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) GetTaskStatus(ctx context.Context, in *GetTaskStatusRequest) (*GetTaskStatusResponse, error) {
 	out := new(GetTaskStatusResponse)
-	err := c.c.Invoke(ctx, _GetTaskStatusContract, in, out)
+	err := c.c.Invoke(ctx, _GetTaskStatusMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +79,7 @@ func (c *client) GetTaskStatus(ctx context.Context, in *GetTaskStatusRequest) (*
 
 func (c *client) InstallApp(ctx context.Context, in *InstallAppRequest) (*InstallAppResponse, error) {
 	out := new(InstallAppResponse)
-	err := c.c.Invoke(ctx, _InstallAppContract, in, out)
+	err := c.c.Invoke(ctx, _InstallAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +88,7 @@ func (c *client) InstallApp(ctx context.Context, in *InstallAppRequest) (*Instal
 
 func (c *client) UninstallApp(ctx context.Context, in *UninstallAppRequest) (*UninstallAppResponse, error) {
 	out := new(UninstallAppResponse)
-	err := c.c.Invoke(ctx, _UninstallAppContract, in, out)
+	err := c.c.Invoke(ctx, _UninstallAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -75,9 +97,23 @@ func (c *client) UninstallApp(ctx context.Context, in *UninstallAppRequest) (*Un
 
 // Service is the server API for desktop service.
 type Service interface {
+	Clone(context.Context, *CloneRequest) (*micro_app.InstalledMicroApp, error)
+	GetAppDependencies(context.Context, *GetAppDependenciesRequest) (*GetAppDependenciesResponse, error)
 	GetTaskStatus(context.Context, *GetTaskStatusRequest) (*GetTaskStatusResponse, error)
 	InstallApp(context.Context, *InstallAppRequest) (*InstallAppResponse, error)
 	UninstallApp(context.Context, *UninstallAppRequest) (*UninstallAppResponse, error)
+}
+
+func _CloneEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.Clone(ctx, req.(*CloneRequest))
+	}
+}
+
+func _GetAppDependenciesEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetAppDependencies(ctx, req.(*GetAppDependenciesRequest))
+	}
 }
 
 func _GetTaskStatusEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -99,49 +135,100 @@ func _UninstallAppEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetTaskStatusContract, _GetTaskStatusEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InstallAppContract, _InstallAppEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UninstallAppContract, _UninstallAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CloneMethodDesc, _CloneEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetAppDependenciesMethodDesc, _GetAppDependenciesEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetTaskStatusMethodDesc, _GetTaskStatusEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstallAppMethodDesc, _InstallAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UninstallAppMethodDesc, _UninstallAppEndpoint(srv))
 }
 
-// API Contract
-var _GetTaskStatusContract = &getTaskStatusContract{}
-
-type getTaskStatusContract struct{}
-
-func (*getTaskStatusContract) ServiceName() string          { return "desktop.rpc" }
-func (*getTaskStatusContract) MethodName() string           { return "GetTaskStatus" }
-func (*getTaskStatusContract) RequestMessage() interface{}  { return new(GetTaskStatusRequest) }
-func (*getTaskStatusContract) ResponseMessage() interface{} { return new(GetTaskStatusRequest) }
-func (*getTaskStatusContract) ContractName() string         { return "easyops.api.ucpro.desktop.GetTaskStatus" }
-func (*getTaskStatusContract) ContractVersion() string      { return "1.0" }
-func (*getTaskStatusContract) Pattern() (string, string)    { return "GET", "/api/v1/desktop/task/:taskId" }
-func (*getTaskStatusContract) Body() string                 { return "" }
-
-var _InstallAppContract = &installAppContract{}
-
-type installAppContract struct{}
-
-func (*installAppContract) ServiceName() string          { return "desktop.rpc" }
-func (*installAppContract) MethodName() string           { return "InstallApp" }
-func (*installAppContract) RequestMessage() interface{}  { return new(InstallAppRequest) }
-func (*installAppContract) ResponseMessage() interface{} { return new(InstallAppRequest) }
-func (*installAppContract) ContractName() string         { return "easyops.api.ucpro.desktop.InstallApp" }
-func (*installAppContract) ContractVersion() string      { return "1.0" }
-func (*installAppContract) Pattern() (string, string)    { return "POST", "/api/v1/desktop/install-app" }
-func (*installAppContract) Body() string                 { return "" }
-
-var _UninstallAppContract = &uninstallAppContract{}
-
-type uninstallAppContract struct{}
-
-func (*uninstallAppContract) ServiceName() string          { return "desktop.rpc" }
-func (*uninstallAppContract) MethodName() string           { return "UninstallApp" }
-func (*uninstallAppContract) RequestMessage() interface{}  { return new(UninstallAppRequest) }
-func (*uninstallAppContract) ResponseMessage() interface{} { return new(UninstallAppRequest) }
-func (*uninstallAppContract) ContractName() string         { return "easyops.api.ucpro.desktop.UninstallApp" }
-func (*uninstallAppContract) ContractVersion() string      { return "1.0" }
-func (*uninstallAppContract) Pattern() (string, string) {
-	return "POST", "/api/v1/desktop/uninstall-app"
+// Method Description
+var _CloneMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ucpro.desktop.Clone",
+		Version: "1.0",
+	},
+	ServiceName:  "desktop.rpc",
+	MethodName:   "Clone",
+	RequestType:  (*CloneRequest)(nil),
+	ResponseType: (*micro_app.InstalledMicroApp)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/micro_app/v1/installed_micro_app/clone",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*uninstallAppContract) Body() string { return "" }
+
+var _GetAppDependenciesMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ucpro.desktop.GetAppDependencies",
+		Version: "1.0",
+	},
+	ServiceName:  "desktop.rpc",
+	MethodName:   "GetAppDependencies",
+	RequestType:  (*GetAppDependenciesRequest)(nil),
+	ResponseType: (*GetAppDependenciesResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/desktop/app-dependencies",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _GetTaskStatusMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ucpro.desktop.GetTaskStatus",
+		Version: "1.0",
+	},
+	ServiceName:  "desktop.rpc",
+	MethodName:   "GetTaskStatus",
+	RequestType:  (*GetTaskStatusRequest)(nil),
+	ResponseType: (*GetTaskStatusResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/desktop/task/:taskId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _InstallAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ucpro.desktop.InstallApp",
+		Version: "1.0",
+	},
+	ServiceName:  "desktop.rpc",
+	MethodName:   "InstallApp",
+	RequestType:  (*InstallAppRequest)(nil),
+	ResponseType: (*InstallAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/desktop/install-app",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _UninstallAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ucpro.desktop.UninstallApp",
+		Version: "1.0",
+	},
+	ServiceName:  "desktop.rpc",
+	MethodName:   "UninstallApp",
+	RequestType:  (*UninstallAppRequest)(nil),
+	ResponseType: (*UninstallAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/desktop/uninstall-app",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

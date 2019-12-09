@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for org service.
 //
@@ -47,7 +48,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) InitOrg(ctx context.Context, in *types.Empty) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _InitOrgContract, in, out)
+	err := c.c.Invoke(ctx, _InitOrgMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,21 +67,24 @@ func _InitOrgEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_InitOrgContract, _InitOrgEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InitOrgMethodDesc, _InitOrgEndpoint(srv))
 }
 
-// API Contract
-var _InitOrgContract = &initOrgContract{}
-
-type initOrgContract struct{}
-
-func (*initOrgContract) ServiceName() string          { return "org.rpc" }
-func (*initOrgContract) MethodName() string           { return "InitOrg" }
-func (*initOrgContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*initOrgContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*initOrgContract) ContractName() string         { return "easyops.api.ops_automation.org.InitOrg" }
-func (*initOrgContract) ContractVersion() string      { return "1.0" }
-func (*initOrgContract) Pattern() (string, string) {
-	return "POST", "/api/ops_automation/v1/org/register"
+// Method Description
+var _InitOrgMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.org.InitOrg",
+		Version: "1.0",
+	},
+	ServiceName:  "org.rpc",
+	MethodName:   "InitOrg",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/org/register",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*initOrgContract) Body() string { return "" }

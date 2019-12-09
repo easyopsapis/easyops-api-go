@@ -19,14 +19,14 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_RemoveRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_RemoveRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 var _regex_RemoveRequest_RelationSideId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 var _regex_RemoveRequest_InstanceIds = regexp.MustCompile(`^[0-9a-z]{13}$`)
 var _regex_RemoveRequest_RelatedInstanceIds = regexp.MustCompile(`^[0-9a-z]{13}$`)
 
 func (this *RemoveRequest) Validate() error {
 	if !_regex_RemoveRequest_ObjectId.MatchString(this.ObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.ObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.ObjectId))
 	}
 	if !_regex_RemoveRequest_RelationSideId.MatchString(this.RelationSideId) {
 		return github_com_mwitkow_go_proto_validators.FieldError("RelationSideId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.RelationSideId))

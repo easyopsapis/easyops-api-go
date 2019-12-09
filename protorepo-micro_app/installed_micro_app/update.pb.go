@@ -21,7 +21,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 //
 //UpdateInstalledMicroApp请求
@@ -30,11 +30,11 @@ type UpdateInstalledMicroAppRequest struct {
 	//小产品id
 	AppId string `protobuf:"bytes,1,opt,name=app_id,json=appId,proto3" json:"app_id" form:"app_id"`
 	//
-	//要更新的小产品信息
-	MicroApp             *micro_app.InstalledMicroApp `protobuf:"bytes,2,opt,name=micro_app,json=microApp,proto3" json:"micro_app" form:"micro_app"`
-	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
-	XXX_unrecognized     []byte                       `json:"-"`
-	XXX_sizecache        int32                        `json:"-"`
+	//小产品id
+	MicroApp             *UpdateInstalledMicroAppRequest_MicroApp `protobuf:"bytes,2,opt,name=micro_app,json=microApp,proto3" json:"micro_app" form:"micro_app"`
+	XXX_NoUnkeyedLiteral struct{}                                 `json:"-"`
+	XXX_unrecognized     []byte                                   `json:"-"`
+	XXX_sizecache        int32                                    `json:"-"`
 }
 
 func (m *UpdateInstalledMicroAppRequest) Reset()         { *m = UpdateInstalledMicroAppRequest{} }
@@ -68,11 +68,957 @@ func (m *UpdateInstalledMicroAppRequest) GetAppId() string {
 	return ""
 }
 
-func (m *UpdateInstalledMicroAppRequest) GetMicroApp() *micro_app.InstalledMicroApp {
+func (m *UpdateInstalledMicroAppRequest) GetMicroApp() *UpdateInstalledMicroAppRequest_MicroApp {
 	if m != nil {
 		return m.MicroApp
 	}
 	return nil
+}
+
+type UpdateInstalledMicroAppRequest_MicroApp struct {
+	//
+	//小产品所属桌面
+	Container *UpdateInstalledMicroAppRequest_MicroApp_Container `protobuf:"bytes,1,opt,name=container,proto3" json:"container" form:"container"`
+	//
+	//cmdb唯一标识, 业务逻辑请使用appId作为唯一标识
+	InstanceId string `protobuf:"bytes,2,opt,name=instanceId,proto3" json:"instanceId" form:"instanceId"`
+	//
+	//小产品名称
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name" form:"name"`
+	//
+	//小产品id
+	AppId string `protobuf:"bytes,4,opt,name=appId,proto3" json:"appId" form:"appId"`
+	//
+	//图标url
+	Icons *UpdateInstalledMicroAppRequest_MicroApp_Icons `protobuf:"bytes,5,opt,name=icons,proto3" json:"icons" form:"icons"`
+	//
+	//小产品配置
+	StoryboardJson string `protobuf:"bytes,6,opt,name=storyboardJson,proto3" json:"storyboardJson" form:"storyboardJson"`
+	//
+	//标签
+	Tags []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags" form:"tags"`
+	//
+	//NA程序包当前版本
+	CurrentVersion string `protobuf:"bytes,8,opt,name=currentVersion,proto3" json:"currentVersion" form:"currentVersion"`
+	//
+	//小产品在应用商店的版本号
+	AppVersion string `protobuf:"bytes,9,opt,name=appVersion,proto3" json:"appVersion" form:"appVersion"`
+	//
+	//安装状态， ok-成功, running-正在安装
+	InstallStatus string `protobuf:"bytes,10,opt,name=installStatus,proto3" json:"installStatus" form:"installStatus"`
+	//
+	//小产品首页
+	Homepage string `protobuf:"bytes,11,opt,name=homepage,proto3" json:"homepage" form:"homepage"`
+	//
+	//表示该应用是内部的，不出现在 launchpad 和 app store 中
+	Internal string `protobuf:"bytes,12,opt,name=internal,proto3" json:"internal" form:"internal"`
+	//
+	//私有安装应用, true or false
+	Private string `protobuf:"bytes,13,opt,name=private,proto3" json:"private" form:"private"`
+	//
+	//克隆对象
+	ClonedFrom *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom `protobuf:"bytes,14,opt,name=clonedFrom,proto3" json:"clonedFrom" form:"clonedFrom"`
+	//
+	//作者
+	Owner string `protobuf:"bytes,15,opt,name=owner,proto3" json:"owner" form:"owner"`
+	//
+	//readme
+	Readme string `protobuf:"bytes,16,opt,name=readme,proto3" json:"readme" form:"readme"`
+	//
+	//状态
+	Status string `protobuf:"bytes,17,opt,name=status,proto3" json:"status" form:"status"`
+	//
+	//创建时间
+	Ctime string `protobuf:"bytes,18,opt,name=ctime,proto3" json:"ctime" form:"ctime"`
+	//
+	//修改时间
+	Mtime string `protobuf:"bytes,19,opt,name=mtime,proto3" json:"mtime" form:"mtime"`
+	//
+	//关联程序包名称
+	PkgName string `protobuf:"bytes,20,opt,name=pkgName,proto3" json:"pkgName" form:"pkgName"`
+	//
+	//图标背景
+	IconBackground string `protobuf:"bytes,21,opt,name=iconBackground,proto3" json:"iconBackground" form:"iconBackground"`
+	//
+	//菜单中显示的图标
+	MenuIcon             *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon `protobuf:"bytes,22,opt,name=menuIcon,proto3" json:"menuIcon" form:"menuIcon"`
+	XXX_NoUnkeyedLiteral struct{}                                          `json:"-"`
+	XXX_unrecognized     []byte                                            `json:"-"`
+	XXX_sizecache        int32                                             `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) Reset() {
+	*m = UpdateInstalledMicroAppRequest_MicroApp{}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp) String() string { return proto.CompactTextString(m) }
+func (*UpdateInstalledMicroAppRequest_MicroApp) ProtoMessage()    {}
+func (*UpdateInstalledMicroAppRequest_MicroApp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{0, 0}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp.Size(m)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetContainer() *UpdateInstalledMicroAppRequest_MicroApp_Container {
+	if m != nil {
+		return m.Container
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetInstanceId() string {
+	if m != nil {
+		return m.InstanceId
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetAppId() string {
+	if m != nil {
+		return m.AppId
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetIcons() *UpdateInstalledMicroAppRequest_MicroApp_Icons {
+	if m != nil {
+		return m.Icons
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetStoryboardJson() string {
+	if m != nil {
+		return m.StoryboardJson
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetTags() []string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetCurrentVersion() string {
+	if m != nil {
+		return m.CurrentVersion
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetAppVersion() string {
+	if m != nil {
+		return m.AppVersion
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetInstallStatus() string {
+	if m != nil {
+		return m.InstallStatus
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetHomepage() string {
+	if m != nil {
+		return m.Homepage
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetInternal() string {
+	if m != nil {
+		return m.Internal
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetPrivate() string {
+	if m != nil {
+		return m.Private
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetClonedFrom() *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom {
+	if m != nil {
+		return m.ClonedFrom
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetReadme() string {
+	if m != nil {
+		return m.Readme
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetStatus() string {
+	if m != nil {
+		return m.Status
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetCtime() string {
+	if m != nil {
+		return m.Ctime
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetMtime() string {
+	if m != nil {
+		return m.Mtime
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetPkgName() string {
+	if m != nil {
+		return m.PkgName
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetIconBackground() string {
+	if m != nil {
+		return m.IconBackground
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp) GetMenuIcon() *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon {
+	if m != nil {
+		return m.MenuIcon
+	}
+	return nil
+}
+
+type UpdateInstalledMicroAppRequest_MicroApp_Container struct {
+	//
+	//桌面的id
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id" form:"id"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) Reset() {
+	*m = UpdateInstalledMicroAppRequest_MicroApp_Container{}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) String() string {
+	return proto.CompactTextString(m)
+}
+func (*UpdateInstalledMicroAppRequest_MicroApp_Container) ProtoMessage() {}
+func (*UpdateInstalledMicroAppRequest_MicroApp_Container) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{0, 0, 0}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Container.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Container.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Container.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Container.Size(m)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Container.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Container proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Container) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type UpdateInstalledMicroAppRequest_MicroApp_Icons struct {
+	//
+	//图标url
+	Large                string   `protobuf:"bytes,1,opt,name=large,proto3" json:"large" form:"large"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) Reset() {
+	*m = UpdateInstalledMicroAppRequest_MicroApp_Icons{}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) String() string {
+	return proto.CompactTextString(m)
+}
+func (*UpdateInstalledMicroAppRequest_MicroApp_Icons) ProtoMessage() {}
+func (*UpdateInstalledMicroAppRequest_MicroApp_Icons) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{0, 0, 1}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Icons.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Icons.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Icons.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Icons.Size(m)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Icons.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_Icons proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_Icons) GetLarge() string {
+	if m != nil {
+		return m.Large
+	}
+	return ""
+}
+
+type UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom struct {
+	//
+	//克隆的appId
+	AppId string `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId" form:"appId"`
+	//
+	//克隆的版本号
+	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version" form:"version"`
+	//
+	//克隆的app名称
+	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name" form:"name"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) Reset() {
+	*m = UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom{}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) String() string {
+	return proto.CompactTextString(m)
+}
+func (*UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) ProtoMessage() {}
+func (*UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{0, 0, 2}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom.Size(m)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) GetAppId() string {
+	if m != nil {
+		return m.AppId
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type UpdateInstalledMicroAppRequest_MicroApp_MenuIcon struct {
+	//
+	//图标库
+	Lib string `protobuf:"bytes,1,opt,name=lib,proto3" json:"lib" form:"lib"`
+	//
+	//Antd 图标类型
+	Type string `protobuf:"bytes,2,opt,name=type,proto3" json:"type" form:"type"`
+	//
+	//Antd 图标主题
+	Theme string `protobuf:"bytes,3,opt,name=theme,proto3" json:"theme" form:"theme"`
+	//
+	//FA 或 EasyOps 图标
+	Icon string `protobuf:"bytes,4,opt,name=icon,proto3" json:"icon" form:"icon"`
+	//
+	//FA 图标前缀
+	Prefix string `protobuf:"bytes,5,opt,name=prefix,proto3" json:"prefix" form:"prefix"`
+	//
+	//EasyOps 图标分类
+	Category             string   `protobuf:"bytes,6,opt,name=category,proto3" json:"category" form:"category"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) Reset() {
+	*m = UpdateInstalledMicroAppRequest_MicroApp_MenuIcon{}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) String() string {
+	return proto.CompactTextString(m)
+}
+func (*UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) ProtoMessage() {}
+func (*UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{0, 0, 3}
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_MenuIcon.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_MenuIcon.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_MenuIcon.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_MenuIcon.Size(m)
+}
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_MenuIcon.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppRequest_MicroApp_MenuIcon proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) GetLib() string {
+	if m != nil {
+		return m.Lib
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) GetTheme() string {
+	if m != nil {
+		return m.Theme
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) GetIcon() string {
+	if m != nil {
+		return m.Icon
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) GetPrefix() string {
+	if m != nil {
+		return m.Prefix
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) GetCategory() string {
+	if m != nil {
+		return m.Category
+	}
+	return ""
+}
+
+//
+//UpdateInstalledMicroApp返回
+type UpdateInstalledMicroAppResponse struct {
+	//
+	//小产品关联的桌面信息
+	Container *micro_app.MicroAppContainer `protobuf:"bytes,1,opt,name=container,proto3" json:"container" form:"container"`
+	//
+	//cmdb唯一标识, 业务逻辑请使用appId作为唯一标识
+	InstanceId string `protobuf:"bytes,2,opt,name=instanceId,proto3" json:"instanceId" form:"instanceId"`
+	//
+	//小产品名称
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name" form:"name"`
+	//
+	//小产品id
+	AppId string `protobuf:"bytes,4,opt,name=appId,proto3" json:"appId" form:"appId"`
+	//
+	//图标url
+	Icons *UpdateInstalledMicroAppResponse_Icons `protobuf:"bytes,5,opt,name=icons,proto3" json:"icons" form:"icons"`
+	//
+	//小产品配置
+	StoryboardJson string `protobuf:"bytes,6,opt,name=storyboardJson,proto3" json:"storyboardJson" form:"storyboardJson"`
+	//
+	//标签
+	Tags []string `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags" form:"tags"`
+	//
+	//NA程序包当前版本
+	CurrentVersion string `protobuf:"bytes,8,opt,name=currentVersion,proto3" json:"currentVersion" form:"currentVersion"`
+	//
+	//小产品在应用商店的版本号
+	AppVersion string `protobuf:"bytes,9,opt,name=appVersion,proto3" json:"appVersion" form:"appVersion"`
+	//
+	//安装状态， ok-成功, running-正在安装
+	InstallStatus string `protobuf:"bytes,10,opt,name=installStatus,proto3" json:"installStatus" form:"installStatus"`
+	//
+	//小产品首页
+	Homepage string `protobuf:"bytes,11,opt,name=homepage,proto3" json:"homepage" form:"homepage"`
+	//
+	//表示该应用是内部的，不出现在 launchpad 和 app store 中
+	Internal string `protobuf:"bytes,12,opt,name=internal,proto3" json:"internal" form:"internal"`
+	//
+	//私有安装应用, true or false
+	Private string `protobuf:"bytes,13,opt,name=private,proto3" json:"private" form:"private"`
+	//
+	//克隆对象
+	ClonedFrom *UpdateInstalledMicroAppResponse_ClonedFrom `protobuf:"bytes,14,opt,name=clonedFrom,proto3" json:"clonedFrom" form:"clonedFrom"`
+	//
+	//作者
+	Owner string `protobuf:"bytes,15,opt,name=owner,proto3" json:"owner" form:"owner"`
+	//
+	//readme
+	Readme string `protobuf:"bytes,16,opt,name=readme,proto3" json:"readme" form:"readme"`
+	//
+	//状态
+	Status string `protobuf:"bytes,17,opt,name=status,proto3" json:"status" form:"status"`
+	//
+	//创建时间
+	Ctime string `protobuf:"bytes,18,opt,name=ctime,proto3" json:"ctime" form:"ctime"`
+	//
+	//修改时间
+	Mtime string `protobuf:"bytes,19,opt,name=mtime,proto3" json:"mtime" form:"mtime"`
+	//
+	//关联程序包名称
+	PkgName string `protobuf:"bytes,20,opt,name=pkgName,proto3" json:"pkgName" form:"pkgName"`
+	//
+	//图标背景
+	IconBackground string `protobuf:"bytes,21,opt,name=iconBackground,proto3" json:"iconBackground" form:"iconBackground"`
+	//
+	//菜单中显示的图标
+	MenuIcon             *UpdateInstalledMicroAppResponse_MenuIcon `protobuf:"bytes,22,opt,name=menuIcon,proto3" json:"menuIcon" form:"menuIcon"`
+	XXX_NoUnkeyedLiteral struct{}                                  `json:"-"`
+	XXX_unrecognized     []byte                                    `json:"-"`
+	XXX_sizecache        int32                                     `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppResponse) Reset()         { *m = UpdateInstalledMicroAppResponse{} }
+func (m *UpdateInstalledMicroAppResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdateInstalledMicroAppResponse) ProtoMessage()    {}
+func (*UpdateInstalledMicroAppResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{1}
+}
+func (m *UpdateInstalledMicroAppResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppResponse) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse.Size(m)
+}
+func (m *UpdateInstalledMicroAppResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppResponse proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppResponse) GetContainer() *micro_app.MicroAppContainer {
+	if m != nil {
+		return m.Container
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetInstanceId() string {
+	if m != nil {
+		return m.InstanceId
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetAppId() string {
+	if m != nil {
+		return m.AppId
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetIcons() *UpdateInstalledMicroAppResponse_Icons {
+	if m != nil {
+		return m.Icons
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetStoryboardJson() string {
+	if m != nil {
+		return m.StoryboardJson
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetTags() []string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetCurrentVersion() string {
+	if m != nil {
+		return m.CurrentVersion
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetAppVersion() string {
+	if m != nil {
+		return m.AppVersion
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetInstallStatus() string {
+	if m != nil {
+		return m.InstallStatus
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetHomepage() string {
+	if m != nil {
+		return m.Homepage
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetInternal() string {
+	if m != nil {
+		return m.Internal
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetPrivate() string {
+	if m != nil {
+		return m.Private
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetClonedFrom() *UpdateInstalledMicroAppResponse_ClonedFrom {
+	if m != nil {
+		return m.ClonedFrom
+	}
+	return nil
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetReadme() string {
+	if m != nil {
+		return m.Readme
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetStatus() string {
+	if m != nil {
+		return m.Status
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetCtime() string {
+	if m != nil {
+		return m.Ctime
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetMtime() string {
+	if m != nil {
+		return m.Mtime
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetPkgName() string {
+	if m != nil {
+		return m.PkgName
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetIconBackground() string {
+	if m != nil {
+		return m.IconBackground
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse) GetMenuIcon() *UpdateInstalledMicroAppResponse_MenuIcon {
+	if m != nil {
+		return m.MenuIcon
+	}
+	return nil
+}
+
+type UpdateInstalledMicroAppResponse_Icons struct {
+	//
+	//图标url
+	Large                string   `protobuf:"bytes,1,opt,name=large,proto3" json:"large" form:"large"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppResponse_Icons) Reset()         { *m = UpdateInstalledMicroAppResponse_Icons{} }
+func (m *UpdateInstalledMicroAppResponse_Icons) String() string { return proto.CompactTextString(m) }
+func (*UpdateInstalledMicroAppResponse_Icons) ProtoMessage()    {}
+func (*UpdateInstalledMicroAppResponse_Icons) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{1, 0}
+}
+func (m *UpdateInstalledMicroAppResponse_Icons) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_Icons.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppResponse_Icons) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_Icons.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppResponse_Icons) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse_Icons.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppResponse_Icons) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_Icons.Size(m)
+}
+func (m *UpdateInstalledMicroAppResponse_Icons) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse_Icons.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppResponse_Icons proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppResponse_Icons) GetLarge() string {
+	if m != nil {
+		return m.Large
+	}
+	return ""
+}
+
+type UpdateInstalledMicroAppResponse_ClonedFrom struct {
+	//
+	//克隆的appId
+	AppId string `protobuf:"bytes,1,opt,name=appId,proto3" json:"appId" form:"appId"`
+	//
+	//克隆的版本号
+	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version" form:"version"`
+	//
+	//克隆的app名称
+	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name" form:"name"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) Reset() {
+	*m = UpdateInstalledMicroAppResponse_ClonedFrom{}
+}
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) String() string {
+	return proto.CompactTextString(m)
+}
+func (*UpdateInstalledMicroAppResponse_ClonedFrom) ProtoMessage() {}
+func (*UpdateInstalledMicroAppResponse_ClonedFrom) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{1, 1}
+}
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_ClonedFrom.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_ClonedFrom.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse_ClonedFrom.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_ClonedFrom.Size(m)
+}
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse_ClonedFrom.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppResponse_ClonedFrom proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) GetAppId() string {
+	if m != nil {
+		return m.AppId
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) GetVersion() string {
+	if m != nil {
+		return m.Version
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_ClonedFrom) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type UpdateInstalledMicroAppResponse_MenuIcon struct {
+	//
+	//图标库
+	Lib string `protobuf:"bytes,1,opt,name=lib,proto3" json:"lib" form:"lib"`
+	//
+	//Antd 图标类型
+	Type string `protobuf:"bytes,2,opt,name=type,proto3" json:"type" form:"type"`
+	//
+	//Antd 图标主题
+	Theme string `protobuf:"bytes,3,opt,name=theme,proto3" json:"theme" form:"theme"`
+	//
+	//FA 或 EasyOps 图标
+	Icon string `protobuf:"bytes,4,opt,name=icon,proto3" json:"icon" form:"icon"`
+	//
+	//FA 图标前缀
+	Prefix string `protobuf:"bytes,5,opt,name=prefix,proto3" json:"prefix" form:"prefix"`
+	//
+	//EasyOps 图标分类
+	Category             string   `protobuf:"bytes,6,opt,name=category,proto3" json:"category" form:"category"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) Reset() {
+	*m = UpdateInstalledMicroAppResponse_MenuIcon{}
+}
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) String() string { return proto.CompactTextString(m) }
+func (*UpdateInstalledMicroAppResponse_MenuIcon) ProtoMessage()    {}
+func (*UpdateInstalledMicroAppResponse_MenuIcon) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3f0fa214029f1c21, []int{1, 2}
+}
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_MenuIcon.Unmarshal(m, b)
+}
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_MenuIcon.Marshal(b, m, deterministic)
+}
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse_MenuIcon.Merge(m, src)
+}
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) XXX_Size() int {
+	return xxx_messageInfo_UpdateInstalledMicroAppResponse_MenuIcon.Size(m)
+}
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateInstalledMicroAppResponse_MenuIcon.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateInstalledMicroAppResponse_MenuIcon proto.InternalMessageInfo
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) GetLib() string {
+	if m != nil {
+		return m.Lib
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) GetTheme() string {
+	if m != nil {
+		return m.Theme
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) GetIcon() string {
+	if m != nil {
+		return m.Icon
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) GetPrefix() string {
+	if m != nil {
+		return m.Prefix
+	}
+	return ""
+}
+
+func (m *UpdateInstalledMicroAppResponse_MenuIcon) GetCategory() string {
+	if m != nil {
+		return m.Category
+	}
+	return ""
 }
 
 //
@@ -89,10 +1035,10 @@ type UpdateInstalledMicroAppResponseWrapper struct {
 	Error string `protobuf:"bytes,3,opt,name=error,proto3" json:"error" form:"error"`
 	//
 	//返回数据
-	Data                 *micro_app.InstalledMicroApp `protobuf:"bytes,4,opt,name=data,proto3" json:"data" form:"data"`
-	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
-	XXX_unrecognized     []byte                       `json:"-"`
-	XXX_sizecache        int32                        `json:"-"`
+	Data                 *UpdateInstalledMicroAppResponse `protobuf:"bytes,4,opt,name=data,proto3" json:"data" form:"data"`
+	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
+	XXX_unrecognized     []byte                           `json:"-"`
+	XXX_sizecache        int32                            `json:"-"`
 }
 
 func (m *UpdateInstalledMicroAppResponseWrapper) Reset() {
@@ -101,7 +1047,7 @@ func (m *UpdateInstalledMicroAppResponseWrapper) Reset() {
 func (m *UpdateInstalledMicroAppResponseWrapper) String() string { return proto.CompactTextString(m) }
 func (*UpdateInstalledMicroAppResponseWrapper) ProtoMessage()    {}
 func (*UpdateInstalledMicroAppResponseWrapper) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3f0fa214029f1c21, []int{1}
+	return fileDescriptor_3f0fa214029f1c21, []int{2}
 }
 func (m *UpdateInstalledMicroAppResponseWrapper) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateInstalledMicroAppResponseWrapper.Unmarshal(m, b)
@@ -142,7 +1088,7 @@ func (m *UpdateInstalledMicroAppResponseWrapper) GetError() string {
 	return ""
 }
 
-func (m *UpdateInstalledMicroAppResponseWrapper) GetData() *micro_app.InstalledMicroApp {
+func (m *UpdateInstalledMicroAppResponseWrapper) GetData() *UpdateInstalledMicroAppResponse {
 	if m != nil {
 		return m.Data
 	}
@@ -151,37 +1097,105 @@ func (m *UpdateInstalledMicroAppResponseWrapper) GetData() *micro_app.InstalledM
 
 func init() {
 	proto.RegisterType((*UpdateInstalledMicroAppRequest)(nil), "installed_micro_app.UpdateInstalledMicroAppRequest")
+	proto.RegisterType((*UpdateInstalledMicroAppRequest_MicroApp)(nil), "installed_micro_app.UpdateInstalledMicroAppRequest.MicroApp")
+	proto.RegisterType((*UpdateInstalledMicroAppRequest_MicroApp_Container)(nil), "installed_micro_app.UpdateInstalledMicroAppRequest.MicroApp.Container")
+	proto.RegisterType((*UpdateInstalledMicroAppRequest_MicroApp_Icons)(nil), "installed_micro_app.UpdateInstalledMicroAppRequest.MicroApp.Icons")
+	proto.RegisterType((*UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom)(nil), "installed_micro_app.UpdateInstalledMicroAppRequest.MicroApp.ClonedFrom")
+	proto.RegisterType((*UpdateInstalledMicroAppRequest_MicroApp_MenuIcon)(nil), "installed_micro_app.UpdateInstalledMicroAppRequest.MicroApp.MenuIcon")
+	proto.RegisterType((*UpdateInstalledMicroAppResponse)(nil), "installed_micro_app.UpdateInstalledMicroAppResponse")
+	proto.RegisterType((*UpdateInstalledMicroAppResponse_Icons)(nil), "installed_micro_app.UpdateInstalledMicroAppResponse.Icons")
+	proto.RegisterType((*UpdateInstalledMicroAppResponse_ClonedFrom)(nil), "installed_micro_app.UpdateInstalledMicroAppResponse.ClonedFrom")
+	proto.RegisterType((*UpdateInstalledMicroAppResponse_MenuIcon)(nil), "installed_micro_app.UpdateInstalledMicroAppResponse.MenuIcon")
 	proto.RegisterType((*UpdateInstalledMicroAppResponseWrapper)(nil), "installed_micro_app.UpdateInstalledMicroAppResponseWrapper")
 }
 
 func init() { proto.RegisterFile("update.proto", fileDescriptor_3f0fa214029f1c21) }
 
 var fileDescriptor_3f0fa214029f1c21 = []byte{
-	// 407 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x51, 0xdd, 0x6a, 0xd4, 0x40,
-	0x14, 0x26, 0xba, 0x5b, 0xdc, 0xd9, 0x8a, 0x75, 0x2a, 0xb2, 0x14, 0x31, 0x65, 0x94, 0xb2, 0x17,
-	0x26, 0x83, 0x2d, 0x88, 0x78, 0x23, 0xbb, 0xe0, 0x45, 0x2f, 0x44, 0x08, 0x88, 0xa0, 0xd4, 0x30,
-	0x9b, 0x99, 0xc6, 0x60, 0x92, 0x73, 0x9c, 0x99, 0x58, 0x7f, 0xf0, 0xa5, 0x7c, 0xa0, 0x08, 0x3e,
-	0x42, 0x9e, 0x40, 0x32, 0x13, 0xd3, 0x05, 0x15, 0xbc, 0x9a, 0x73, 0xce, 0xf7, 0x73, 0xbe, 0xc3,
-	0x90, 0xdd, 0x06, 0xa5, 0xb0, 0x2a, 0x46, 0x0d, 0x16, 0xe8, 0x7e, 0x51, 0x1b, 0x2b, 0xca, 0x52,
-	0xc9, 0xb4, 0x2a, 0x32, 0x0d, 0xa9, 0x40, 0x3c, 0x88, 0xf2, 0xc2, 0xbe, 0x6b, 0x36, 0x71, 0x06,
-	0x15, 0xcf, 0x21, 0x07, 0xee, 0xb8, 0x9b, 0xe6, 0xdc, 0x75, 0xae, 0x71, 0x95, 0xf7, 0x38, 0x38,
-	0xcb, 0x21, 0x56, 0xc2, 0x7c, 0x06, 0x34, 0x71, 0x09, 0x99, 0x28, 0x79, 0x06, 0xb5, 0xd5, 0x22,
-	0xb3, 0xc6, 0x2b, 0xb5, 0x42, 0x88, 0x2a, 0x90, 0xaa, 0x34, 0x7c, 0x20, 0x72, 0xd7, 0xf2, 0x71,
-	0x27, 0xff, 0x4b, 0x8e, 0xc1, 0xfe, 0xd1, 0x56, 0x9a, 0xea, 0xa2, 0xb0, 0xef, 0xe1, 0x82, 0xe7,
-	0x10, 0x39, 0x30, 0xfa, 0x28, 0xca, 0x42, 0x0a, 0x0b, 0xda, 0xf0, 0xb1, 0xf4, 0x3a, 0xf6, 0x3d,
-	0x20, 0x77, 0x5f, 0xba, 0x5b, 0x4f, 0x7f, 0x7b, 0x3f, 0xef, 0xad, 0x57, 0x88, 0x89, 0xfa, 0xd0,
-	0x28, 0x63, 0xe9, 0x53, 0xb2, 0x23, 0x10, 0xd3, 0x42, 0x2e, 0x82, 0xc3, 0x60, 0x39, 0x5b, 0x2f,
-	0xbb, 0x36, 0xbc, 0x7e, 0x0e, 0xba, 0x7a, 0xc2, 0xfc, 0x9c, 0xfd, 0xfc, 0x11, 0xee, 0x93, 0x9b,
-	0x6f, 0xdf, 0x88, 0xe8, 0xcb, 0x2a, 0x7a, 0x9d, 0x9e, 0x7d, 0x7d, 0xf8, 0xe0, 0xe4, 0xf8, 0xdb,
-	0xfd, 0x64, 0x2a, 0x10, 0x4f, 0x25, 0x7d, 0x41, 0x66, 0x63, 0xdc, 0xc5, 0x95, 0xc3, 0x60, 0x39,
-	0x3f, 0xbe, 0x13, 0x5f, 0x1e, 0xf0, 0xc7, 0xe2, 0xf5, 0xad, 0xae, 0x0d, 0xf7, 0xfc, 0x86, 0x91,
-	0xc6, 0x92, 0x6b, 0xd5, 0x80, 0xb3, 0x2e, 0x20, 0x47, 0xff, 0x0c, 0x6d, 0x10, 0x6a, 0xa3, 0x5e,
-	0x69, 0x81, 0xa8, 0x34, 0xbd, 0x47, 0x26, 0x19, 0x48, 0xe5, 0xa2, 0x4f, 0xd7, 0x37, 0xba, 0x36,
-	0x9c, 0x7b, 0xe3, 0x7e, 0xca, 0x12, 0x07, 0xd2, 0xc7, 0x64, 0xde, 0xbf, 0xcf, 0x3e, 0x61, 0x29,
-	0x8a, 0xda, 0x45, 0x9c, 0xad, 0x6f, 0x77, 0x6d, 0x48, 0x2f, 0xb9, 0x03, 0xc8, 0x92, 0x6d, 0x2a,
-	0x3d, 0x22, 0x53, 0xa5, 0x35, 0xe8, 0xc5, 0x55, 0xa7, 0xd9, 0xeb, 0xda, 0x70, 0xd7, 0x6b, 0xdc,
-	0x98, 0x25, 0x1e, 0xa6, 0x2b, 0x32, 0x91, 0xc2, 0x8a, 0xc5, 0xe4, 0x3f, 0xae, 0xdf, 0x0a, 0xd9,
-	0x6b, 0x58, 0xe2, 0xa4, 0x9b, 0x1d, 0xf7, 0x61, 0x27, 0xbf, 0x02, 0x00, 0x00, 0xff, 0xff, 0x9e,
-	0xaf, 0x7c, 0x4d, 0x9b, 0x02, 0x00, 0x00,
+	// 1353 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x5f, 0x6f, 0x13, 0xc7,
+	0x16, 0x97, 0x03, 0x0e, 0xf6, 0x84, 0xfc, 0x9b, 0x04, 0xb4, 0xd7, 0xba, 0xf7, 0x6e, 0xee, 0x10,
+	0x71, 0xd7, 0x09, 0x6b, 0x3b, 0x0e, 0xfd, 0x83, 0x45, 0xb1, 0x92, 0x0a, 0x90, 0x91, 0xa8, 0xaa,
+	0x69, 0x4b, 0x55, 0xbc, 0x76, 0x3a, 0xde, 0x1d, 0xcc, 0x16, 0xef, 0xce, 0x76, 0x77, 0x1d, 0x08,
+	0x98, 0x7e, 0x80, 0x7e, 0x86, 0x7e, 0x82, 0x4a, 0xfd, 0x0c, 0x95, 0xfa, 0x2d, 0xfa, 0xe2, 0x4a,
+	0x7d, 0xea, 0xb3, 0x1f, 0x2b, 0x55, 0xaa, 0x66, 0x66, 0xff, 0x39, 0x09, 0x94, 0x12, 0x5e, 0xda,
+	0xe6, 0xc5, 0x3b, 0x73, 0xce, 0xef, 0xfc, 0x9d, 0x33, 0x73, 0x8e, 0x0c, 0xce, 0x0f, 0x3d, 0x8b,
+	0x84, 0xb4, 0xe2, 0xf9, 0x2c, 0x64, 0x70, 0xc5, 0x76, 0x83, 0x90, 0x0c, 0x06, 0xd4, 0xda, 0x73,
+	0x6c, 0xd3, 0x67, 0x7b, 0xc4, 0xf3, 0x4a, 0x7a, 0xdf, 0x0e, 0x1f, 0x0e, 0x7b, 0x15, 0x93, 0x39,
+	0xd5, 0x3e, 0xeb, 0xb3, 0xaa, 0xc0, 0xf6, 0x86, 0x0f, 0xc4, 0x4e, 0x6c, 0xc4, 0x4a, 0xea, 0x28,
+	0x75, 0xfa, 0xac, 0x42, 0x49, 0x70, 0xc0, 0xbc, 0xa0, 0x32, 0x60, 0x26, 0x19, 0x54, 0x4d, 0xe6,
+	0x86, 0x3e, 0x31, 0xc3, 0x40, 0x4a, 0xfa, 0xd4, 0x63, 0xba, 0xc3, 0x2c, 0x3a, 0x08, 0xaa, 0x11,
+	0xb0, 0x2a, 0xb6, 0xd5, 0xc4, 0x66, 0xba, 0xda, 0xe3, 0xc2, 0xc4, 0x76, 0xa9, 0x1f, 0xa9, 0x7f,
+	0x3b, 0xe3, 0x8d, 0xf3, 0xd8, 0x0e, 0x1f, 0xb1, 0xc7, 0xd5, 0x3e, 0xd3, 0x05, 0x53, 0xdf, 0x27,
+	0x03, 0xdb, 0x22, 0x21, 0xf3, 0x83, 0x6a, 0xb2, 0x94, 0x72, 0xe8, 0xb7, 0x55, 0xf0, 0xdf, 0x4f,
+	0x44, 0xac, 0xad, 0x38, 0xc6, 0xbb, 0xdc, 0xc8, 0x8e, 0xe7, 0x61, 0xfa, 0xe5, 0x90, 0x06, 0x21,
+	0xd4, 0xc0, 0x2c, 0xb7, 0x68, 0x5b, 0x4a, 0x6e, 0x2d, 0xa7, 0x15, 0x77, 0x97, 0x27, 0x63, 0x75,
+	0xfe, 0x01, 0xf3, 0x9d, 0x06, 0x92, 0x74, 0x84, 0xf3, 0xc4, 0xf3, 0x5a, 0x16, 0x64, 0xa0, 0x98,
+	0x78, 0xa8, 0xcc, 0xac, 0xe5, 0xb4, 0xb9, 0xfa, 0xf5, 0xca, 0x31, 0xb9, 0xab, 0xbc, 0xdc, 0x62,
+	0x25, 0xde, 0xef, 0xae, 0x4e, 0xc6, 0xea, 0x92, 0x34, 0x95, 0x08, 0x23, 0x5c, 0x70, 0x22, 0x7e,
+	0xe9, 0xfb, 0x15, 0x50, 0x88, 0xc1, 0xf0, 0x29, 0x28, 0x26, 0x59, 0x11, 0xae, 0xce, 0xd5, 0x6f,
+	0x9d, 0xc4, 0x7a, 0xe5, 0xfd, 0x58, 0x5b, 0xd6, 0x8f, 0xc4, 0x04, 0xc2, 0xa9, 0x39, 0xd8, 0x02,
+	0x40, 0x58, 0x72, 0x4d, 0xda, 0xb2, 0x44, 0xe8, 0xc5, 0xdd, 0xf2, 0x64, 0xac, 0x2e, 0x4b, 0xa1,
+	0x94, 0x87, 0x7e, 0xfe, 0x49, 0x5d, 0x02, 0x0b, 0xdd, 0x76, 0x4d, 0xbf, 0x46, 0xf4, 0xa7, 0x9d,
+	0x67, 0x5b, 0xdb, 0xcf, 0xd7, 0x71, 0x46, 0x18, 0x5e, 0x02, 0x67, 0x5d, 0xe2, 0x50, 0xe5, 0x8c,
+	0x50, 0xb2, 0x38, 0x19, 0xab, 0x73, 0x52, 0x09, 0xa7, 0x22, 0x2c, 0x98, 0xf0, 0x32, 0x90, 0x29,
+	0x57, 0xce, 0x0a, 0xd4, 0xd2, 0x64, 0xac, 0x9e, 0x4f, 0x8e, 0xa4, 0x95, 0x9e, 0xc8, 0x17, 0x20,
+	0x6f, 0x9b, 0xcc, 0x0d, 0x94, 0xbc, 0xc8, 0xc7, 0xee, 0x89, 0xf2, 0xd1, 0xe2, 0x9a, 0xb2, 0xb6,
+	0x84, 0x6a, 0x84, 0xa5, 0x09, 0xb8, 0x03, 0x16, 0x82, 0x90, 0xf9, 0x07, 0x3d, 0x46, 0x7c, 0xeb,
+	0x4e, 0xc0, 0x5c, 0x65, 0x56, 0x38, 0xf7, 0xaf, 0xc9, 0x58, 0xbd, 0x20, 0x05, 0xa6, 0xf9, 0x08,
+	0x1f, 0x12, 0xe0, 0xb1, 0x87, 0xa4, 0x1f, 0x28, 0xe7, 0xd6, 0xce, 0x4c, 0xc7, 0xce, 0xa9, 0x08,
+	0x0b, 0x26, 0xbc, 0x07, 0x16, 0xcc, 0xa1, 0xef, 0x53, 0x37, 0xbc, 0x47, 0xfd, 0xc0, 0x66, 0xae,
+	0x52, 0x10, 0x76, 0x2a, 0xa9, 0x9d, 0x69, 0x3e, 0xcf, 0xf9, 0x32, 0x58, 0xec, 0x1a, 0xd6, 0xa6,
+	0x51, 0x89, 0x7f, 0xd6, 0xf1, 0x21, 0x2d, 0xf0, 0x0e, 0x00, 0xc4, 0xf3, 0x62, 0x9d, 0x45, 0xa1,
+	0x73, 0x23, 0x3d, 0xc3, 0x94, 0xf7, 0x02, 0x7d, 0x19, 0x69, 0x78, 0x03, 0xcc, 0x47, 0x99, 0xfe,
+	0x28, 0x24, 0xe1, 0x30, 0x50, 0x80, 0x50, 0xa7, 0x4c, 0xc6, 0xea, 0x6a, 0xa6, 0x24, 0x62, 0x36,
+	0xc2, 0xd3, 0x70, 0x38, 0x02, 0x85, 0x87, 0xcc, 0xa1, 0x1e, 0xe9, 0x53, 0x65, 0x4e, 0x88, 0x7e,
+	0x3e, 0x19, 0xab, 0x8b, 0x52, 0x34, 0xe6, 0x70, 0x3f, 0x5a, 0xe0, 0x76, 0x57, 0xd3, 0x8c, 0x6a,
+	0xbb, 0x6b, 0x54, 0x1b, 0xc6, 0x86, 0xd1, 0x44, 0xe8, 0xfa, 0x0d, 0x63, 0x64, 0xf8, 0x86, 0xdb,
+	0xd9, 0x2c, 0x6f, 0x96, 0x47, 0x9a, 0x51, 0x2d, 0x8f, 0xda, 0x44, 0x7f, 0xba, 0xa3, 0xdf, 0xef,
+	0x34, 0x34, 0xc3, 0x68, 0x77, 0x0d, 0xe3, 0x28, 0x72, 0x63, 0x1d, 0x27, 0x16, 0x61, 0x15, 0x14,
+	0x6c, 0x37, 0xa4, 0xbe, 0x4b, 0x06, 0xca, 0x79, 0x61, 0x7d, 0x25, 0xb5, 0x1e, 0x73, 0x10, 0x4e,
+	0x40, 0xf0, 0x0a, 0x38, 0xe7, 0xf9, 0xf6, 0x3e, 0x09, 0xa9, 0x32, 0x2f, 0xf0, 0x70, 0x32, 0x56,
+	0x17, 0x24, 0x3e, 0x62, 0x20, 0x1c, 0x43, 0xe0, 0x57, 0x00, 0x98, 0x03, 0xe6, 0x52, 0xeb, 0x96,
+	0xcf, 0x1c, 0x65, 0x41, 0x54, 0xe6, 0xed, 0x93, 0xdd, 0xd4, 0x44, 0xdd, 0xee, 0x85, 0xf4, 0xc4,
+	0x52, 0x23, 0x08, 0x67, 0x2c, 0xc2, 0xbb, 0x20, 0xcf, 0x1e, 0xf3, 0x47, 0x62, 0x51, 0xf8, 0xfa,
+	0x4e, 0x5a, 0xd0, 0x82, 0xcc, 0xd3, 0x7a, 0x09, 0xfc, 0xaf, 0x1b, 0x25, 0xad, 0xa6, 0x5f, 0xeb,
+	0xb4, 0x2b, 0xc9, 0x7a, 0x4f, 0xef, 0x3c, 0xab, 0x5f, 0xd9, 0xde, 0x7a, 0xbe, 0x8e, 0xa5, 0x16,
+	0x58, 0x06, 0xb3, 0x3e, 0x25, 0x96, 0x43, 0x95, 0xa5, 0xc3, 0xef, 0xa3, 0xa4, 0x23, 0x1c, 0x01,
+	0x38, 0x34, 0x90, 0xf5, 0xb0, 0x7c, 0x18, 0x1a, 0x44, 0x85, 0x10, 0x01, 0xe0, 0x8f, 0x39, 0x90,
+	0x37, 0x43, 0xdb, 0xa1, 0x0a, 0x14, 0xd0, 0x1f, 0x72, 0xa9, 0x9b, 0x82, 0xce, 0xdd, 0xfc, 0x2e,
+	0x07, 0xbe, 0xcd, 0x75, 0x35, 0xad, 0xd9, 0x68, 0x6f, 0x71, 0x37, 0xb9, 0xaf, 0x1b, 0xe5, 0xa6,
+	0xf8, 0x3e, 0xbb, 0xfa, 0xbc, 0xac, 0x6b, 0x5b, 0xed, 0x9a, 0x5e, 0xef, 0x8c, 0x6a, 0x82, 0x5f,
+	0xd6, 0xb5, 0xed, 0x76, 0x4d, 0xdf, 0x8a, 0xf7, 0xa3, 0xf6, 0x96, 0x5e, 0x97, 0x52, 0xe5, 0xf6,
+	0xc7, 0x6b, 0x1d, 0xad, 0xde, 0xae, 0xe9, 0xdb, 0x9d, 0x91, 0xc0, 0x48, 0x72, 0x43, 0x6b, 0xd7,
+	0xf4, 0xb7, 0xe2, 0x4d, 0xba, 0xd6, 0x8c, 0x8a, 0xf8, 0x6e, 0x96, 0x9b, 0xda, 0xfd, 0x51, 0x7b,
+	0x53, 0xef, 0x68, 0xcd, 0xc6, 0x31, 0xe2, 0x19, 0xe9, 0xe6, 0x3a, 0x96, 0x11, 0x89, 0xd8, 0x1c,
+	0x11, 0xdb, 0xca, 0x91, 0xd8, 0x9c, 0xbf, 0x6c, 0x6c, 0xc2, 0x73, 0x71, 0x15, 0x1e, 0xf5, 0x3f,
+	0xe0, 0x2f, 0xf8, 0xea, 0x91, 0xab, 0x20, 0x19, 0xfc, 0x2a, 0xc8, 0x15, 0x7f, 0x33, 0xf9, 0xe3,
+	0xb9, 0x4b, 0xcc, 0x47, 0x7d, 0x9f, 0x0d, 0x5d, 0x4b, 0xb9, 0x70, 0xf8, 0xcd, 0x9c, 0xe6, 0x23,
+	0x7c, 0x48, 0x00, 0xee, 0x83, 0x82, 0x43, 0xdd, 0x21, 0x7f, 0x9c, 0x95, 0x8b, 0xe2, 0x2e, 0xdd,
+	0x3c, 0xd1, 0x5d, 0xba, 0x1b, 0x29, 0xcb, 0xde, 0xf9, 0xd8, 0x00, 0xef, 0xbd, 0xd1, 0xb2, 0xb4,
+	0x01, 0x8a, 0x49, 0x83, 0x84, 0xff, 0x01, 0x33, 0xc9, 0x7c, 0x30, 0x3f, 0x19, 0xab, 0xc5, 0xc8,
+	0x77, 0x0b, 0xe1, 0x19, 0xdb, 0x2a, 0x8d, 0x40, 0x5e, 0x34, 0x0f, 0x18, 0x80, 0xfc, 0x80, 0xf8,
+	0x7d, 0x1a, 0x41, 0x3b, 0xe9, 0xb9, 0x0b, 0xf2, 0x1b, 0x7e, 0xd1, 0xa4, 0xad, 0xd2, 0x37, 0x39,
+	0x00, 0xd2, 0x17, 0x22, 0xed, 0x9d, 0xb9, 0x97, 0xf7, 0xce, 0x1d, 0x70, 0x6e, 0x3f, 0x6a, 0x06,
+	0xb2, 0xa1, 0xff, 0x3f, 0x3d, 0xc9, 0xfd, 0x97, 0x76, 0x82, 0x58, 0xee, 0x95, 0x7a, 0x79, 0xe9,
+	0xd7, 0x1c, 0x28, 0xc4, 0x49, 0x87, 0x6b, 0xe0, 0xcc, 0xc0, 0xee, 0x45, 0xae, 0x2d, 0x4c, 0xc6,
+	0x2a, 0x88, 0xd2, 0x63, 0xf7, 0x10, 0xe6, 0x2c, 0xd1, 0x23, 0x0f, 0x3c, 0x1a, 0xf9, 0x94, 0xed,
+	0x91, 0x07, 0x1e, 0xd7, 0xc9, 0x3f, 0x3c, 0xc6, 0xf0, 0x21, 0x4d, 0x2c, 0x67, 0x62, 0x14, 0x64,
+	0x84, 0x25, 0x9b, 0x2b, 0xe3, 0xe5, 0x14, 0x8d, 0x11, 0x19, 0x65, 0xb6, 0x38, 0x6d, 0xc1, 0xe4,
+	0xaf, 0x96, 0xe7, 0xd3, 0x07, 0xf6, 0x13, 0x31, 0x45, 0x4c, 0xbd, 0x5a, 0x92, 0x8e, 0x70, 0x04,
+	0xe0, 0x9d, 0xc3, 0x24, 0x21, 0xed, 0x33, 0xff, 0x20, 0xea, 0xfe, 0x99, 0x2a, 0x8a, 0x39, 0x08,
+	0x27, 0x20, 0xf4, 0x0b, 0x04, 0xea, 0x0b, 0x2b, 0x33, 0xf0, 0x98, 0x1b, 0x50, 0xf8, 0xe1, 0xd1,
+	0xc1, 0xee, 0xdf, 0x95, 0xb4, 0xb0, 0x63, 0xfc, 0xdf, 0x60, 0x5c, 0xeb, 0x4d, 0x8f, 0x6b, 0x8d,
+	0x3f, 0x77, 0x91, 0x65, 0xba, 0x4e, 0xc7, 0xb4, 0xd3, 0x31, 0xed, 0x8d, 0x8c, 0x69, 0xfb, 0xc7,
+	0x8c, 0x69, 0xcd, 0xd7, 0xaa, 0xc8, 0xd3, 0xf1, 0xec, 0x74, 0x3c, 0xfb, 0xa7, 0x8e, 0x67, 0xee,
+	0x91, 0xf1, 0xec, 0xbd, 0xd7, 0xba, 0x43, 0xaf, 0x3a, 0x96, 0x9d, 0x8e, 0x5a, 0xa7, 0xa3, 0xd6,
+	0xf1, 0xa3, 0xd6, 0xd7, 0x33, 0xe0, 0xf2, 0x1f, 0x54, 0xd9, 0xa7, 0x3e, 0xf1, 0x3c, 0xea, 0x73,
+	0x5f, 0x4d, 0x66, 0xc9, 0xd2, 0xc9, 0x67, 0x7d, 0xe5, 0x54, 0x84, 0x05, 0x13, 0xbe, 0x0b, 0xe6,
+	0xf8, 0xf7, 0xe6, 0x13, 0x6f, 0x40, 0xec, 0xf8, 0xe0, 0x2e, 0x4e, 0xc6, 0x2a, 0x4c, 0xb1, 0x11,
+	0x13, 0xe1, 0x2c, 0x94, 0xa7, 0x8c, 0xfa, 0x3e, 0xf3, 0x8f, 0xa6, 0x4c, 0x90, 0x11, 0x96, 0x6c,
+	0xf8, 0x19, 0x38, 0x6b, 0x91, 0x90, 0x88, 0x94, 0xcd, 0xd5, 0xaf, 0xbe, 0xce, 0xbd, 0xc9, 0x3a,
+	0xcf, 0x75, 0x21, 0x2c, 0x54, 0xf6, 0x66, 0xc5, 0xdf, 0x9f, 0xdb, 0xbf, 0x07, 0x00, 0x00, 0xff,
+	0xff, 0x1a, 0x37, 0x42, 0xd7, 0xe9, 0x15, 0x00, 0x00,
 }

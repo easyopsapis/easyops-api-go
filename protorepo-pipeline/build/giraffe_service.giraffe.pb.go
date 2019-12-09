@@ -7,8 +7,9 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	pipeline "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/pipeline"
 	io "io"
 	math "math"
@@ -23,23 +24,28 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for build service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
 	AppendProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
+	Approval(ctx context.Context, in *ApprovalRequest) (*types.Empty, error)
+	Cancel(ctx context.Context, in *CancelRequest) (*types.Empty, error)
 	Create(ctx context.Context, in *CreateRequest) (*pipeline.Build, error)
 	CreateProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
 	CreateStageStatus(ctx context.Context, in *CreateStageStatusRequest) (*pipeline.StageStatus, error)
 	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
 	GetProgressLog(ctx context.Context, in *GetProgressLogRequest) (*pipeline.ProgressLog, error)
-	POST(ctx context.Context, in *POSTRequest) (*POSTResponse, error)
+	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
+	RecordEvents(ctx context.Context, in *RecordEventsRequest) (*pipeline.Build, error)
 	Retry(ctx context.Context, in *RetryRequest) (*RetryResponse, error)
+	UpdateArtifact(ctx context.Context, in *UpdateArtifactRequest) (*UpdateArtifactResponse, error)
 	UpdateBuildStatus(ctx context.Context, in *UpdateBuildStatusRequest) (*pipeline.Build, error)
 	UpdateProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
 	UpdateStageStatus(ctx context.Context, in *pipeline.StageStatus) (*pipeline.StageStatus, error)
@@ -57,7 +63,25 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) AppendProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error) {
 	out := new(pipeline.ProgressLog)
-	err := c.c.Invoke(ctx, _AppendProgressLogContract, in, out)
+	err := c.c.Invoke(ctx, _AppendProgressLogMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) Approval(ctx context.Context, in *ApprovalRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _ApprovalMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) Cancel(ctx context.Context, in *CancelRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _CancelMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +90,7 @@ func (c *client) AppendProgressLog(ctx context.Context, in *pipeline.ProgressLog
 
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*pipeline.Build, error) {
 	out := new(pipeline.Build)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +99,7 @@ func (c *client) Create(ctx context.Context, in *CreateRequest) (*pipeline.Build
 
 func (c *client) CreateProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error) {
 	out := new(pipeline.ProgressLog)
-	err := c.c.Invoke(ctx, _CreateProgressLogContract, in, out)
+	err := c.c.Invoke(ctx, _CreateProgressLogMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +108,7 @@ func (c *client) CreateProgressLog(ctx context.Context, in *pipeline.ProgressLog
 
 func (c *client) CreateStageStatus(ctx context.Context, in *CreateStageStatusRequest) (*pipeline.StageStatus, error) {
 	out := new(pipeline.StageStatus)
-	err := c.c.Invoke(ctx, _CreateStageStatusContract, in, out)
+	err := c.c.Invoke(ctx, _CreateStageStatusMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +117,7 @@ func (c *client) CreateStageStatus(ctx context.Context, in *CreateStageStatusReq
 
 func (c *client) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
 	out := new(GetResponse)
-	err := c.c.Invoke(ctx, _GetContract, in, out)
+	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -102,16 +126,25 @@ func (c *client) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) 
 
 func (c *client) GetProgressLog(ctx context.Context, in *GetProgressLogRequest) (*pipeline.ProgressLog, error) {
 	out := new(pipeline.ProgressLog)
-	err := c.c.Invoke(ctx, _GetProgressLogContract, in, out)
+	err := c.c.Invoke(ctx, _GetProgressLogMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) POST(ctx context.Context, in *POSTRequest) (*POSTResponse, error) {
-	out := new(POSTResponse)
-	err := c.c.Invoke(ctx, _POSTContract, in, out)
+func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
+	out := new(ListResponse)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) RecordEvents(ctx context.Context, in *RecordEventsRequest) (*pipeline.Build, error) {
+	out := new(pipeline.Build)
+	err := c.c.Invoke(ctx, _RecordEventsMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +153,16 @@ func (c *client) POST(ctx context.Context, in *POSTRequest) (*POSTResponse, erro
 
 func (c *client) Retry(ctx context.Context, in *RetryRequest) (*RetryResponse, error) {
 	out := new(RetryResponse)
-	err := c.c.Invoke(ctx, _RetryContract, in, out)
+	err := c.c.Invoke(ctx, _RetryMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) UpdateArtifact(ctx context.Context, in *UpdateArtifactRequest) (*UpdateArtifactResponse, error) {
+	out := new(UpdateArtifactResponse)
+	err := c.c.Invoke(ctx, _UpdateArtifactMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +171,7 @@ func (c *client) Retry(ctx context.Context, in *RetryRequest) (*RetryResponse, e
 
 func (c *client) UpdateBuildStatus(ctx context.Context, in *UpdateBuildStatusRequest) (*pipeline.Build, error) {
 	out := new(pipeline.Build)
-	err := c.c.Invoke(ctx, _UpdateBuildStatusContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateBuildStatusMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +180,7 @@ func (c *client) UpdateBuildStatus(ctx context.Context, in *UpdateBuildStatusReq
 
 func (c *client) UpdateProgressLog(ctx context.Context, in *pipeline.ProgressLog) (*pipeline.ProgressLog, error) {
 	out := new(pipeline.ProgressLog)
-	err := c.c.Invoke(ctx, _UpdateProgressLogContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateProgressLogMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +189,7 @@ func (c *client) UpdateProgressLog(ctx context.Context, in *pipeline.ProgressLog
 
 func (c *client) UpdateStageStatus(ctx context.Context, in *pipeline.StageStatus) (*pipeline.StageStatus, error) {
 	out := new(pipeline.StageStatus)
-	err := c.c.Invoke(ctx, _UpdateStageStatusContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateStageStatusMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -157,13 +199,17 @@ func (c *client) UpdateStageStatus(ctx context.Context, in *pipeline.StageStatus
 // Service is the server API for build service.
 type Service interface {
 	AppendProgressLog(context.Context, *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
+	Approval(context.Context, *ApprovalRequest) (*types.Empty, error)
+	Cancel(context.Context, *CancelRequest) (*types.Empty, error)
 	Create(context.Context, *CreateRequest) (*pipeline.Build, error)
 	CreateProgressLog(context.Context, *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
 	CreateStageStatus(context.Context, *CreateStageStatusRequest) (*pipeline.StageStatus, error)
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	GetProgressLog(context.Context, *GetProgressLogRequest) (*pipeline.ProgressLog, error)
-	POST(context.Context, *POSTRequest) (*POSTResponse, error)
+	List(context.Context, *ListRequest) (*ListResponse, error)
+	RecordEvents(context.Context, *RecordEventsRequest) (*pipeline.Build, error)
 	Retry(context.Context, *RetryRequest) (*RetryResponse, error)
+	UpdateArtifact(context.Context, *UpdateArtifactRequest) (*UpdateArtifactResponse, error)
 	UpdateBuildStatus(context.Context, *UpdateBuildStatusRequest) (*pipeline.Build, error)
 	UpdateProgressLog(context.Context, *pipeline.ProgressLog) (*pipeline.ProgressLog, error)
 	UpdateStageStatus(context.Context, *pipeline.StageStatus) (*pipeline.StageStatus, error)
@@ -172,6 +218,18 @@ type Service interface {
 func _AppendProgressLogEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.AppendProgressLog(ctx, req.(*pipeline.ProgressLog))
+	}
+}
+
+func _ApprovalEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.Approval(ctx, req.(*ApprovalRequest))
+	}
+}
+
+func _CancelEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.Cancel(ctx, req.(*CancelRequest))
 	}
 }
 
@@ -205,15 +263,27 @@ func _GetProgressLogEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
-func _POSTEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+func _ListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.POST(ctx, req.(*POSTRequest))
+		return s.List(ctx, req.(*ListRequest))
+	}
+}
+
+func _RecordEventsEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.RecordEvents(ctx, req.(*RecordEventsRequest))
 	}
 }
 
 func _RetryEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.Retry(ctx, req.(*RetryRequest))
+	}
+}
+
+func _UpdateArtifactEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.UpdateArtifact(ctx, req.(*UpdateArtifactRequest))
 	}
 }
 
@@ -236,189 +306,290 @@ func _UpdateStageStatusEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_AppendProgressLogContract, _AppendProgressLogEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateProgressLogContract, _CreateProgressLogEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateStageStatusContract, _CreateStageStatusEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetProgressLogContract, _GetProgressLogEndpoint(srv))
-	s.RegisterUnaryEndpoint(_POSTContract, _POSTEndpoint(srv))
-	s.RegisterUnaryEndpoint(_RetryContract, _RetryEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateBuildStatusContract, _UpdateBuildStatusEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateProgressLogContract, _UpdateProgressLogEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateStageStatusContract, _UpdateStageStatusEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AppendProgressLogMethodDesc, _AppendProgressLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ApprovalMethodDesc, _ApprovalEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CancelMethodDesc, _CancelEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateProgressLogMethodDesc, _CreateProgressLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateStageStatusMethodDesc, _CreateStageStatusEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetProgressLogMethodDesc, _GetProgressLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RecordEventsMethodDesc, _RecordEventsEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RetryMethodDesc, _RetryEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateArtifactMethodDesc, _UpdateArtifactEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateBuildStatusMethodDesc, _UpdateBuildStatusEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateProgressLogMethodDesc, _UpdateProgressLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateStageStatusMethodDesc, _UpdateStageStatusEndpoint(srv))
 }
 
-// API Contract
-var _AppendProgressLogContract = &appendProgressLogContract{}
-
-type appendProgressLogContract struct{}
-
-func (*appendProgressLogContract) ServiceName() string          { return "build.rpc" }
-func (*appendProgressLogContract) MethodName() string           { return "AppendProgressLog" }
-func (*appendProgressLogContract) RequestMessage() interface{}  { return new(pipeline.ProgressLog) }
-func (*appendProgressLogContract) ResponseMessage() interface{} { return new(pipeline.ProgressLog) }
-func (*appendProgressLogContract) ContractName() string {
-	return "easyops.api.pipeline.build.AppendProgressLog"
+// Method Description
+var _AppendProgressLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.AppendProgressLog",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "AppendProgressLog",
+	RequestType:  (*pipeline.ProgressLog)(nil),
+	ResponseType: (*pipeline.ProgressLog)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/progress_log/:id/append",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*appendProgressLogContract) ContractVersion() string { return "1.0" }
-func (*appendProgressLogContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/progress_log/:id/append"
+
+var _ApprovalMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.Approval",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "Approval",
+	RequestType:  (*ApprovalRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/builds/:build_id/approval/:step_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*appendProgressLogContract) Body() string { return "" }
 
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "build.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(CreateRequest) }
-func (*createContract) ResponseMessage() interface{} { return new(CreateRequest) }
-func (*createContract) ContractName() string         { return "easyops.api.pipeline.build.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/api/pipeline/v1/builds" }
-func (*createContract) Body() string                 { return "" }
-
-var _CreateProgressLogContract = &createProgressLogContract{}
-
-type createProgressLogContract struct{}
-
-func (*createProgressLogContract) ServiceName() string          { return "build.rpc" }
-func (*createProgressLogContract) MethodName() string           { return "CreateProgressLog" }
-func (*createProgressLogContract) RequestMessage() interface{}  { return new(pipeline.ProgressLog) }
-func (*createProgressLogContract) ResponseMessage() interface{} { return new(pipeline.ProgressLog) }
-func (*createProgressLogContract) ContractName() string {
-	return "easyops.api.pipeline.build.CreateProgressLog"
+var _CancelMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.Cancel",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "Cancel",
+	RequestType:  (*CancelRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/builds/:build_id/cancel",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createProgressLogContract) ContractVersion() string { return "1.0" }
-func (*createProgressLogContract) Pattern() (string, string) {
-	return "POST", "/api/pipeline/v1/progress_log"
+
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*pipeline.Build)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/builds",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createProgressLogContract) Body() string { return "" }
 
-var _CreateStageStatusContract = &createStageStatusContract{}
-
-type createStageStatusContract struct{}
-
-func (*createStageStatusContract) ServiceName() string          { return "build.rpc" }
-func (*createStageStatusContract) MethodName() string           { return "CreateStageStatus" }
-func (*createStageStatusContract) RequestMessage() interface{}  { return new(CreateStageStatusRequest) }
-func (*createStageStatusContract) ResponseMessage() interface{} { return new(CreateStageStatusRequest) }
-func (*createStageStatusContract) ContractName() string {
-	return "easyops.api.pipeline.build.CreateStageStatus"
+var _CreateProgressLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.CreateProgressLog",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "CreateProgressLog",
+	RequestType:  (*pipeline.ProgressLog)(nil),
+	ResponseType: (*pipeline.ProgressLog)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/progress_log",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createStageStatusContract) ContractVersion() string { return "1.0" }
-func (*createStageStatusContract) Pattern() (string, string) {
-	return "POST", "/api/pipeline/v1/stage_status"
+
+var _CreateStageStatusMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.CreateStageStatus",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "CreateStageStatus",
+	RequestType:  (*CreateStageStatusRequest)(nil),
+	ResponseType: (*pipeline.StageStatus)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/stage_status",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createStageStatusContract) Body() string { return "" }
 
-var _GetContract = &getContract{}
-
-type getContract struct{}
-
-func (*getContract) ServiceName() string          { return "build.rpc" }
-func (*getContract) MethodName() string           { return "Get" }
-func (*getContract) RequestMessage() interface{}  { return new(GetRequest) }
-func (*getContract) ResponseMessage() interface{} { return new(GetRequest) }
-func (*getContract) ContractName() string         { return "easyops.api.pipeline.build.Get" }
-func (*getContract) ContractVersion() string      { return "1.0" }
-func (*getContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/builds/:build_id" }
-func (*getContract) Body() string                 { return "" }
-
-var _GetProgressLogContract = &getProgressLogContract{}
-
-type getProgressLogContract struct{}
-
-func (*getProgressLogContract) ServiceName() string          { return "build.rpc" }
-func (*getProgressLogContract) MethodName() string           { return "GetProgressLog" }
-func (*getProgressLogContract) RequestMessage() interface{}  { return new(GetProgressLogRequest) }
-func (*getProgressLogContract) ResponseMessage() interface{} { return new(GetProgressLogRequest) }
-func (*getProgressLogContract) ContractName() string {
-	return "easyops.api.pipeline.build.GetProgressLog"
+var _GetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.Get",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "Get",
+	RequestType:  (*GetRequest)(nil),
+	ResponseType: (*GetResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/builds/:build_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getProgressLogContract) ContractVersion() string { return "1.0" }
-func (*getProgressLogContract) Pattern() (string, string) {
-	return "GET", "/api/pipeline/v1/progress_log/:id"
+
+var _GetProgressLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.GetProgressLog",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "GetProgressLog",
+	RequestType:  (*GetProgressLogRequest)(nil),
+	ResponseType: (*pipeline.ProgressLog)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/progress_log/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getProgressLogContract) Body() string { return "" }
 
-var _POSTContract = &pOSTContract{}
-
-type pOSTContract struct{}
-
-func (*pOSTContract) ServiceName() string          { return "build.rpc" }
-func (*pOSTContract) MethodName() string           { return "POST" }
-func (*pOSTContract) RequestMessage() interface{}  { return new(POSTRequest) }
-func (*pOSTContract) ResponseMessage() interface{} { return new(POSTRequest) }
-func (*pOSTContract) ContractName() string         { return "easyops.api.pipeline.build.POST" }
-func (*pOSTContract) ContractVersion() string      { return "1.0" }
-func (*pOSTContract) Pattern() (string, string)    { return "POST", "/api/pipeline/v1/builds/list" }
-func (*pOSTContract) Body() string                 { return "" }
-
-var _RetryContract = &retryContract{}
-
-type retryContract struct{}
-
-func (*retryContract) ServiceName() string          { return "build.rpc" }
-func (*retryContract) MethodName() string           { return "Retry" }
-func (*retryContract) RequestMessage() interface{}  { return new(RetryRequest) }
-func (*retryContract) ResponseMessage() interface{} { return new(RetryRequest) }
-func (*retryContract) ContractName() string         { return "easyops.api.pipeline.build.Retry" }
-func (*retryContract) ContractVersion() string      { return "1.0" }
-func (*retryContract) Pattern() (string, string) {
-	return "POST", "/api/pipeline/v1/builds/:build_id/retry"
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.List",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "List",
+	RequestType:  (*ListRequest)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/builds/list",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*retryContract) Body() string { return "" }
 
-var _UpdateBuildStatusContract = &updateBuildStatusContract{}
-
-type updateBuildStatusContract struct{}
-
-func (*updateBuildStatusContract) ServiceName() string          { return "build.rpc" }
-func (*updateBuildStatusContract) MethodName() string           { return "UpdateBuildStatus" }
-func (*updateBuildStatusContract) RequestMessage() interface{}  { return new(UpdateBuildStatusRequest) }
-func (*updateBuildStatusContract) ResponseMessage() interface{} { return new(UpdateBuildStatusRequest) }
-func (*updateBuildStatusContract) ContractName() string {
-	return "easyops.api.pipeline.build.UpdateBuildStatus"
+var _RecordEventsMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.RecordEvents",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "RecordEvents",
+	RequestType:  (*RecordEventsRequest)(nil),
+	ResponseType: (*pipeline.Build)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/builds/:build_id/events",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateBuildStatusContract) ContractVersion() string { return "1.0" }
-func (*updateBuildStatusContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/builds/:build_id"
+
+var _RetryMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.Retry",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "Retry",
+	RequestType:  (*RetryRequest)(nil),
+	ResponseType: (*RetryResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/builds/:build_id/retry",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateBuildStatusContract) Body() string { return "" }
 
-var _UpdateProgressLogContract = &updateProgressLogContract{}
-
-type updateProgressLogContract struct{}
-
-func (*updateProgressLogContract) ServiceName() string          { return "build.rpc" }
-func (*updateProgressLogContract) MethodName() string           { return "UpdateProgressLog" }
-func (*updateProgressLogContract) RequestMessage() interface{}  { return new(pipeline.ProgressLog) }
-func (*updateProgressLogContract) ResponseMessage() interface{} { return new(pipeline.ProgressLog) }
-func (*updateProgressLogContract) ContractName() string {
-	return "easyops.api.pipeline.build.UpdateProgressLog"
+var _UpdateArtifactMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.UpdateArtifact",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "UpdateArtifact",
+	RequestType:  (*UpdateArtifactRequest)(nil),
+	ResponseType: (*UpdateArtifactResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/builds/:build_id/update_artifact",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateProgressLogContract) ContractVersion() string { return "1.0" }
-func (*updateProgressLogContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/progress_log/:id"
-}
-func (*updateProgressLogContract) Body() string { return "" }
 
-var _UpdateStageStatusContract = &updateStageStatusContract{}
-
-type updateStageStatusContract struct{}
-
-func (*updateStageStatusContract) ServiceName() string          { return "build.rpc" }
-func (*updateStageStatusContract) MethodName() string           { return "UpdateStageStatus" }
-func (*updateStageStatusContract) RequestMessage() interface{}  { return new(pipeline.StageStatus) }
-func (*updateStageStatusContract) ResponseMessage() interface{} { return new(pipeline.StageStatus) }
-func (*updateStageStatusContract) ContractName() string {
-	return "easyops.api.pipeline.build.UpdateStageStatus"
+var _UpdateBuildStatusMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.UpdateBuildStatus",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "UpdateBuildStatus",
+	RequestType:  (*UpdateBuildStatusRequest)(nil),
+	ResponseType: (*pipeline.Build)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/builds/:build_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateStageStatusContract) ContractVersion() string { return "1.0" }
-func (*updateStageStatusContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/stage_status/:id"
+
+var _UpdateProgressLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.UpdateProgressLog",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "UpdateProgressLog",
+	RequestType:  (*pipeline.ProgressLog)(nil),
+	ResponseType: (*pipeline.ProgressLog)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/progress_log/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updateStageStatusContract) Body() string { return "" }
+
+var _UpdateStageStatusMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.build.UpdateStageStatus",
+		Version: "1.0",
+	},
+	ServiceName:  "build.rpc",
+	MethodName:   "UpdateStageStatus",
+	RequestType:  (*pipeline.StageStatus)(nil),
+	ResponseType: (*pipeline.StageStatus)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/stage_status/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

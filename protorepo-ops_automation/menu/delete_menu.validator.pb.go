@@ -19,10 +19,10 @@ var _ = math.Inf
 
 func (this *DeleteMenuRequest) Validate() error {
 	if !(len(this.MenusId) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenusId", fmt.Errorf(`value '%v' must length be greater than '1'`, this.MenusId))
+		return github_com_mwitkow_go_proto_validators.FieldError("MenusId", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.MenusId))
 	}
 	if !(len(this.MenusId) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("MenusId", fmt.Errorf(`value '%v' must length be less than '34'`, this.MenusId))
+		return github_com_mwitkow_go_proto_validators.FieldError("MenusId", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.MenusId))
 	}
 	return nil
 }

@@ -18,15 +18,15 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_View_Creator = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_View_Modifier = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_View_Creator = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_View_Modifier = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *View) Validate() error {
 	if !_regex_View_Creator.MatchString(this.Creator) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Creator))
+		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Creator))
 	}
 	if !_regex_View_Modifier.MatchString(this.Modifier) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Modifier", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Modifier))
+		return github_com_mwitkow_go_proto_validators.FieldError("Modifier", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Modifier))
 	}
 	if this.RootNode != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.RootNode); err != nil {

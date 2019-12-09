@@ -18,27 +18,27 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_ReleasePackage_Name = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-var _regex_ReleasePackage_PackageName = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-var _regex_ReleasePackage_VersionName = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-var _regex_ReleasePackage_PackageId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-var _regex_ReleasePackage_VersionId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_ReleasePackage_Name = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_ReleasePackage_PackageName = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_ReleasePackage_VersionName = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_ReleasePackage_PackageId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_ReleasePackage_VersionId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *ReleasePackage) Validate() error {
 	if !_regex_ReleasePackage_Name.MatchString(this.Name) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.Name))
+		return github_com_mwitkow_go_proto_validators.FieldError("Name", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.Name))
 	}
 	if !_regex_ReleasePackage_PackageName.MatchString(this.PackageName) {
-		return github_com_mwitkow_go_proto_validators.FieldError("PackageName", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.PackageName))
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageName", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.PackageName))
 	}
 	if !_regex_ReleasePackage_VersionName.MatchString(this.VersionName) {
-		return github_com_mwitkow_go_proto_validators.FieldError("VersionName", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.VersionName))
+		return github_com_mwitkow_go_proto_validators.FieldError("VersionName", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.VersionName))
 	}
 	if !_regex_ReleasePackage_PackageId.MatchString(this.PackageId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.PackageId))
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.PackageId))
 	}
 	if !_regex_ReleasePackage_VersionId.MatchString(this.VersionId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.VersionId))
+		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.VersionId))
 	}
 	return nil
 }

@@ -31,6 +31,19 @@ func (this *GetRequest) Validate() error {
 	}
 	return nil
 }
+func (this *GetResponse) Validate() error {
+	if this.Pipeline != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Pipeline); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Pipeline", err)
+		}
+	}
+	if this.Template != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Template); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Template", err)
+		}
+	}
+	return nil
+}
 func (this *GetResponseWrapper) Validate() error {
 	if this.Data != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {

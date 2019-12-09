@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,16 +23,17 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for org service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	Register(ctx context.Context, in *types.Empty) (*types.Empty, error)
+	RegisterOrg(ctx context.Context, in *types.Empty) (*types.Empty, error)
 }
 
 type client struct {
@@ -45,9 +46,9 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) Register(ctx context.Context, in *types.Empty) (*types.Empty, error) {
+func (c *client) RegisterOrg(ctx context.Context, in *types.Empty) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _RegisterContract, in, out)
+	err := c.c.Invoke(ctx, _RegisterOrgMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -56,29 +57,34 @@ func (c *client) Register(ctx context.Context, in *types.Empty) (*types.Empty, e
 
 // Service is the server API for org service.
 type Service interface {
-	Register(context.Context, *types.Empty) (*types.Empty, error)
+	RegisterOrg(context.Context, *types.Empty) (*types.Empty, error)
 }
 
-func _RegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+func _RegisterOrgEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.Register(ctx, req.(*types.Empty))
+		return s.RegisterOrg(ctx, req.(*types.Empty))
 	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_RegisterContract, _RegisterEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RegisterOrgMethodDesc, _RegisterOrgEndpoint(srv))
 }
 
-// API Contract
-var _RegisterContract = &registerContract{}
-
-type registerContract struct{}
-
-func (*registerContract) ServiceName() string          { return "org.rpc" }
-func (*registerContract) MethodName() string           { return "Register" }
-func (*registerContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*registerContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*registerContract) ContractName() string         { return "easyops.api.pipeline.org.Register" }
-func (*registerContract) ContractVersion() string      { return "1.0" }
-func (*registerContract) Pattern() (string, string)    { return "POST", "/api/pipeline/v1/org/register" }
-func (*registerContract) Body() string                 { return "" }
+// Method Description
+var _RegisterOrgMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.org.RegisterOrg",
+		Version: "1.0",
+	},
+	ServiceName:  "org.rpc",
+	MethodName:   "RegisterOrg",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/org/register",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

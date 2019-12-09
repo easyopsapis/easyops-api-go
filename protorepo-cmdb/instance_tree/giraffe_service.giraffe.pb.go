@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for instance_tree service.
 //
@@ -50,7 +51,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) InstanceTree(ctx context.Context, in *InstanceTreeRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _InstanceTreeContract, in, out)
+	err := c.c.Invoke(ctx, _InstanceTreeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +60,7 @@ func (c *client) InstanceTree(ctx context.Context, in *InstanceTreeRequest) (*ty
 
 func (c *client) InstanceTreeAnchor(ctx context.Context, in *InstanceTreeAnchorRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _InstanceTreeAnchorContract, in, out)
+	err := c.c.Invoke(ctx, _InstanceTreeAnchorMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +69,7 @@ func (c *client) InstanceTreeAnchor(ctx context.Context, in *InstanceTreeAnchorR
 
 func (c *client) InstanceTreeExpand(ctx context.Context, in *InstanceTreeExpandRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _InstanceTreeExpandContract, in, out)
+	err := c.c.Invoke(ctx, _InstanceTreeExpandMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +78,7 @@ func (c *client) InstanceTreeExpand(ctx context.Context, in *InstanceTreeExpandR
 
 func (c *client) InstanceTreeSearch(ctx context.Context, in *InstanceTreeSearchRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _InstanceTreeSearchContract, in, out)
+	err := c.c.Invoke(ctx, _InstanceTreeSearchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -117,75 +118,81 @@ func _InstanceTreeSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_InstanceTreeContract, _InstanceTreeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InstanceTreeAnchorContract, _InstanceTreeAnchorEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InstanceTreeExpandContract, _InstanceTreeExpandEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InstanceTreeSearchContract, _InstanceTreeSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceTreeMethodDesc, _InstanceTreeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceTreeAnchorMethodDesc, _InstanceTreeAnchorEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceTreeExpandMethodDesc, _InstanceTreeExpandEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceTreeSearchMethodDesc, _InstanceTreeSearchEndpoint(srv))
 }
 
-// API Contract
-var _InstanceTreeContract = &instanceTreeContract{}
-
-type instanceTreeContract struct{}
-
-func (*instanceTreeContract) ServiceName() string          { return "instance_tree.rpc" }
-func (*instanceTreeContract) MethodName() string           { return "InstanceTree" }
-func (*instanceTreeContract) RequestMessage() interface{}  { return new(InstanceTreeRequest) }
-func (*instanceTreeContract) ResponseMessage() interface{} { return new(InstanceTreeRequest) }
-func (*instanceTreeContract) ContractName() string {
-	return "easyops.api.cmdb.instance_tree.InstanceTree"
+// Method Description
+var _InstanceTreeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_tree.InstanceTree",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_tree.rpc",
+	MethodName:   "InstanceTree",
+	RequestType:  (*InstanceTreeRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/instance_tree/full",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*instanceTreeContract) ContractVersion() string   { return "1.0" }
-func (*instanceTreeContract) Pattern() (string, string) { return "POST", "/instance_tree/full" }
-func (*instanceTreeContract) Body() string              { return "" }
 
-var _InstanceTreeAnchorContract = &instanceTreeAnchorContract{}
-
-type instanceTreeAnchorContract struct{}
-
-func (*instanceTreeAnchorContract) ServiceName() string         { return "instance_tree.rpc" }
-func (*instanceTreeAnchorContract) MethodName() string          { return "InstanceTreeAnchor" }
-func (*instanceTreeAnchorContract) RequestMessage() interface{} { return new(InstanceTreeAnchorRequest) }
-func (*instanceTreeAnchorContract) ResponseMessage() interface{} {
-	return new(InstanceTreeAnchorRequest)
+var _InstanceTreeAnchorMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_tree.InstanceTreeAnchor",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_tree.rpc",
+	MethodName:   "InstanceTreeAnchor",
+	RequestType:  (*InstanceTreeAnchorRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/instance_tree/anchor",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*instanceTreeAnchorContract) ContractName() string {
-	return "easyops.api.cmdb.instance_tree.InstanceTreeAnchor"
+
+var _InstanceTreeExpandMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_tree.InstanceTreeExpand",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_tree.rpc",
+	MethodName:   "InstanceTreeExpand",
+	RequestType:  (*InstanceTreeExpandRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/instance_tree/expand",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*instanceTreeAnchorContract) ContractVersion() string   { return "1.0" }
-func (*instanceTreeAnchorContract) Pattern() (string, string) { return "POST", "/instance_tree/anchor" }
-func (*instanceTreeAnchorContract) Body() string              { return "" }
 
-var _InstanceTreeExpandContract = &instanceTreeExpandContract{}
-
-type instanceTreeExpandContract struct{}
-
-func (*instanceTreeExpandContract) ServiceName() string         { return "instance_tree.rpc" }
-func (*instanceTreeExpandContract) MethodName() string          { return "InstanceTreeExpand" }
-func (*instanceTreeExpandContract) RequestMessage() interface{} { return new(InstanceTreeExpandRequest) }
-func (*instanceTreeExpandContract) ResponseMessage() interface{} {
-	return new(InstanceTreeExpandRequest)
+var _InstanceTreeSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance_tree.InstanceTreeSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance_tree.rpc",
+	MethodName:   "InstanceTreeSearch",
+	RequestType:  (*InstanceTreeSearchRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/instance_tree/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*instanceTreeExpandContract) ContractName() string {
-	return "easyops.api.cmdb.instance_tree.InstanceTreeExpand"
-}
-func (*instanceTreeExpandContract) ContractVersion() string   { return "1.0" }
-func (*instanceTreeExpandContract) Pattern() (string, string) { return "POST", "/instance_tree/expand" }
-func (*instanceTreeExpandContract) Body() string              { return "" }
-
-var _InstanceTreeSearchContract = &instanceTreeSearchContract{}
-
-type instanceTreeSearchContract struct{}
-
-func (*instanceTreeSearchContract) ServiceName() string         { return "instance_tree.rpc" }
-func (*instanceTreeSearchContract) MethodName() string          { return "InstanceTreeSearch" }
-func (*instanceTreeSearchContract) RequestMessage() interface{} { return new(InstanceTreeSearchRequest) }
-func (*instanceTreeSearchContract) ResponseMessage() interface{} {
-	return new(InstanceTreeSearchRequest)
-}
-func (*instanceTreeSearchContract) ContractName() string {
-	return "easyops.api.cmdb.instance_tree.InstanceTreeSearch"
-}
-func (*instanceTreeSearchContract) ContractVersion() string   { return "1.0" }
-func (*instanceTreeSearchContract) Pattern() (string, string) { return "POST", "/instance_tree/search" }
-func (*instanceTreeSearchContract) Body() string              { return "" }

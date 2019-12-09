@@ -7,8 +7,10 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
+	permission "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/permission"
 	io "io"
 	math "math"
 )
@@ -22,16 +24,23 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for permission service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	DeletePermission(ctx context.Context, in *DeletePermissionRequest) (*DeletePermissionResponse, error)
 	GetPermissionList(ctx context.Context, in *GetPermissionListRequest) (*GetPermissionListResponse, error)
+	OrgRegister(ctx context.Context, in *types.Empty) (*types.Empty, error)
+	SavePermission(ctx context.Context, in *permission.Permission) (*SavePermissionResponse, error)
+	ValidateArtifactPermission(ctx context.Context, in *ValidateArtifactPermissionRequest) (*ValidateArtifactPermissionResponse, error)
+	ValidateCmdbPermission(ctx context.Context, in *ValidateCmdbPermissionRequest) (*ValidateCmdbPermissionResponse, error)
+	ValidateOpsAutomationPermission(ctx context.Context, in *ValidateOpsAutomationPermissionRequest) (*ValidateOpsAutomationPermissionResponse, error)
 }
 
 type client struct {
@@ -44,9 +53,63 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) DeletePermission(ctx context.Context, in *DeletePermissionRequest) (*DeletePermissionResponse, error) {
+	out := new(DeletePermissionResponse)
+	err := c.c.Invoke(ctx, _DeletePermissionMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) GetPermissionList(ctx context.Context, in *GetPermissionListRequest) (*GetPermissionListResponse, error) {
 	out := new(GetPermissionListResponse)
-	err := c.c.Invoke(ctx, _GetPermissionListContract, in, out)
+	err := c.c.Invoke(ctx, _GetPermissionListMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) OrgRegister(ctx context.Context, in *types.Empty) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _OrgRegisterMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) SavePermission(ctx context.Context, in *permission.Permission) (*SavePermissionResponse, error) {
+	out := new(SavePermissionResponse)
+	err := c.c.Invoke(ctx, _SavePermissionMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ValidateArtifactPermission(ctx context.Context, in *ValidateArtifactPermissionRequest) (*ValidateArtifactPermissionResponse, error) {
+	out := new(ValidateArtifactPermissionResponse)
+	err := c.c.Invoke(ctx, _ValidateArtifactPermissionMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ValidateCmdbPermission(ctx context.Context, in *ValidateCmdbPermissionRequest) (*ValidateCmdbPermissionResponse, error) {
+	out := new(ValidateCmdbPermissionResponse)
+	err := c.c.Invoke(ctx, _ValidateCmdbPermissionMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ValidateOpsAutomationPermission(ctx context.Context, in *ValidateOpsAutomationPermissionRequest) (*ValidateOpsAutomationPermissionResponse, error) {
+	out := new(ValidateOpsAutomationPermissionResponse)
+	err := c.c.Invoke(ctx, _ValidateOpsAutomationPermissionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +118,19 @@ func (c *client) GetPermissionList(ctx context.Context, in *GetPermissionListReq
 
 // Service is the server API for permission service.
 type Service interface {
+	DeletePermission(context.Context, *DeletePermissionRequest) (*DeletePermissionResponse, error)
 	GetPermissionList(context.Context, *GetPermissionListRequest) (*GetPermissionListResponse, error)
+	OrgRegister(context.Context, *types.Empty) (*types.Empty, error)
+	SavePermission(context.Context, *permission.Permission) (*SavePermissionResponse, error)
+	ValidateArtifactPermission(context.Context, *ValidateArtifactPermissionRequest) (*ValidateArtifactPermissionResponse, error)
+	ValidateCmdbPermission(context.Context, *ValidateCmdbPermissionRequest) (*ValidateCmdbPermissionResponse, error)
+	ValidateOpsAutomationPermission(context.Context, *ValidateOpsAutomationPermissionRequest) (*ValidateOpsAutomationPermissionResponse, error)
+}
+
+func _DeletePermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.DeletePermission(ctx, req.(*DeletePermissionRequest))
+	}
 }
 
 func _GetPermissionListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -64,22 +139,169 @@ func _GetPermissionListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _OrgRegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.OrgRegister(ctx, req.(*types.Empty))
+	}
+}
+
+func _SavePermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.SavePermission(ctx, req.(*permission.Permission))
+	}
+}
+
+func _ValidateArtifactPermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ValidateArtifactPermission(ctx, req.(*ValidateArtifactPermissionRequest))
+	}
+}
+
+func _ValidateCmdbPermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ValidateCmdbPermission(ctx, req.(*ValidateCmdbPermissionRequest))
+	}
+}
+
+func _ValidateOpsAutomationPermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ValidateOpsAutomationPermission(ctx, req.(*ValidateOpsAutomationPermissionRequest))
+	}
+}
+
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetPermissionListContract, _GetPermissionListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeletePermissionMethodDesc, _DeletePermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetPermissionListMethodDesc, _GetPermissionListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_OrgRegisterMethodDesc, _OrgRegisterEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SavePermissionMethodDesc, _SavePermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ValidateArtifactPermissionMethodDesc, _ValidateArtifactPermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ValidateCmdbPermissionMethodDesc, _ValidateCmdbPermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ValidateOpsAutomationPermissionMethodDesc, _ValidateOpsAutomationPermissionEndpoint(srv))
 }
 
-// API Contract
-var _GetPermissionListContract = &getPermissionListContract{}
-
-type getPermissionListContract struct{}
-
-func (*getPermissionListContract) ServiceName() string          { return "permission.rpc" }
-func (*getPermissionListContract) MethodName() string           { return "GetPermissionList" }
-func (*getPermissionListContract) RequestMessage() interface{}  { return new(GetPermissionListRequest) }
-func (*getPermissionListContract) ResponseMessage() interface{} { return new(GetPermissionListRequest) }
-func (*getPermissionListContract) ContractName() string {
-	return "easyops.api.permission.permission.GetPermissionList"
+// Method Description
+var _DeletePermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.DeletePermission",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "DeletePermission",
+	RequestType:  (*DeletePermissionRequest)(nil),
+	ResponseType: (*DeletePermissionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/v1/permission",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*getPermissionListContract) ContractVersion() string   { return "1.0" }
-func (*getPermissionListContract) Pattern() (string, string) { return "GET", "/api/v1/permission" }
-func (*getPermissionListContract) Body() string              { return "" }
+
+var _GetPermissionListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.GetPermissionList",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "GetPermissionList",
+	RequestType:  (*GetPermissionListRequest)(nil),
+	ResponseType: (*GetPermissionListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
+
+var _OrgRegisterMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.OrgRegister",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "OrgRegister",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/org/register",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _SavePermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.SavePermission",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "SavePermission",
+	RequestType:  (*permission.Permission)(nil),
+	ResponseType: (*SavePermissionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/permission/save",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
+
+var _ValidateArtifactPermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.ValidateArtifactPermission",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "ValidateArtifactPermission",
+	RequestType:  (*ValidateArtifactPermissionRequest)(nil),
+	ResponseType: (*ValidateArtifactPermissionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission/validate",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
+
+var _ValidateCmdbPermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.ValidateCmdbPermission",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "ValidateCmdbPermission",
+	RequestType:  (*ValidateCmdbPermissionRequest)(nil),
+	ResponseType: (*ValidateCmdbPermissionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission/validate",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _ValidateOpsAutomationPermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.permission.ValidateOpsAutomationPermission",
+		Version: "1.0",
+	},
+	ServiceName:  "permission.rpc",
+	MethodName:   "ValidateOpsAutomationPermission",
+	RequestType:  (*ValidateOpsAutomationPermissionRequest)(nil),
+	ResponseType: (*ValidateOpsAutomationPermissionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission/validate",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

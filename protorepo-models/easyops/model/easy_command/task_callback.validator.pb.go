@@ -18,11 +18,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_TaskCallback_Url = regexp.MustCompile(`^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$`)
+var _regex_TaskCallback_Url = regexp.MustCompile(`(\b(https?|ftp|file)://)?[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`)
 
 func (this *TaskCallback) Validate() error {
 	if !_regex_TaskCallback_Url.MatchString(this.Url) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Url", fmt.Errorf(`value '%v' must be a string conforming to regex "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$"`, this.Url))
+		return github_com_mwitkow_go_proto_validators.FieldError("Url", fmt.Errorf(`value '%v' must be a string conforming to regex "(\\b(https?|ftp|file)://)?[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"`, this.Url))
 	}
 	return nil
 }

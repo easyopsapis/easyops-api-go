@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	pipeline "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/pipeline"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for provider service.
 //
@@ -54,7 +55,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *pipeline.Provider) (*pipeline.Provider, error) {
 	out := new(pipeline.Provider)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +64,7 @@ func (c *client) Create(ctx context.Context, in *pipeline.Provider) (*pipeline.P
 
 func (c *client) DeleteProvider(ctx context.Context, in *DeleteProviderRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteProviderContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteProviderMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +73,7 @@ func (c *client) DeleteProvider(ctx context.Context, in *DeleteProviderRequest) 
 
 func (c *client) Get(ctx context.Context, in *GetRequest) (*pipeline.Provider, error) {
 	out := new(pipeline.Provider)
-	err := c.c.Invoke(ctx, _GetContract, in, out)
+	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +82,7 @@ func (c *client) Get(ctx context.Context, in *GetRequest) (*pipeline.Provider, e
 
 func (c *client) List(ctx context.Context, in *types.Empty) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.c.Invoke(ctx, _ListContract, in, out)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (c *client) List(ctx context.Context, in *types.Empty) (*ListResponse, erro
 
 func (c *client) ListRepository(ctx context.Context, in *ListRepositoryRequest) (*ListRepositoryResponse, error) {
 	out := new(ListRepositoryResponse)
-	err := c.c.Invoke(ctx, _ListRepositoryContract, in, out)
+	err := c.c.Invoke(ctx, _ListRepositoryMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +100,7 @@ func (c *client) ListRepository(ctx context.Context, in *ListRepositoryRequest) 
 
 func (c *client) SetDefaultProvider(ctx context.Context, in *SetDefaultProviderRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _SetDefaultProviderContract, in, out)
+	err := c.c.Invoke(ctx, _SetDefaultProviderMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ func (c *client) SetDefaultProvider(ctx context.Context, in *SetDefaultProviderR
 
 func (c *client) Update(ctx context.Context, in *pipeline.Provider) (*pipeline.Provider, error) {
 	out := new(pipeline.Provider)
-	err := c.c.Invoke(ctx, _UpdateContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -169,117 +170,138 @@ func _UpdateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteProviderContract, _DeleteProviderEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContract, _ListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListRepositoryContract, _ListRepositoryEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SetDefaultProviderContract, _SetDefaultProviderEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContract, _UpdateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteProviderMethodDesc, _DeleteProviderEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListRepositoryMethodDesc, _ListRepositoryEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SetDefaultProviderMethodDesc, _SetDefaultProviderEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "provider.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(pipeline.Provider) }
-func (*createContract) ResponseMessage() interface{} { return new(pipeline.Provider) }
-func (*createContract) ContractName() string         { return "easyops.api.pipeline.provider.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/api/pipeline/v1/providers" }
-func (*createContract) Body() string                 { return "" }
-
-var _DeleteProviderContract = &deleteProviderContract{}
-
-type deleteProviderContract struct{}
-
-func (*deleteProviderContract) ServiceName() string          { return "provider.rpc" }
-func (*deleteProviderContract) MethodName() string           { return "DeleteProvider" }
-func (*deleteProviderContract) RequestMessage() interface{}  { return new(DeleteProviderRequest) }
-func (*deleteProviderContract) ResponseMessage() interface{} { return new(DeleteProviderRequest) }
-func (*deleteProviderContract) ContractName() string {
-	return "easyops.api.pipeline.provider.DeleteProvider"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "Create",
+	RequestType:  (*pipeline.Provider)(nil),
+	ResponseType: (*pipeline.Provider)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/providers",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteProviderContract) ContractVersion() string { return "1.0" }
-func (*deleteProviderContract) Pattern() (string, string) {
-	return "DELETE", "/api/pipeline/v1/providers/:id"
+
+var _DeleteProviderMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.DeleteProvider",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "DeleteProvider",
+	RequestType:  (*DeleteProviderRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/pipeline/v1/providers/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteProviderContract) Body() string { return "" }
 
-var _GetContract = &getContract{}
-
-type getContract struct{}
-
-func (*getContract) ServiceName() string          { return "provider.rpc" }
-func (*getContract) MethodName() string           { return "Get" }
-func (*getContract) RequestMessage() interface{}  { return new(GetRequest) }
-func (*getContract) ResponseMessage() interface{} { return new(GetRequest) }
-func (*getContract) ContractName() string         { return "easyops.api.pipeline.provider.Get" }
-func (*getContract) ContractVersion() string      { return "1.0" }
-func (*getContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/providers/:id" }
-func (*getContract) Body() string                 { return "" }
-
-var _ListContract = &listContract{}
-
-type listContract struct{}
-
-func (*listContract) ServiceName() string          { return "provider.rpc" }
-func (*listContract) MethodName() string           { return "List" }
-func (*listContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*listContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*listContract) ContractName() string         { return "easyops.api.pipeline.provider.List" }
-func (*listContract) ContractVersion() string      { return "1.0" }
-func (*listContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/providers" }
-func (*listContract) Body() string                 { return "" }
-
-var _ListRepositoryContract = &listRepositoryContract{}
-
-type listRepositoryContract struct{}
-
-func (*listRepositoryContract) ServiceName() string          { return "provider.rpc" }
-func (*listRepositoryContract) MethodName() string           { return "ListRepository" }
-func (*listRepositoryContract) RequestMessage() interface{}  { return new(ListRepositoryRequest) }
-func (*listRepositoryContract) ResponseMessage() interface{} { return new(ListRepositoryRequest) }
-func (*listRepositoryContract) ContractName() string {
-	return "easyops.api.pipeline.provider.ListRepository"
+var _GetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.Get",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "Get",
+	RequestType:  (*GetRequest)(nil),
+	ResponseType: (*pipeline.Provider)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/providers/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listRepositoryContract) ContractVersion() string { return "1.0" }
-func (*listRepositoryContract) Pattern() (string, string) {
-	return "GET", "/api/pipeline/v1/provider/:provider_id/repositories"
+
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.List",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "List",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/providers",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listRepositoryContract) Body() string { return "" }
 
-var _SetDefaultProviderContract = &setDefaultProviderContract{}
-
-type setDefaultProviderContract struct{}
-
-func (*setDefaultProviderContract) ServiceName() string         { return "provider.rpc" }
-func (*setDefaultProviderContract) MethodName() string          { return "SetDefaultProvider" }
-func (*setDefaultProviderContract) RequestMessage() interface{} { return new(SetDefaultProviderRequest) }
-func (*setDefaultProviderContract) ResponseMessage() interface{} {
-	return new(SetDefaultProviderRequest)
+var _ListRepositoryMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.ListRepository",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "ListRepository",
+	RequestType:  (*ListRepositoryRequest)(nil),
+	ResponseType: (*ListRepositoryResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/provider/:provider_id/repositories",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*setDefaultProviderContract) ContractName() string {
-	return "easyops.api.pipeline.provider.SetDefaultProvider"
+
+var _SetDefaultProviderMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.SetDefaultProvider",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "SetDefaultProvider",
+	RequestType:  (*SetDefaultProviderRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/providers/:id/default",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*setDefaultProviderContract) ContractVersion() string { return "1.0" }
-func (*setDefaultProviderContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/providers/:id/default"
+
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.provider.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "provider.rpc",
+	MethodName:   "Update",
+	RequestType:  (*pipeline.Provider)(nil),
+	ResponseType: (*pipeline.Provider)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/providers/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*setDefaultProviderContract) Body() string { return "" }
-
-var _UpdateContract = &updateContract{}
-
-type updateContract struct{}
-
-func (*updateContract) ServiceName() string          { return "provider.rpc" }
-func (*updateContract) MethodName() string           { return "Update" }
-func (*updateContract) RequestMessage() interface{}  { return new(pipeline.Provider) }
-func (*updateContract) ResponseMessage() interface{} { return new(pipeline.Provider) }
-func (*updateContract) ContractName() string         { return "easyops.api.pipeline.provider.Update" }
-func (*updateContract) ContractVersion() string      { return "1.0" }
-func (*updateContract) Pattern() (string, string)    { return "PUT", "/api/pipeline/v1/providers/:id" }
-func (*updateContract) Body() string                 { return "" }

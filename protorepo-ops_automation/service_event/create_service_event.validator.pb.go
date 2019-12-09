@@ -19,16 +19,16 @@ var _ = math.Inf
 
 func (this *CreateServiceEventRequest) Validate() error {
 	if !(len(this.System) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("System", fmt.Errorf(`value '%v' must length be greater than '1'`, this.System))
+		return github_com_mwitkow_go_proto_validators.FieldError("System", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.System))
 	}
 	if !(len(this.System) < 256) {
-		return github_com_mwitkow_go_proto_validators.FieldError("System", fmt.Errorf(`value '%v' must length be less than '256'`, this.System))
+		return github_com_mwitkow_go_proto_validators.FieldError("System", fmt.Errorf(`value '%v' must have a length smaller than '256'`, this.System))
 	}
 	if !(len(this.Topic) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Topic", fmt.Errorf(`value '%v' must length be greater than '1'`, this.Topic))
+		return github_com_mwitkow_go_proto_validators.FieldError("Topic", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.Topic))
 	}
 	if !(len(this.Topic) < 256) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Topic", fmt.Errorf(`value '%v' must length be less than '256'`, this.Topic))
+		return github_com_mwitkow_go_proto_validators.FieldError("Topic", fmt.Errorf(`value '%v' must have a length smaller than '256'`, this.Topic))
 	}
 	if this.Data != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {

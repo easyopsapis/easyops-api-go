@@ -5,9 +5,11 @@ import (
 
 	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/apikey"
 
-	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/invitation_code"
+	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/auth"
 
-	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/mongo"
+	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/gateway"
+
+	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/invitation_code"
 
 	"github.com/easyopsapis/easyops-api-go/protorepo-user_service/organization"
 
@@ -17,9 +19,11 @@ import (
 type Client struct {
 	Apikey apikey.Client
 
-	InvitationCode invitation_code.Client
+	Auth auth.Client
 
-	Mongo mongo.Client
+	Gateway gateway.Client
+
+	InvitationCode invitation_code.Client
 
 	Organization organization.Client
 
@@ -31,9 +35,11 @@ func NewClient(c giraffe.Client) *Client {
 
 	client.Apikey = apikey.NewClient(c)
 
-	client.InvitationCode = invitation_code.NewClient(c)
+	client.Auth = auth.NewClient(c)
 
-	client.Mongo = mongo.NewClient(c)
+	client.Gateway = gateway.NewClient(c)
+
+	client.InvitationCode = invitation_code.NewClient(c)
 
 	client.Organization = organization.NewClient(c)
 

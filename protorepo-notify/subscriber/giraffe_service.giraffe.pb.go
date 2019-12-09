@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	notify "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/notify"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for subscriber service.
 //
@@ -48,7 +49,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateSubscriber(ctx context.Context, in *notify.Subscriber) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _CreateSubscriberContract, in, out)
+	err := c.c.Invoke(ctx, _CreateSubscriberMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -67,21 +68,24 @@ func _CreateSubscriberEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateSubscriberContract, _CreateSubscriberEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateSubscriberMethodDesc, _CreateSubscriberEndpoint(srv))
 }
 
-// API Contract
-var _CreateSubscriberContract = &createSubscriberContract{}
-
-type createSubscriberContract struct{}
-
-func (*createSubscriberContract) ServiceName() string          { return "subscriber.rpc" }
-func (*createSubscriberContract) MethodName() string           { return "CreateSubscriber" }
-func (*createSubscriberContract) RequestMessage() interface{}  { return new(notify.Subscriber) }
-func (*createSubscriberContract) ResponseMessage() interface{} { return new(notify.Subscriber) }
-func (*createSubscriberContract) ContractName() string {
-	return "easyops.api.notify.subscriber.CreateSubscriber"
+// Method Description
+var _CreateSubscriberMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.notify.subscriber.CreateSubscriber",
+		Version: "1.0",
+	},
+	ServiceName:  "subscriber.rpc",
+	MethodName:   "CreateSubscriber",
+	RequestType:  (*notify.Subscriber)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/subscriber",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createSubscriberContract) ContractVersion() string   { return "1.0" }
-func (*createSubscriberContract) Pattern() (string, string) { return "POST", "/subscriber" }
-func (*createSubscriberContract) Body() string              { return "" }

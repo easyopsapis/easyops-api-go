@@ -19,17 +19,163 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_UpdateInstalledMicroAppRequest_AppId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-
 func (this *UpdateInstalledMicroAppRequest) Validate() error {
-	if !_regex_UpdateInstalledMicroAppRequest_AppId.MatchString(this.AppId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AppId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.AppId))
-	}
 	if this.MicroApp != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MicroApp); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("MicroApp", err)
 		}
 	}
+	return nil
+}
+
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_CurrentVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_AppVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_Homepage = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_Owner = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_Mtime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+
+func (this *UpdateInstalledMicroAppRequest_MicroApp) Validate() error {
+	if this.Container != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Container); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Container", err)
+		}
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_InstanceId.MatchString(this.InstanceId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("InstanceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.InstanceId))
+	}
+	if this.Icons != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Icons); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Icons", err)
+		}
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_CurrentVersion.MatchString(this.CurrentVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("CurrentVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.CurrentVersion))
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_AppVersion.MatchString(this.AppVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("AppVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.AppVersion))
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_Homepage.MatchString(this.Homepage) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Homepage", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Homepage))
+	}
+	if this.ClonedFrom != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ClonedFrom); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("ClonedFrom", err)
+		}
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_Owner.MatchString(this.Owner) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Owner", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Owner))
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
+	}
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_Mtime.MatchString(this.Mtime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Mtime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Mtime))
+	}
+	if this.MenuIcon != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MenuIcon); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("MenuIcon", err)
+		}
+	}
+	return nil
+}
+func (this *UpdateInstalledMicroAppRequest_MicroApp_Container) Validate() error {
+	return nil
+}
+
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_Icons_Large = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+
+func (this *UpdateInstalledMicroAppRequest_MicroApp_Icons) Validate() error {
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_Icons_Large.MatchString(this.Large) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Large", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Large))
+	}
+	return nil
+}
+
+var _regex_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom_Version = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+
+func (this *UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom) Validate() error {
+	if !_regex_UpdateInstalledMicroAppRequest_MicroApp_ClonedFrom_Version.MatchString(this.Version) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Version", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.Version))
+	}
+	return nil
+}
+func (this *UpdateInstalledMicroAppRequest_MicroApp_MenuIcon) Validate() error {
+	return nil
+}
+
+var _regex_UpdateInstalledMicroAppResponse_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
+var _regex_UpdateInstalledMicroAppResponse_CurrentVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_UpdateInstalledMicroAppResponse_AppVersion = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+var _regex_UpdateInstalledMicroAppResponse_Homepage = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+var _regex_UpdateInstalledMicroAppResponse_Owner = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_UpdateInstalledMicroAppResponse_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+var _regex_UpdateInstalledMicroAppResponse_Mtime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+
+func (this *UpdateInstalledMicroAppResponse) Validate() error {
+	if this.Container != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Container); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Container", err)
+		}
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_InstanceId.MatchString(this.InstanceId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("InstanceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.InstanceId))
+	}
+	if this.Icons != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Icons); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Icons", err)
+		}
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_CurrentVersion.MatchString(this.CurrentVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("CurrentVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.CurrentVersion))
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_AppVersion.MatchString(this.AppVersion) {
+		return github_com_mwitkow_go_proto_validators.FieldError("AppVersion", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.AppVersion))
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_Homepage.MatchString(this.Homepage) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Homepage", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Homepage))
+	}
+	if this.ClonedFrom != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ClonedFrom); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("ClonedFrom", err)
+		}
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_Owner.MatchString(this.Owner) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Owner", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Owner))
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
+	}
+	if !_regex_UpdateInstalledMicroAppResponse_Mtime.MatchString(this.Mtime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Mtime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Mtime))
+	}
+	if this.MenuIcon != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MenuIcon); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("MenuIcon", err)
+		}
+	}
+	return nil
+}
+
+var _regex_UpdateInstalledMicroAppResponse_Icons_Large = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
+
+func (this *UpdateInstalledMicroAppResponse_Icons) Validate() error {
+	if !_regex_UpdateInstalledMicroAppResponse_Icons_Large.MatchString(this.Large) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Large", fmt.Errorf(`value '%v' must be a string conforming to regex "^((\\/[^\\/:\\*\\?\"\"<>\\|\\r\\n]+)+)|(\\/)|[a-zA-Z]:(\\\\[^\\\\:\\*\\?\"\"<>\\|\\r\\n]+)*$"`, this.Large))
+	}
+	return nil
+}
+
+var _regex_UpdateInstalledMicroAppResponse_ClonedFrom_Version = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+
+func (this *UpdateInstalledMicroAppResponse_ClonedFrom) Validate() error {
+	if !_regex_UpdateInstalledMicroAppResponse_ClonedFrom_Version.MatchString(this.Version) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Version", fmt.Errorf(`value '%v' must be a string conforming to regex "^\\d+\\.\\d+\\.\\d+$"`, this.Version))
+	}
+	return nil
+}
+func (this *UpdateInstalledMicroAppResponse_MenuIcon) Validate() error {
 	return nil
 }
 func (this *UpdateInstalledMicroAppResponseWrapper) Validate() error {

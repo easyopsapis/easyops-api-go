@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	app_store "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/app_store"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for micro_app service.
 //
@@ -52,7 +53,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *app_store.AppStoreMicroApp) (*app_store.AppStoreMicroApp, error) {
 	out := new(app_store.AppStoreMicroApp)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (c *client) Create(ctx context.Context, in *app_store.AppStoreMicroApp) (*a
 
 func (c *client) DeleteAppStoreMicroApp(ctx context.Context, in *DeleteAppStoreMicroAppRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteAppStoreMicroAppContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteAppStoreMicroAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +71,7 @@ func (c *client) DeleteAppStoreMicroApp(ctx context.Context, in *DeleteAppStoreM
 
 func (c *client) GetAppStoreMicroApp(ctx context.Context, in *GetAppStoreMicroAppRequest) (*GetAppStoreMicroAppResponse, error) {
 	out := new(GetAppStoreMicroAppResponse)
-	err := c.c.Invoke(ctx, _GetAppStoreMicroAppContract, in, out)
+	err := c.c.Invoke(ctx, _GetAppStoreMicroAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +80,7 @@ func (c *client) GetAppStoreMicroApp(ctx context.Context, in *GetAppStoreMicroAp
 
 func (c *client) GetRelatedPackages(ctx context.Context, in *GetRelatedPackagesRequest) (*GetRelatedPackagesResponse, error) {
 	out := new(GetRelatedPackagesResponse)
-	err := c.c.Invoke(ctx, _GetRelatedPackagesContract, in, out)
+	err := c.c.Invoke(ctx, _GetRelatedPackagesMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +89,7 @@ func (c *client) GetRelatedPackages(ctx context.Context, in *GetRelatedPackagesR
 
 func (c *client) ListAppStoreMicroApp(ctx context.Context, in *ListAppStoreMicroAppRequest) (*ListAppStoreMicroAppResponse, error) {
 	out := new(ListAppStoreMicroAppResponse)
-	err := c.c.Invoke(ctx, _ListAppStoreMicroAppContract, in, out)
+	err := c.c.Invoke(ctx, _ListAppStoreMicroAppMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -135,105 +136,100 @@ func _ListAppStoreMicroAppEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteAppStoreMicroAppContract, _DeleteAppStoreMicroAppEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetAppStoreMicroAppContract, _GetAppStoreMicroAppEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetRelatedPackagesContract, _GetRelatedPackagesEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListAppStoreMicroAppContract, _ListAppStoreMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteAppStoreMicroAppMethodDesc, _DeleteAppStoreMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetAppStoreMicroAppMethodDesc, _GetAppStoreMicroAppEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetRelatedPackagesMethodDesc, _GetRelatedPackagesEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListAppStoreMicroAppMethodDesc, _ListAppStoreMicroAppEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.micro_app.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "micro_app.rpc",
+	MethodName:   "Create",
+	RequestType:  (*app_store.AppStoreMicroApp)(nil),
+	ResponseType: (*app_store.AppStoreMicroApp)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/app_store/v1/micro_app",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type createContract struct{}
+var _DeleteAppStoreMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.micro_app.DeleteAppStoreMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "micro_app.rpc",
+	MethodName:   "DeleteAppStoreMicroApp",
+	RequestType:  (*DeleteAppStoreMicroAppRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/app_store/v1/micro_app/app_id/:app_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*createContract) ServiceName() string          { return "micro_app.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(app_store.AppStoreMicroApp) }
-func (*createContract) ResponseMessage() interface{} { return new(app_store.AppStoreMicroApp) }
-func (*createContract) ContractName() string         { return "easyops.api.app_store.micro_app.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/api/app_store/v1/micro_app" }
-func (*createContract) Body() string                 { return "" }
+var _GetAppStoreMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.micro_app.GetAppStoreMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "micro_app.rpc",
+	MethodName:   "GetAppStoreMicroApp",
+	RequestType:  (*GetAppStoreMicroAppRequest)(nil),
+	ResponseType: (*GetAppStoreMicroAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/app_store/v1/micro_app/app_id/:app_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-var _DeleteAppStoreMicroAppContract = &deleteAppStoreMicroAppContract{}
+var _GetRelatedPackagesMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.micro_app.GetRelatedPackages",
+		Version: "1.0",
+	},
+	ServiceName:  "micro_app.rpc",
+	MethodName:   "GetRelatedPackages",
+	RequestType:  (*GetRelatedPackagesRequest)(nil),
+	ResponseType: (*GetRelatedPackagesResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/app_store/v1/related_packages/app_id/:app_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type deleteAppStoreMicroAppContract struct{}
-
-func (*deleteAppStoreMicroAppContract) ServiceName() string { return "micro_app.rpc" }
-func (*deleteAppStoreMicroAppContract) MethodName() string  { return "DeleteAppStoreMicroApp" }
-func (*deleteAppStoreMicroAppContract) RequestMessage() interface{} {
-	return new(DeleteAppStoreMicroAppRequest)
+var _ListAppStoreMicroAppMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.micro_app.ListAppStoreMicroApp",
+		Version: "1.0",
+	},
+	ServiceName:  "micro_app.rpc",
+	MethodName:   "ListAppStoreMicroApp",
+	RequestType:  (*ListAppStoreMicroAppRequest)(nil),
+	ResponseType: (*ListAppStoreMicroAppResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/app_store/v1/micro_app/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteAppStoreMicroAppContract) ResponseMessage() interface{} {
-	return new(DeleteAppStoreMicroAppRequest)
-}
-func (*deleteAppStoreMicroAppContract) ContractName() string {
-	return "easyops.api.app_store.micro_app.DeleteAppStoreMicroApp"
-}
-func (*deleteAppStoreMicroAppContract) ContractVersion() string { return "1.0" }
-func (*deleteAppStoreMicroAppContract) Pattern() (string, string) {
-	return "DELETE", "/api/app_store/v1/micro_app/app_id/:app_id"
-}
-func (*deleteAppStoreMicroAppContract) Body() string { return "" }
-
-var _GetAppStoreMicroAppContract = &getAppStoreMicroAppContract{}
-
-type getAppStoreMicroAppContract struct{}
-
-func (*getAppStoreMicroAppContract) ServiceName() string { return "micro_app.rpc" }
-func (*getAppStoreMicroAppContract) MethodName() string  { return "GetAppStoreMicroApp" }
-func (*getAppStoreMicroAppContract) RequestMessage() interface{} {
-	return new(GetAppStoreMicroAppRequest)
-}
-func (*getAppStoreMicroAppContract) ResponseMessage() interface{} {
-	return new(GetAppStoreMicroAppRequest)
-}
-func (*getAppStoreMicroAppContract) ContractName() string {
-	return "easyops.api.app_store.micro_app.GetAppStoreMicroApp"
-}
-func (*getAppStoreMicroAppContract) ContractVersion() string { return "1.0" }
-func (*getAppStoreMicroAppContract) Pattern() (string, string) {
-	return "GET", "/api/app_store/v1/micro_app/app_id/:app_id"
-}
-func (*getAppStoreMicroAppContract) Body() string { return "" }
-
-var _GetRelatedPackagesContract = &getRelatedPackagesContract{}
-
-type getRelatedPackagesContract struct{}
-
-func (*getRelatedPackagesContract) ServiceName() string         { return "micro_app.rpc" }
-func (*getRelatedPackagesContract) MethodName() string          { return "GetRelatedPackages" }
-func (*getRelatedPackagesContract) RequestMessage() interface{} { return new(GetRelatedPackagesRequest) }
-func (*getRelatedPackagesContract) ResponseMessage() interface{} {
-	return new(GetRelatedPackagesRequest)
-}
-func (*getRelatedPackagesContract) ContractName() string {
-	return "easyops.api.app_store.micro_app.GetRelatedPackages"
-}
-func (*getRelatedPackagesContract) ContractVersion() string { return "1.0" }
-func (*getRelatedPackagesContract) Pattern() (string, string) {
-	return "GET", "/api/app_store/v1/related_packages/app_id/:app_id"
-}
-func (*getRelatedPackagesContract) Body() string { return "" }
-
-var _ListAppStoreMicroAppContract = &listAppStoreMicroAppContract{}
-
-type listAppStoreMicroAppContract struct{}
-
-func (*listAppStoreMicroAppContract) ServiceName() string { return "micro_app.rpc" }
-func (*listAppStoreMicroAppContract) MethodName() string  { return "ListAppStoreMicroApp" }
-func (*listAppStoreMicroAppContract) RequestMessage() interface{} {
-	return new(ListAppStoreMicroAppRequest)
-}
-func (*listAppStoreMicroAppContract) ResponseMessage() interface{} {
-	return new(ListAppStoreMicroAppRequest)
-}
-func (*listAppStoreMicroAppContract) ContractName() string {
-	return "easyops.api.app_store.micro_app.ListAppStoreMicroApp"
-}
-func (*listAppStoreMicroAppContract) ContractVersion() string { return "1.0" }
-func (*listAppStoreMicroAppContract) Pattern() (string, string) {
-	return "POST", "/api/app_store/v1/micro_app/search"
-}
-func (*listAppStoreMicroAppContract) Body() string { return "" }

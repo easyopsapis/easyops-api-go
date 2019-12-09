@@ -20,10 +20,14 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_CreateRequest_ProjectId = regexp.MustCompile(`^[0-9a-z]{13}$`)
+var _regex_CreateRequest_TemplateId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 
 func (this *CreateRequest) Validate() error {
 	if !_regex_CreateRequest_ProjectId.MatchString(this.ProjectId) {
 		return github_com_mwitkow_go_proto_validators.FieldError("ProjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.ProjectId))
+	}
+	if !_regex_CreateRequest_TemplateId.MatchString(this.TemplateId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("TemplateId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.TemplateId))
 	}
 	if this.Pipeline != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Pipeline); err != nil {

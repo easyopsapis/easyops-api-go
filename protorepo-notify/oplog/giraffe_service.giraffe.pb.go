@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	notify "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/notify"
 	io "io"
@@ -23,17 +23,18 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for oplog service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
 	CreateOperationLog(ctx context.Context, in *notify.OperationLogWithMeta) (*CreateOperationLogResponse, error)
-	ListOperationLog(ctx context.Context, in *ListOperationLogRequest) (*ListOperationLogResponse, error)
+	ListOperationLog(ctx context.Context, in *notify.ListOperationLogRequest) (*ListOperationLogResponse, error)
 }
 
 type client struct {
@@ -48,16 +49,16 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateOperationLog(ctx context.Context, in *notify.OperationLogWithMeta) (*CreateOperationLogResponse, error) {
 	out := new(CreateOperationLogResponse)
-	err := c.c.Invoke(ctx, _CreateOperationLogContract, in, out)
+	err := c.c.Invoke(ctx, _CreateOperationLogMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) ListOperationLog(ctx context.Context, in *ListOperationLogRequest) (*ListOperationLogResponse, error) {
+func (c *client) ListOperationLog(ctx context.Context, in *notify.ListOperationLogRequest) (*ListOperationLogResponse, error) {
 	out := new(ListOperationLogResponse)
-	err := c.c.Invoke(ctx, _ListOperationLogContract, in, out)
+	err := c.c.Invoke(ctx, _ListOperationLogMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +68,7 @@ func (c *client) ListOperationLog(ctx context.Context, in *ListOperationLogReque
 // Service is the server API for oplog service.
 type Service interface {
 	CreateOperationLog(context.Context, *notify.OperationLogWithMeta) (*CreateOperationLogResponse, error)
-	ListOperationLog(context.Context, *ListOperationLogRequest) (*ListOperationLogResponse, error)
+	ListOperationLog(context.Context, *notify.ListOperationLogRequest) (*ListOperationLogResponse, error)
 }
 
 func _CreateOperationLogEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -78,46 +79,48 @@ func _CreateOperationLogEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 
 func _ListOperationLogEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.ListOperationLog(ctx, req.(*ListOperationLogRequest))
+		return s.ListOperationLog(ctx, req.(*notify.ListOperationLogRequest))
 	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateOperationLogContract, _CreateOperationLogEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListOperationLogContract, _ListOperationLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateOperationLogMethodDesc, _CreateOperationLogEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListOperationLogMethodDesc, _ListOperationLogEndpoint(srv))
 }
 
-// API Contract
-var _CreateOperationLogContract = &createOperationLogContract{}
-
-type createOperationLogContract struct{}
-
-func (*createOperationLogContract) ServiceName() string { return "oplog.rpc" }
-func (*createOperationLogContract) MethodName() string  { return "CreateOperationLog" }
-func (*createOperationLogContract) RequestMessage() interface{} {
-	return new(notify.OperationLogWithMeta)
+// Method Description
+var _CreateOperationLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.notify.oplog.CreateOperationLog",
+		Version: "1.0",
+	},
+	ServiceName:  "oplog.rpc",
+	MethodName:   "CreateOperationLog",
+	RequestType:  (*notify.OperationLogWithMeta)(nil),
+	ResponseType: (*CreateOperationLogResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/operation/log",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createOperationLogContract) ResponseMessage() interface{} {
-	return new(notify.OperationLogWithMeta)
-}
-func (*createOperationLogContract) ContractName() string {
-	return "easyops.api.notify.oplog.CreateOperationLog"
-}
-func (*createOperationLogContract) ContractVersion() string   { return "1.0" }
-func (*createOperationLogContract) Pattern() (string, string) { return "POST", "/operation/log" }
-func (*createOperationLogContract) Body() string              { return "" }
 
-var _ListOperationLogContract = &listOperationLogContract{}
-
-type listOperationLogContract struct{}
-
-func (*listOperationLogContract) ServiceName() string          { return "oplog.rpc" }
-func (*listOperationLogContract) MethodName() string           { return "ListOperationLog" }
-func (*listOperationLogContract) RequestMessage() interface{}  { return new(ListOperationLogRequest) }
-func (*listOperationLogContract) ResponseMessage() interface{} { return new(ListOperationLogRequest) }
-func (*listOperationLogContract) ContractName() string {
-	return "easyops.api.notify.oplog.ListOperationLog"
+var _ListOperationLogMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.notify.oplog.ListOperationLog",
+		Version: "1.0",
+	},
+	ServiceName:  "oplog.rpc",
+	MethodName:   "ListOperationLog",
+	RequestType:  (*notify.ListOperationLogRequest)(nil),
+	ResponseType: (*ListOperationLogResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/operation/log",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listOperationLogContract) ContractVersion() string   { return "1.0" }
-func (*listOperationLogContract) Pattern() (string, string) { return "GET", "/operation/log" }
-func (*listOperationLogContract) Body() string              { return "" }

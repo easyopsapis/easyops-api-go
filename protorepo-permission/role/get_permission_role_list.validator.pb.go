@@ -18,11 +18,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_GetPermissionRoleListRequest_User = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_GetPermissionRoleListRequest_User = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *GetPermissionRoleListRequest) Validate() error {
 	if !_regex_GetPermissionRoleListRequest_User.MatchString(this.User) {
-		return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.User))
+		return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.User))
 	}
 	if !(this.Page > 0) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Page", fmt.Errorf(`value '%v' must be greater than '0'`, this.Page))
@@ -50,7 +50,7 @@ func (this *GetPermissionRoleListResponse) Validate() error {
 }
 
 var _regex_GetPermissionRoleListResponse_Data_Id = regexp.MustCompile(`^[0-9a-fA-F]{24}$`)
-var _regex_GetPermissionRoleListResponse_Data_User = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_GetPermissionRoleListResponse_Data_User = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 var _regex_GetPermissionRoleListResponse_Data_Permission = regexp.MustCompile(`^[0-9a-fA-F]{24}$`)
 
 func (this *GetPermissionRoleListResponse_Data) Validate() error {
@@ -62,7 +62,7 @@ func (this *GetPermissionRoleListResponse_Data) Validate() error {
 	}
 	for _, item := range this.User {
 		if !_regex_GetPermissionRoleListResponse_Data_User.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("User", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.Permission {

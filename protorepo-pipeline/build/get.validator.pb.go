@@ -29,7 +29,7 @@ func (this *GetRequest) Validate() error {
 }
 
 var _regex_GetResponse_Id = regexp.MustCompile(`^[0-9a-z]{13}$`)
-var _regex_GetResponse_Sender = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_GetResponse_Sender = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *GetResponse) Validate() error {
 	if this.Project != nil {
@@ -58,12 +58,34 @@ func (this *GetResponse) Validate() error {
 		}
 	}
 	if !_regex_GetResponse_Sender.MatchString(this.Sender) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Sender", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.Sender))
+		return github_com_mwitkow_go_proto_validators.FieldError("Sender", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Sender))
+	}
+	if this.Artifact != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Artifact); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Artifact", err)
+		}
 	}
 	if this.Status != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Status); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Status", err)
 		}
+	}
+	return nil
+}
+
+var _regex_GetResponse_Artifact_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
+var _regex_GetResponse_Artifact_PackageId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
+var _regex_GetResponse_Artifact_VersionId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
+
+func (this *GetResponse_Artifact) Validate() error {
+	if !_regex_GetResponse_Artifact_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
+	}
+	if !_regex_GetResponse_Artifact_PackageId.MatchString(this.PackageId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.PackageId))
+	}
+	if !_regex_GetResponse_Artifact_VersionId.MatchString(this.VersionId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("VersionId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.VersionId))
 	}
 	return nil
 }

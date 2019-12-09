@@ -20,11 +20,11 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_TraverseGraphCountRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_TraverseGraphCountRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *TraverseGraphCountRequest) Validate() error {
 	if !_regex_TraverseGraphCountRequest_ObjectId.MatchString(this.ObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.ObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.ObjectId))
 	}
 	if this.Query != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Query); err != nil {
@@ -46,12 +46,12 @@ func (this *TraverseGraphCountRequest) Validate() error {
 	return nil
 }
 
-var _regex_TraverseGraphCountResponse_ObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_TraverseGraphCountResponse_ObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 var _regex_TraverseGraphCountResponse_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 
 func (this *TraverseGraphCountResponse) Validate() error {
 	if !_regex_TraverseGraphCountResponse_ObjectId.MatchString(this.ObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.ObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.ObjectId))
 	}
 	if !_regex_TraverseGraphCountResponse_InstanceId.MatchString(this.InstanceId) {
 		return github_com_mwitkow_go_proto_validators.FieldError("InstanceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.InstanceId))
@@ -66,11 +66,11 @@ func (this *TraverseGraphCountResponse) Validate() error {
 	return nil
 }
 
-var _regex_TraverseGraphCountResponse_List_ObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_TraverseGraphCountResponse_List_ObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *TraverseGraphCountResponse_List) Validate() error {
 	if !_regex_TraverseGraphCountResponse_List_ObjectId.MatchString(this.ObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.ObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.ObjectId))
 	}
 	return nil
 }

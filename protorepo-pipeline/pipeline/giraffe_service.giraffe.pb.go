@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	pipeline "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/pipeline"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for pipeline service.
 //
@@ -37,8 +38,9 @@ type Client interface {
 	CreateTrigger(ctx context.Context, in *CreateTriggerRequest) (*pipeline.Trigger, error)
 	DeletePipeline(ctx context.Context, in *DeletePipelineRequest) (*types.Empty, error)
 	DeleteTrigger(ctx context.Context, in *DeleteTriggerRequest) (*types.Empty, error)
+	DeleteTriggers(ctx context.Context, in *DeleteTriggersRequest) (*types.Empty, error)
 	Execute(ctx context.Context, in *ExecuteRequest) (*ExecuteResponse, error)
-	Get(ctx context.Context, in *GetRequest) (*pipeline.Pipeline, error)
+	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
 	GetTrigger(ctx context.Context, in *GetTriggerRequest) (*pipeline.Trigger, error)
 	GetTriggerDetail(ctx context.Context, in *GetTriggerDetailRequest) (*GetTriggerDetailResponse, error)
 	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
@@ -59,7 +61,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*pipeline.Pipeline, error) {
 	out := new(pipeline.Pipeline)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +70,7 @@ func (c *client) Create(ctx context.Context, in *CreateRequest) (*pipeline.Pipel
 
 func (c *client) CreateTrigger(ctx context.Context, in *CreateTriggerRequest) (*pipeline.Trigger, error) {
 	out := new(pipeline.Trigger)
-	err := c.c.Invoke(ctx, _CreateTriggerContract, in, out)
+	err := c.c.Invoke(ctx, _CreateTriggerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +79,7 @@ func (c *client) CreateTrigger(ctx context.Context, in *CreateTriggerRequest) (*
 
 func (c *client) DeletePipeline(ctx context.Context, in *DeletePipelineRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeletePipelineContract, in, out)
+	err := c.c.Invoke(ctx, _DeletePipelineMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +88,16 @@ func (c *client) DeletePipeline(ctx context.Context, in *DeletePipelineRequest) 
 
 func (c *client) DeleteTrigger(ctx context.Context, in *DeleteTriggerRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteTriggerContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteTriggerMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) DeleteTriggers(ctx context.Context, in *DeleteTriggersRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _DeleteTriggersMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -95,16 +106,16 @@ func (c *client) DeleteTrigger(ctx context.Context, in *DeleteTriggerRequest) (*
 
 func (c *client) Execute(ctx context.Context, in *ExecuteRequest) (*ExecuteResponse, error) {
 	out := new(ExecuteResponse)
-	err := c.c.Invoke(ctx, _ExecuteContract, in, out)
+	err := c.c.Invoke(ctx, _ExecuteMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) Get(ctx context.Context, in *GetRequest) (*pipeline.Pipeline, error) {
-	out := new(pipeline.Pipeline)
-	err := c.c.Invoke(ctx, _GetContract, in, out)
+func (c *client) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +124,7 @@ func (c *client) Get(ctx context.Context, in *GetRequest) (*pipeline.Pipeline, e
 
 func (c *client) GetTrigger(ctx context.Context, in *GetTriggerRequest) (*pipeline.Trigger, error) {
 	out := new(pipeline.Trigger)
-	err := c.c.Invoke(ctx, _GetTriggerContract, in, out)
+	err := c.c.Invoke(ctx, _GetTriggerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +133,7 @@ func (c *client) GetTrigger(ctx context.Context, in *GetTriggerRequest) (*pipeli
 
 func (c *client) GetTriggerDetail(ctx context.Context, in *GetTriggerDetailRequest) (*GetTriggerDetailResponse, error) {
 	out := new(GetTriggerDetailResponse)
-	err := c.c.Invoke(ctx, _GetTriggerDetailContract, in, out)
+	err := c.c.Invoke(ctx, _GetTriggerDetailMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +142,7 @@ func (c *client) GetTriggerDetail(ctx context.Context, in *GetTriggerDetailReque
 
 func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.c.Invoke(ctx, _ListContract, in, out)
+	err := c.c.Invoke(ctx, _ListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +151,7 @@ func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, erro
 
 func (c *client) ListTrigger(ctx context.Context, in *ListTriggerRequest) (*ListTriggerResponse, error) {
 	out := new(ListTriggerResponse)
-	err := c.c.Invoke(ctx, _ListTriggerContract, in, out)
+	err := c.c.Invoke(ctx, _ListTriggerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +160,7 @@ func (c *client) ListTrigger(ctx context.Context, in *ListTriggerRequest) (*List
 
 func (c *client) Update(ctx context.Context, in *UpdateRequest) (*pipeline.Pipeline, error) {
 	out := new(pipeline.Pipeline)
-	err := c.c.Invoke(ctx, _UpdateContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +169,7 @@ func (c *client) Update(ctx context.Context, in *UpdateRequest) (*pipeline.Pipel
 
 func (c *client) UpdateTrigger(ctx context.Context, in *UpdateTriggerRequest) (*pipeline.Trigger, error) {
 	out := new(pipeline.Trigger)
-	err := c.c.Invoke(ctx, _UpdateTriggerContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateTriggerMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -171,8 +182,9 @@ type Service interface {
 	CreateTrigger(context.Context, *CreateTriggerRequest) (*pipeline.Trigger, error)
 	DeletePipeline(context.Context, *DeletePipelineRequest) (*types.Empty, error)
 	DeleteTrigger(context.Context, *DeleteTriggerRequest) (*types.Empty, error)
+	DeleteTriggers(context.Context, *DeleteTriggersRequest) (*types.Empty, error)
 	Execute(context.Context, *ExecuteRequest) (*ExecuteResponse, error)
-	Get(context.Context, *GetRequest) (*pipeline.Pipeline, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
 	GetTrigger(context.Context, *GetTriggerRequest) (*pipeline.Trigger, error)
 	GetTriggerDetail(context.Context, *GetTriggerDetailRequest) (*GetTriggerDetailResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
@@ -202,6 +214,12 @@ func _DeletePipelineEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 func _DeleteTriggerEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.DeleteTrigger(ctx, req.(*DeleteTriggerRequest))
+	}
+}
+
+func _DeleteTriggersEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.DeleteTriggers(ctx, req.(*DeleteTriggersRequest))
 	}
 }
 
@@ -254,201 +272,252 @@ func _UpdateTriggerEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateTriggerContract, _CreateTriggerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeletePipelineContract, _DeletePipelineEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteTriggerContract, _DeleteTriggerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ExecuteContract, _ExecuteEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetContract, _GetEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetTriggerContract, _GetTriggerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetTriggerDetailContract, _GetTriggerDetailEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListContract, _ListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListTriggerContract, _ListTriggerEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateContract, _UpdateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateTriggerContract, _UpdateTriggerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateTriggerMethodDesc, _CreateTriggerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeletePipelineMethodDesc, _DeletePipelineEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteTriggerMethodDesc, _DeleteTriggerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteTriggersMethodDesc, _DeleteTriggersEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ExecuteMethodDesc, _ExecuteEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetTriggerMethodDesc, _GetTriggerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetTriggerDetailMethodDesc, _GetTriggerDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListTriggerMethodDesc, _ListTriggerEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMethodDesc, _UpdateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateTriggerMethodDesc, _UpdateTriggerEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "pipeline.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(CreateRequest) }
-func (*createContract) ResponseMessage() interface{} { return new(CreateRequest) }
-func (*createContract) ContractName() string         { return "easyops.api.pipeline.pipeline.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string) {
-	return "POST", "/api/pipeline/v1/projects/:project_id/pipelines"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "Create",
+	RequestType:  (*CreateRequest)(nil),
+	ResponseType: (*pipeline.Pipeline)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/projects/:project_id/pipelines",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createContract) Body() string { return "" }
 
-var _CreateTriggerContract = &createTriggerContract{}
-
-type createTriggerContract struct{}
-
-func (*createTriggerContract) ServiceName() string          { return "pipeline.rpc" }
-func (*createTriggerContract) MethodName() string           { return "CreateTrigger" }
-func (*createTriggerContract) RequestMessage() interface{}  { return new(CreateTriggerRequest) }
-func (*createTriggerContract) ResponseMessage() interface{} { return new(CreateTriggerRequest) }
-func (*createTriggerContract) ContractName() string {
-	return "easyops.api.pipeline.pipeline.CreateTrigger"
+var _CreateTriggerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.CreateTrigger",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "CreateTrigger",
+	RequestType:  (*CreateTriggerRequest)(nil),
+	ResponseType: (*pipeline.Trigger)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/triggers",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createTriggerContract) ContractVersion() string   { return "1.0" }
-func (*createTriggerContract) Pattern() (string, string) { return "POST", "/api/pipeline/v1/triggers" }
-func (*createTriggerContract) Body() string              { return "" }
 
-var _DeletePipelineContract = &deletePipelineContract{}
-
-type deletePipelineContract struct{}
-
-func (*deletePipelineContract) ServiceName() string          { return "pipeline.rpc" }
-func (*deletePipelineContract) MethodName() string           { return "DeletePipeline" }
-func (*deletePipelineContract) RequestMessage() interface{}  { return new(DeletePipelineRequest) }
-func (*deletePipelineContract) ResponseMessage() interface{} { return new(DeletePipelineRequest) }
-func (*deletePipelineContract) ContractName() string {
-	return "easyops.api.pipeline.pipeline.DeletePipeline"
+var _DeletePipelineMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.DeletePipeline",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "DeletePipeline",
+	RequestType:  (*DeletePipelineRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deletePipelineContract) ContractVersion() string { return "1.0" }
-func (*deletePipelineContract) Pattern() (string, string) {
-	return "DELETE", "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id"
+
+var _DeleteTriggerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.DeleteTrigger",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "DeleteTrigger",
+	RequestType:  (*DeleteTriggerRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/pipeline/v1/triggers/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deletePipelineContract) Body() string { return "" }
 
-var _DeleteTriggerContract = &deleteTriggerContract{}
-
-type deleteTriggerContract struct{}
-
-func (*deleteTriggerContract) ServiceName() string          { return "pipeline.rpc" }
-func (*deleteTriggerContract) MethodName() string           { return "DeleteTrigger" }
-func (*deleteTriggerContract) RequestMessage() interface{}  { return new(DeleteTriggerRequest) }
-func (*deleteTriggerContract) ResponseMessage() interface{} { return new(DeleteTriggerRequest) }
-func (*deleteTriggerContract) ContractName() string {
-	return "easyops.api.pipeline.pipeline.DeleteTrigger"
+var _DeleteTriggersMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.DeleteTriggers",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "DeleteTriggers",
+	RequestType:  (*DeleteTriggersRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/pipeline/v1/triggers",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteTriggerContract) ContractVersion() string { return "1.0" }
-func (*deleteTriggerContract) Pattern() (string, string) {
-	return "DELETE", "/api/pipeline/v1/triggers/:id"
+
+var _ExecuteMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.Execute",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "Execute",
+	RequestType:  (*ExecuteRequest)(nil),
+	ResponseType: (*ExecuteResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id/execute",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteTriggerContract) Body() string { return "" }
 
-var _ExecuteContract = &executeContract{}
-
-type executeContract struct{}
-
-func (*executeContract) ServiceName() string          { return "pipeline.rpc" }
-func (*executeContract) MethodName() string           { return "Execute" }
-func (*executeContract) RequestMessage() interface{}  { return new(ExecuteRequest) }
-func (*executeContract) ResponseMessage() interface{} { return new(ExecuteRequest) }
-func (*executeContract) ContractName() string         { return "easyops.api.pipeline.pipeline.Execute" }
-func (*executeContract) ContractVersion() string      { return "1.0" }
-func (*executeContract) Pattern() (string, string) {
-	return "POST", "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id/execute"
+var _GetMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.Get",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "Get",
+	RequestType:  (*GetRequest)(nil),
+	ResponseType: (*GetResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*executeContract) Body() string { return "" }
 
-var _GetContract = &getContract{}
-
-type getContract struct{}
-
-func (*getContract) ServiceName() string          { return "pipeline.rpc" }
-func (*getContract) MethodName() string           { return "Get" }
-func (*getContract) RequestMessage() interface{}  { return new(GetRequest) }
-func (*getContract) ResponseMessage() interface{} { return new(GetRequest) }
-func (*getContract) ContractName() string         { return "easyops.api.pipeline.pipeline.Get" }
-func (*getContract) ContractVersion() string      { return "1.0" }
-func (*getContract) Pattern() (string, string) {
-	return "GET", "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id"
+var _GetTriggerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.GetTrigger",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "GetTrigger",
+	RequestType:  (*GetTriggerRequest)(nil),
+	ResponseType: (*pipeline.Trigger)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/triggers/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getContract) Body() string { return "" }
 
-var _GetTriggerContract = &getTriggerContract{}
-
-type getTriggerContract struct{}
-
-func (*getTriggerContract) ServiceName() string          { return "pipeline.rpc" }
-func (*getTriggerContract) MethodName() string           { return "GetTrigger" }
-func (*getTriggerContract) RequestMessage() interface{}  { return new(GetTriggerRequest) }
-func (*getTriggerContract) ResponseMessage() interface{} { return new(GetTriggerRequest) }
-func (*getTriggerContract) ContractName() string         { return "easyops.api.pipeline.pipeline.GetTrigger" }
-func (*getTriggerContract) ContractVersion() string      { return "1.0" }
-func (*getTriggerContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/triggers/:id" }
-func (*getTriggerContract) Body() string                 { return "" }
-
-var _GetTriggerDetailContract = &getTriggerDetailContract{}
-
-type getTriggerDetailContract struct{}
-
-func (*getTriggerDetailContract) ServiceName() string          { return "pipeline.rpc" }
-func (*getTriggerDetailContract) MethodName() string           { return "GetTriggerDetail" }
-func (*getTriggerDetailContract) RequestMessage() interface{}  { return new(GetTriggerDetailRequest) }
-func (*getTriggerDetailContract) ResponseMessage() interface{} { return new(GetTriggerDetailRequest) }
-func (*getTriggerDetailContract) ContractName() string {
-	return "easyops.api.pipeline.pipeline.GetTriggerDetail"
+var _GetTriggerDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.GetTriggerDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "GetTriggerDetail",
+	RequestType:  (*GetTriggerDetailRequest)(nil),
+	ResponseType: (*GetTriggerDetailResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/triggers/:id/detail",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getTriggerDetailContract) ContractVersion() string { return "1.0" }
-func (*getTriggerDetailContract) Pattern() (string, string) {
-	return "GET", "/api/pipeline/v1/triggers/:id/detail"
+
+var _ListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.List",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "List",
+	RequestType:  (*ListRequest)(nil),
+	ResponseType: (*ListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/projects/:project_id/pipelines",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getTriggerDetailContract) Body() string { return "" }
 
-var _ListContract = &listContract{}
-
-type listContract struct{}
-
-func (*listContract) ServiceName() string          { return "pipeline.rpc" }
-func (*listContract) MethodName() string           { return "List" }
-func (*listContract) RequestMessage() interface{}  { return new(ListRequest) }
-func (*listContract) ResponseMessage() interface{} { return new(ListRequest) }
-func (*listContract) ContractName() string         { return "easyops.api.pipeline.pipeline.List" }
-func (*listContract) ContractVersion() string      { return "1.0" }
-func (*listContract) Pattern() (string, string) {
-	return "GET", "/api/pipeline/v1/projects/:project_id/pipelines"
+var _ListTriggerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.ListTrigger",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "ListTrigger",
+	RequestType:  (*ListTriggerRequest)(nil),
+	ResponseType: (*ListTriggerResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v1/triggers",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listContract) Body() string { return "" }
 
-var _ListTriggerContract = &listTriggerContract{}
-
-type listTriggerContract struct{}
-
-func (*listTriggerContract) ServiceName() string          { return "pipeline.rpc" }
-func (*listTriggerContract) MethodName() string           { return "ListTrigger" }
-func (*listTriggerContract) RequestMessage() interface{}  { return new(ListTriggerRequest) }
-func (*listTriggerContract) ResponseMessage() interface{} { return new(ListTriggerRequest) }
-func (*listTriggerContract) ContractName() string         { return "easyops.api.pipeline.pipeline.ListTrigger" }
-func (*listTriggerContract) ContractVersion() string      { return "1.0" }
-func (*listTriggerContract) Pattern() (string, string)    { return "GET", "/api/pipeline/v1/triggers" }
-func (*listTriggerContract) Body() string                 { return "" }
-
-var _UpdateContract = &updateContract{}
-
-type updateContract struct{}
-
-func (*updateContract) ServiceName() string          { return "pipeline.rpc" }
-func (*updateContract) MethodName() string           { return "Update" }
-func (*updateContract) RequestMessage() interface{}  { return new(UpdateRequest) }
-func (*updateContract) ResponseMessage() interface{} { return new(UpdateRequest) }
-func (*updateContract) ContractName() string         { return "easyops.api.pipeline.pipeline.Update" }
-func (*updateContract) ContractVersion() string      { return "1.0" }
-func (*updateContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id"
+var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.Update",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "Update",
+	RequestType:  (*UpdateRequest)(nil),
+	ResponseType: (*pipeline.Pipeline)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id",
+		},
+		Body:         "pipeline",
+		ResponseBody: "data",
+	},
 }
-func (*updateContract) Body() string { return "pipeline" }
 
-var _UpdateTriggerContract = &updateTriggerContract{}
-
-type updateTriggerContract struct{}
-
-func (*updateTriggerContract) ServiceName() string          { return "pipeline.rpc" }
-func (*updateTriggerContract) MethodName() string           { return "UpdateTrigger" }
-func (*updateTriggerContract) RequestMessage() interface{}  { return new(UpdateTriggerRequest) }
-func (*updateTriggerContract) ResponseMessage() interface{} { return new(UpdateTriggerRequest) }
-func (*updateTriggerContract) ContractName() string {
-	return "easyops.api.pipeline.pipeline.UpdateTrigger"
+var _UpdateTriggerMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.UpdateTrigger",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "UpdateTrigger",
+	RequestType:  (*UpdateTriggerRequest)(nil),
+	ResponseType: (*pipeline.Trigger)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/pipeline/v1/triggers/:id",
+		},
+		Body:         "trigger",
+		ResponseBody: "data",
+	},
 }
-func (*updateTriggerContract) ContractVersion() string { return "1.0" }
-func (*updateTriggerContract) Pattern() (string, string) {
-	return "PUT", "/api/pipeline/v1/triggers/:id"
-}
-func (*updateTriggerContract) Body() string { return "trigger" }

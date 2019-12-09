@@ -7,9 +7,10 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
+	notify "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/notify"
 	io "io"
 	math "math"
 )
@@ -23,15 +24,17 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for cmdb_approve service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	CreateInstanceApplyPermission(ctx context.Context, in *notify.OperationLogWithMeta) (*types.Empty, error)
 	GetApproveCount(ctx context.Context, in *GetApproveCountRequest) (*GetApproveCountResponse, error)
 	GetApproveObjectList(ctx context.Context, in *GetApproveObjectListRequest) (*GetApproveObjectListResponse, error)
 	GetHistoryApproverList(ctx context.Context, in *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error)
@@ -49,9 +52,18 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) CreateInstanceApplyPermission(ctx context.Context, in *notify.OperationLogWithMeta) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _CreateInstanceApplyPermissionMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) GetApproveCount(ctx context.Context, in *GetApproveCountRequest) (*GetApproveCountResponse, error) {
 	out := new(GetApproveCountResponse)
-	err := c.c.Invoke(ctx, _GetApproveCountContract, in, out)
+	err := c.c.Invoke(ctx, _GetApproveCountMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +72,7 @@ func (c *client) GetApproveCount(ctx context.Context, in *GetApproveCountRequest
 
 func (c *client) GetApproveObjectList(ctx context.Context, in *GetApproveObjectListRequest) (*GetApproveObjectListResponse, error) {
 	out := new(GetApproveObjectListResponse)
-	err := c.c.Invoke(ctx, _GetApproveObjectListContract, in, out)
+	err := c.c.Invoke(ctx, _GetApproveObjectListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +81,7 @@ func (c *client) GetApproveObjectList(ctx context.Context, in *GetApproveObjectL
 
 func (c *client) GetHistoryApproverList(ctx context.Context, in *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error) {
 	out := new(GetHistoryApproverListResponse)
-	err := c.c.Invoke(ctx, _GetHistoryApproverListContract, in, out)
+	err := c.c.Invoke(ctx, _GetHistoryApproverListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +90,7 @@ func (c *client) GetHistoryApproverList(ctx context.Context, in *GetHistoryAppro
 
 func (c *client) GetHistoryObjectList(ctx context.Context, in *GetHistoryObjectListRequest) (*GetHistoryObjectListResponse, error) {
 	out := new(GetHistoryObjectListResponse)
-	err := c.c.Invoke(ctx, _GetHistoryObjectListContract, in, out)
+	err := c.c.Invoke(ctx, _GetHistoryObjectListMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +99,7 @@ func (c *client) GetHistoryObjectList(ctx context.Context, in *GetHistoryObjectL
 
 func (c *client) InstanceRelationEdit(ctx context.Context, in *InstanceRelationEditRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _InstanceRelationEditContract, in, out)
+	err := c.c.Invoke(ctx, _InstanceRelationEditMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -96,11 +108,18 @@ func (c *client) InstanceRelationEdit(ctx context.Context, in *InstanceRelationE
 
 // Service is the server API for cmdb_approve service.
 type Service interface {
+	CreateInstanceApplyPermission(context.Context, *notify.OperationLogWithMeta) (*types.Empty, error)
 	GetApproveCount(context.Context, *GetApproveCountRequest) (*GetApproveCountResponse, error)
 	GetApproveObjectList(context.Context, *GetApproveObjectListRequest) (*GetApproveObjectListResponse, error)
 	GetHistoryApproverList(context.Context, *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error)
 	GetHistoryObjectList(context.Context, *GetHistoryObjectListRequest) (*GetHistoryObjectListResponse, error)
 	InstanceRelationEdit(context.Context, *InstanceRelationEditRequest) (*types.Empty, error)
+}
+
+func _CreateInstanceApplyPermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.CreateInstanceApplyPermission(ctx, req.(*notify.OperationLogWithMeta))
+	}
 }
 
 func _GetApproveCountEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -134,109 +153,119 @@ func _InstanceRelationEditEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetApproveCountContract, _GetApproveCountEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetApproveObjectListContract, _GetApproveObjectListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetHistoryApproverListContract, _GetHistoryApproverListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetHistoryObjectListContract, _GetHistoryObjectListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_InstanceRelationEditContract, _InstanceRelationEditEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateInstanceApplyPermissionMethodDesc, _CreateInstanceApplyPermissionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetApproveCountMethodDesc, _GetApproveCountEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetApproveObjectListMethodDesc, _GetApproveObjectListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetHistoryApproverListMethodDesc, _GetHistoryApproverListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetHistoryObjectListMethodDesc, _GetHistoryObjectListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceRelationEditMethodDesc, _InstanceRelationEditEndpoint(srv))
 }
 
-// API Contract
-var _GetApproveCountContract = &getApproveCountContract{}
+// Method Description
+var _CreateInstanceApplyPermissionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.CreateInstanceApplyPermission",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "CreateInstanceApplyPermission",
+	RequestType:  (*notify.OperationLogWithMeta)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/instance/apply/permission/add",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type getApproveCountContract struct{}
+var _GetApproveCountMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.GetApproveCount",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "GetApproveCount",
+	RequestType:  (*GetApproveCountRequest)(nil),
+	ResponseType: (*GetApproveCountResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/approve/count",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*getApproveCountContract) ServiceName() string          { return "cmdb_approve.rpc" }
-func (*getApproveCountContract) MethodName() string           { return "GetApproveCount" }
-func (*getApproveCountContract) RequestMessage() interface{}  { return new(GetApproveCountRequest) }
-func (*getApproveCountContract) ResponseMessage() interface{} { return new(GetApproveCountRequest) }
-func (*getApproveCountContract) ContractName() string {
-	return "easyops.api.resource_manage.cmdb_approve.GetApproveCount"
+var _GetApproveObjectListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.GetApproveObjectList",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "GetApproveObjectList",
+	RequestType:  (*GetApproveObjectListRequest)(nil),
+	ResponseType: (*GetApproveObjectListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/approve/object/list",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getApproveCountContract) ContractVersion() string   { return "1.0" }
-func (*getApproveCountContract) Pattern() (string, string) { return "GET", "/api/v1/approve/count" }
-func (*getApproveCountContract) Body() string              { return "" }
 
-var _GetApproveObjectListContract = &getApproveObjectListContract{}
+var _GetHistoryApproverListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.GetHistoryApproverList",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "GetHistoryApproverList",
+	RequestType:  (*GetHistoryApproverListRequest)(nil),
+	ResponseType: (*GetHistoryApproverListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/history/approver/list",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type getApproveObjectListContract struct{}
+var _GetHistoryObjectListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.GetHistoryObjectList",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "GetHistoryObjectList",
+	RequestType:  (*GetHistoryObjectListRequest)(nil),
+	ResponseType: (*GetHistoryObjectListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/history/object/list",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*getApproveObjectListContract) ServiceName() string { return "cmdb_approve.rpc" }
-func (*getApproveObjectListContract) MethodName() string  { return "GetApproveObjectList" }
-func (*getApproveObjectListContract) RequestMessage() interface{} {
-	return new(GetApproveObjectListRequest)
+var _InstanceRelationEditMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.InstanceRelationEdit",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "InstanceRelationEdit",
+	RequestType:  (*InstanceRelationEditRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:object_id/relation/:relation_side_id/:operation",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getApproveObjectListContract) ResponseMessage() interface{} {
-	return new(GetApproveObjectListRequest)
-}
-func (*getApproveObjectListContract) ContractName() string {
-	return "easyops.api.resource_manage.cmdb_approve.GetApproveObjectList"
-}
-func (*getApproveObjectListContract) ContractVersion() string { return "1.0" }
-func (*getApproveObjectListContract) Pattern() (string, string) {
-	return "POST", "/api/v1/approve/object/list"
-}
-func (*getApproveObjectListContract) Body() string { return "" }
-
-var _GetHistoryApproverListContract = &getHistoryApproverListContract{}
-
-type getHistoryApproverListContract struct{}
-
-func (*getHistoryApproverListContract) ServiceName() string { return "cmdb_approve.rpc" }
-func (*getHistoryApproverListContract) MethodName() string  { return "GetHistoryApproverList" }
-func (*getHistoryApproverListContract) RequestMessage() interface{} {
-	return new(GetHistoryApproverListRequest)
-}
-func (*getHistoryApproverListContract) ResponseMessage() interface{} {
-	return new(GetHistoryApproverListRequest)
-}
-func (*getHistoryApproverListContract) ContractName() string {
-	return "easyops.api.resource_manage.cmdb_approve.GetHistoryApproverList"
-}
-func (*getHistoryApproverListContract) ContractVersion() string { return "1.0" }
-func (*getHistoryApproverListContract) Pattern() (string, string) {
-	return "POST", "/api/v1/history/approver/list"
-}
-func (*getHistoryApproverListContract) Body() string { return "" }
-
-var _GetHistoryObjectListContract = &getHistoryObjectListContract{}
-
-type getHistoryObjectListContract struct{}
-
-func (*getHistoryObjectListContract) ServiceName() string { return "cmdb_approve.rpc" }
-func (*getHistoryObjectListContract) MethodName() string  { return "GetHistoryObjectList" }
-func (*getHistoryObjectListContract) RequestMessage() interface{} {
-	return new(GetHistoryObjectListRequest)
-}
-func (*getHistoryObjectListContract) ResponseMessage() interface{} {
-	return new(GetHistoryObjectListRequest)
-}
-func (*getHistoryObjectListContract) ContractName() string {
-	return "easyops.api.resource_manage.cmdb_approve.GetHistoryObjectList"
-}
-func (*getHistoryObjectListContract) ContractVersion() string { return "1.0" }
-func (*getHistoryObjectListContract) Pattern() (string, string) {
-	return "POST", "/api/v1/history/object/list"
-}
-func (*getHistoryObjectListContract) Body() string { return "" }
-
-var _InstanceRelationEditContract = &instanceRelationEditContract{}
-
-type instanceRelationEditContract struct{}
-
-func (*instanceRelationEditContract) ServiceName() string { return "cmdb_approve.rpc" }
-func (*instanceRelationEditContract) MethodName() string  { return "InstanceRelationEdit" }
-func (*instanceRelationEditContract) RequestMessage() interface{} {
-	return new(InstanceRelationEditRequest)
-}
-func (*instanceRelationEditContract) ResponseMessage() interface{} {
-	return new(InstanceRelationEditRequest)
-}
-func (*instanceRelationEditContract) ContractName() string {
-	return "easyops.api.resource_manage.cmdb_approve.InstanceRelationEdit"
-}
-func (*instanceRelationEditContract) ContractVersion() string { return "1.0" }
-func (*instanceRelationEditContract) Pattern() (string, string) {
-	return "POST", "/object/:object_id/relation/:relation_side_id/:operation"
-}
-func (*instanceRelationEditContract) Body() string { return "" }

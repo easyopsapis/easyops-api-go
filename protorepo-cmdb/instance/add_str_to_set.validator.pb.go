@@ -19,15 +19,15 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_AddStrToSetRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
-var _regex_AddStrToSetRequest_AttrId = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_AddStrToSetRequest_ObjectId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
+var _regex_AddStrToSetRequest_AttrId = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *AddStrToSetRequest) Validate() error {
 	if !_regex_AddStrToSetRequest_ObjectId.MatchString(this.ObjectId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.ObjectId))
+		return github_com_mwitkow_go_proto_validators.FieldError("ObjectId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.ObjectId))
 	}
 	if !_regex_AddStrToSetRequest_AttrId.MatchString(this.AttrId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AttrId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, this.AttrId))
+		return github_com_mwitkow_go_proto_validators.FieldError("AttrId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, this.AttrId))
 	}
 	if this.Query != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Query); err != nil {

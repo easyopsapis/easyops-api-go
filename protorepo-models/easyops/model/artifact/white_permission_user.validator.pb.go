@@ -18,24 +18,24 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_WhitePermissionUser_UpdateAuthorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_WhitePermissionUser_DeleteAuthorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_WhitePermissionUser_ReadAuthorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_WhitePermissionUser_UpdateAuthorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_WhitePermissionUser_DeleteAuthorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_WhitePermissionUser_ReadAuthorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *WhitePermissionUser) Validate() error {
 	for _, item := range this.UpdateAuthorizers {
 		if !_regex_WhitePermissionUser_UpdateAuthorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("UpdateAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("UpdateAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.DeleteAuthorizers {
 		if !_regex_WhitePermissionUser_DeleteAuthorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("DeleteAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("DeleteAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.ReadAuthorizers {
 		if !_regex_WhitePermissionUser_ReadAuthorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("ReadAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("ReadAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	return nil

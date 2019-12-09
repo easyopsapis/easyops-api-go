@@ -20,14 +20,10 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 var _regex_ForgotPasswordRequest_Email = regexp.MustCompile(`^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$`)
-var _regex_ForgotPasswordRequest_Url = regexp.MustCompile(`^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$`)
 
 func (this *ForgotPasswordRequest) Validate() error {
 	if !_regex_ForgotPasswordRequest_Email.MatchString(this.Email) {
 		return github_com_mwitkow_go_proto_validators.FieldError("Email", fmt.Errorf(`value '%v' must be a string conforming to regex "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,8})$"`, this.Email))
-	}
-	if !_regex_ForgotPasswordRequest_Url.MatchString(this.Url) {
-		return github_com_mwitkow_go_proto_validators.FieldError("Url", fmt.Errorf(`value '%v' must be a string conforming to regex "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$"`, this.Url))
 	}
 	return nil
 }

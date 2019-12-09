@@ -7,9 +7,10 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
+	cmdb "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/cmdb"
 	io "io"
 	math "math"
 )
@@ -23,25 +24,38 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for instance service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
 	AggregateCount(ctx context.Context, in *AggregateCountRequest) (*AggregateCountResponse, error)
+	AutoDiscovery(ctx context.Context, in *AutoDiscoveryRequest) (*AutoDiscoveryResponse, error)
+	BatchListInstanceQueryStrategy(ctx context.Context, in *BatchListInstanceQueryStrategyRequest) (*BatchListInstanceQueryStrategyResponse, error)
+	BatchSearch(ctx context.Context, in *BatchSearchRequest) (*BatchSearchResponse, error)
 	CreateInstance(ctx context.Context, in *CreateInstanceRequest) (*types.Struct, error)
 	DeleteInstance(ctx context.Context, in *DeleteInstanceRequest) (*types.Struct, error)
 	DeleteInstanceBatch(ctx context.Context, in *DeleteInstanceBatchRequest) (*DeleteInstanceBatchResponse, error)
+	FulltextSearch(ctx context.Context, in *FulltextSearchRequest) (*FulltextSearchResponse, error)
 	GetDefaultValueTemplate(ctx context.Context, in *GetDefaultValueTemplateRequest) (*types.Struct, error)
 	GetDetail(ctx context.Context, in *GetDetailRequest) (*types.Struct, error)
+	GetInstanceQueryStrategy(ctx context.Context, in *GetInstanceQueryStrategyRequest) (*cmdb.InstanceQueryStrategy, error)
 	ImportInstance(ctx context.Context, in *ImportInstanceRequest) (*ImportInstanceResponse, error)
+	InstanceRelationsCount(ctx context.Context, in *InstanceRelationsCountRequest) (*types.Struct, error)
+	InstanceSnapshot(ctx context.Context, in *InstanceSnapshotRequest) (*types.Struct, error)
+	ListInstance(ctx context.Context, in *ListInstanceRequest) (*ListInstanceResponse, error)
+	ListInstanceQueryStrategy(ctx context.Context, in *ListInstanceQueryStrategyRequest) (*ListInstanceQueryStrategyResponse, error)
 	PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error)
+	RelationCountAggregate(ctx context.Context, in *RelationCountAggregateRequest) (*RelationCountAggregateResponse, error)
+	RelationMaxCheck(ctx context.Context, in *RelationMaxCheckRequest) (*RelationMaxCheckResponse, error)
 	SearchTotal(ctx context.Context, in *SearchTotalRequest) (*SearchTotalResponse, error)
 	UpdateInstance(ctx context.Context, in *UpdateInstanceRequest) (*types.Struct, error)
+	UpdateInstanceV2(ctx context.Context, in *UpdateInstanceV2Request) (*types.Struct, error)
 	UpdatePermissionBatch(ctx context.Context, in *UpdatePermissionBatchRequest) (*UpdatePermissionBatchResponse, error)
 }
 
@@ -57,7 +71,34 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) AggregateCount(ctx context.Context, in *AggregateCountRequest) (*AggregateCountResponse, error) {
 	out := new(AggregateCountResponse)
-	err := c.c.Invoke(ctx, _AggregateCountContract, in, out)
+	err := c.c.Invoke(ctx, _AggregateCountMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) AutoDiscovery(ctx context.Context, in *AutoDiscoveryRequest) (*AutoDiscoveryResponse, error) {
+	out := new(AutoDiscoveryResponse)
+	err := c.c.Invoke(ctx, _AutoDiscoveryMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) BatchListInstanceQueryStrategy(ctx context.Context, in *BatchListInstanceQueryStrategyRequest) (*BatchListInstanceQueryStrategyResponse, error) {
+	out := new(BatchListInstanceQueryStrategyResponse)
+	err := c.c.Invoke(ctx, _BatchListInstanceQueryStrategyMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) BatchSearch(ctx context.Context, in *BatchSearchRequest) (*BatchSearchResponse, error) {
+	out := new(BatchSearchResponse)
+	err := c.c.Invoke(ctx, _BatchSearchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +107,7 @@ func (c *client) AggregateCount(ctx context.Context, in *AggregateCountRequest) 
 
 func (c *client) CreateInstance(ctx context.Context, in *CreateInstanceRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _CreateInstanceContract, in, out)
+	err := c.c.Invoke(ctx, _CreateInstanceMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +116,7 @@ func (c *client) CreateInstance(ctx context.Context, in *CreateInstanceRequest) 
 
 func (c *client) DeleteInstance(ctx context.Context, in *DeleteInstanceRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _DeleteInstanceContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteInstanceMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +125,16 @@ func (c *client) DeleteInstance(ctx context.Context, in *DeleteInstanceRequest) 
 
 func (c *client) DeleteInstanceBatch(ctx context.Context, in *DeleteInstanceBatchRequest) (*DeleteInstanceBatchResponse, error) {
 	out := new(DeleteInstanceBatchResponse)
-	err := c.c.Invoke(ctx, _DeleteInstanceBatchContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteInstanceBatchMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) FulltextSearch(ctx context.Context, in *FulltextSearchRequest) (*FulltextSearchResponse, error) {
+	out := new(FulltextSearchResponse)
+	err := c.c.Invoke(ctx, _FulltextSearchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +143,7 @@ func (c *client) DeleteInstanceBatch(ctx context.Context, in *DeleteInstanceBatc
 
 func (c *client) GetDefaultValueTemplate(ctx context.Context, in *GetDefaultValueTemplateRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _GetDefaultValueTemplateContract, in, out)
+	err := c.c.Invoke(ctx, _GetDefaultValueTemplateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +152,16 @@ func (c *client) GetDefaultValueTemplate(ctx context.Context, in *GetDefaultValu
 
 func (c *client) GetDetail(ctx context.Context, in *GetDetailRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _GetDetailContract, in, out)
+	err := c.c.Invoke(ctx, _GetDetailMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetInstanceQueryStrategy(ctx context.Context, in *GetInstanceQueryStrategyRequest) (*cmdb.InstanceQueryStrategy, error) {
+	out := new(cmdb.InstanceQueryStrategy)
+	err := c.c.Invoke(ctx, _GetInstanceQueryStrategyMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +170,43 @@ func (c *client) GetDetail(ctx context.Context, in *GetDetailRequest) (*types.St
 
 func (c *client) ImportInstance(ctx context.Context, in *ImportInstanceRequest) (*ImportInstanceResponse, error) {
 	out := new(ImportInstanceResponse)
-	err := c.c.Invoke(ctx, _ImportInstanceContract, in, out)
+	err := c.c.Invoke(ctx, _ImportInstanceMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) InstanceRelationsCount(ctx context.Context, in *InstanceRelationsCountRequest) (*types.Struct, error) {
+	out := new(types.Struct)
+	err := c.c.Invoke(ctx, _InstanceRelationsCountMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) InstanceSnapshot(ctx context.Context, in *InstanceSnapshotRequest) (*types.Struct, error) {
+	out := new(types.Struct)
+	err := c.c.Invoke(ctx, _InstanceSnapshotMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListInstance(ctx context.Context, in *ListInstanceRequest) (*ListInstanceResponse, error) {
+	out := new(ListInstanceResponse)
+	err := c.c.Invoke(ctx, _ListInstanceMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListInstanceQueryStrategy(ctx context.Context, in *ListInstanceQueryStrategyRequest) (*ListInstanceQueryStrategyResponse, error) {
+	out := new(ListInstanceQueryStrategyResponse)
+	err := c.c.Invoke(ctx, _ListInstanceQueryStrategyMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +215,25 @@ func (c *client) ImportInstance(ctx context.Context, in *ImportInstanceRequest) 
 
 func (c *client) PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error) {
 	out := new(PostSearchResponse)
-	err := c.c.Invoke(ctx, _PostSearchContract, in, out)
+	err := c.c.Invoke(ctx, _PostSearchMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) RelationCountAggregate(ctx context.Context, in *RelationCountAggregateRequest) (*RelationCountAggregateResponse, error) {
+	out := new(RelationCountAggregateResponse)
+	err := c.c.Invoke(ctx, _RelationCountAggregateMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) RelationMaxCheck(ctx context.Context, in *RelationMaxCheckRequest) (*RelationMaxCheckResponse, error) {
+	out := new(RelationMaxCheckResponse)
+	err := c.c.Invoke(ctx, _RelationMaxCheckMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +242,7 @@ func (c *client) PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSe
 
 func (c *client) SearchTotal(ctx context.Context, in *SearchTotalRequest) (*SearchTotalResponse, error) {
 	out := new(SearchTotalResponse)
-	err := c.c.Invoke(ctx, _SearchTotalContract, in, out)
+	err := c.c.Invoke(ctx, _SearchTotalMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +251,16 @@ func (c *client) SearchTotal(ctx context.Context, in *SearchTotalRequest) (*Sear
 
 func (c *client) UpdateInstance(ctx context.Context, in *UpdateInstanceRequest) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _UpdateInstanceContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateInstanceMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) UpdateInstanceV2(ctx context.Context, in *UpdateInstanceV2Request) (*types.Struct, error) {
+	out := new(types.Struct)
+	err := c.c.Invoke(ctx, _UpdateInstanceV2MethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +269,7 @@ func (c *client) UpdateInstance(ctx context.Context, in *UpdateInstanceRequest) 
 
 func (c *client) UpdatePermissionBatch(ctx context.Context, in *UpdatePermissionBatchRequest) (*UpdatePermissionBatchResponse, error) {
 	out := new(UpdatePermissionBatchResponse)
-	err := c.c.Invoke(ctx, _UpdatePermissionBatchContract, in, out)
+	err := c.c.Invoke(ctx, _UpdatePermissionBatchMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -157,21 +279,51 @@ func (c *client) UpdatePermissionBatch(ctx context.Context, in *UpdatePermission
 // Service is the server API for instance service.
 type Service interface {
 	AggregateCount(context.Context, *AggregateCountRequest) (*AggregateCountResponse, error)
+	AutoDiscovery(context.Context, *AutoDiscoveryRequest) (*AutoDiscoveryResponse, error)
+	BatchListInstanceQueryStrategy(context.Context, *BatchListInstanceQueryStrategyRequest) (*BatchListInstanceQueryStrategyResponse, error)
+	BatchSearch(context.Context, *BatchSearchRequest) (*BatchSearchResponse, error)
 	CreateInstance(context.Context, *CreateInstanceRequest) (*types.Struct, error)
 	DeleteInstance(context.Context, *DeleteInstanceRequest) (*types.Struct, error)
 	DeleteInstanceBatch(context.Context, *DeleteInstanceBatchRequest) (*DeleteInstanceBatchResponse, error)
+	FulltextSearch(context.Context, *FulltextSearchRequest) (*FulltextSearchResponse, error)
 	GetDefaultValueTemplate(context.Context, *GetDefaultValueTemplateRequest) (*types.Struct, error)
 	GetDetail(context.Context, *GetDetailRequest) (*types.Struct, error)
+	GetInstanceQueryStrategy(context.Context, *GetInstanceQueryStrategyRequest) (*cmdb.InstanceQueryStrategy, error)
 	ImportInstance(context.Context, *ImportInstanceRequest) (*ImportInstanceResponse, error)
+	InstanceRelationsCount(context.Context, *InstanceRelationsCountRequest) (*types.Struct, error)
+	InstanceSnapshot(context.Context, *InstanceSnapshotRequest) (*types.Struct, error)
+	ListInstance(context.Context, *ListInstanceRequest) (*ListInstanceResponse, error)
+	ListInstanceQueryStrategy(context.Context, *ListInstanceQueryStrategyRequest) (*ListInstanceQueryStrategyResponse, error)
 	PostSearch(context.Context, *PostSearchRequest) (*PostSearchResponse, error)
+	RelationCountAggregate(context.Context, *RelationCountAggregateRequest) (*RelationCountAggregateResponse, error)
+	RelationMaxCheck(context.Context, *RelationMaxCheckRequest) (*RelationMaxCheckResponse, error)
 	SearchTotal(context.Context, *SearchTotalRequest) (*SearchTotalResponse, error)
 	UpdateInstance(context.Context, *UpdateInstanceRequest) (*types.Struct, error)
+	UpdateInstanceV2(context.Context, *UpdateInstanceV2Request) (*types.Struct, error)
 	UpdatePermissionBatch(context.Context, *UpdatePermissionBatchRequest) (*UpdatePermissionBatchResponse, error)
 }
 
 func _AggregateCountEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.AggregateCount(ctx, req.(*AggregateCountRequest))
+	}
+}
+
+func _AutoDiscoveryEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.AutoDiscovery(ctx, req.(*AutoDiscoveryRequest))
+	}
+}
+
+func _BatchListInstanceQueryStrategyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.BatchListInstanceQueryStrategy(ctx, req.(*BatchListInstanceQueryStrategyRequest))
+	}
+}
+
+func _BatchSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.BatchSearch(ctx, req.(*BatchSearchRequest))
 	}
 }
 
@@ -193,6 +345,12 @@ func _DeleteInstanceBatchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _FulltextSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.FulltextSearch(ctx, req.(*FulltextSearchRequest))
+	}
+}
+
 func _GetDefaultValueTemplateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.GetDefaultValueTemplate(ctx, req.(*GetDefaultValueTemplateRequest))
@@ -205,15 +363,57 @@ func _GetDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _GetInstanceQueryStrategyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetInstanceQueryStrategy(ctx, req.(*GetInstanceQueryStrategyRequest))
+	}
+}
+
 func _ImportInstanceEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.ImportInstance(ctx, req.(*ImportInstanceRequest))
 	}
 }
 
+func _InstanceRelationsCountEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.InstanceRelationsCount(ctx, req.(*InstanceRelationsCountRequest))
+	}
+}
+
+func _InstanceSnapshotEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.InstanceSnapshot(ctx, req.(*InstanceSnapshotRequest))
+	}
+}
+
+func _ListInstanceEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListInstance(ctx, req.(*ListInstanceRequest))
+	}
+}
+
+func _ListInstanceQueryStrategyEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListInstanceQueryStrategy(ctx, req.(*ListInstanceQueryStrategyRequest))
+	}
+}
+
 func _PostSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.PostSearch(ctx, req.(*PostSearchRequest))
+	}
+}
+
+func _RelationCountAggregateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.RelationCountAggregate(ctx, req.(*RelationCountAggregateRequest))
+	}
+}
+
+func _RelationMaxCheckEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.RelationMaxCheck(ctx, req.(*RelationMaxCheckRequest))
 	}
 }
 
@@ -229,6 +429,12 @@ func _UpdateInstanceEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _UpdateInstanceV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.UpdateInstanceV2(ctx, req.(*UpdateInstanceV2Request))
+	}
+}
+
 func _UpdatePermissionBatchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.UpdatePermissionBatch(ctx, req.(*UpdatePermissionBatchRequest))
@@ -236,209 +442,442 @@ func _UpdatePermissionBatchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_AggregateCountContract, _AggregateCountEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateInstanceContract, _CreateInstanceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteInstanceContract, _DeleteInstanceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteInstanceBatchContract, _DeleteInstanceBatchEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetDefaultValueTemplateContract, _GetDefaultValueTemplateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetDetailContract, _GetDetailEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ImportInstanceContract, _ImportInstanceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_PostSearchContract, _PostSearchEndpoint(srv))
-	s.RegisterUnaryEndpoint(_SearchTotalContract, _SearchTotalEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateInstanceContract, _UpdateInstanceEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdatePermissionBatchContract, _UpdatePermissionBatchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AggregateCountMethodDesc, _AggregateCountEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AutoDiscoveryMethodDesc, _AutoDiscoveryEndpoint(srv))
+	s.RegisterUnaryEndpoint(_BatchListInstanceQueryStrategyMethodDesc, _BatchListInstanceQueryStrategyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_BatchSearchMethodDesc, _BatchSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateInstanceMethodDesc, _CreateInstanceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteInstanceMethodDesc, _DeleteInstanceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteInstanceBatchMethodDesc, _DeleteInstanceBatchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_FulltextSearchMethodDesc, _FulltextSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetDefaultValueTemplateMethodDesc, _GetDefaultValueTemplateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetDetailMethodDesc, _GetDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetInstanceQueryStrategyMethodDesc, _GetInstanceQueryStrategyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ImportInstanceMethodDesc, _ImportInstanceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceRelationsCountMethodDesc, _InstanceRelationsCountEndpoint(srv))
+	s.RegisterUnaryEndpoint(_InstanceSnapshotMethodDesc, _InstanceSnapshotEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListInstanceMethodDesc, _ListInstanceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListInstanceQueryStrategyMethodDesc, _ListInstanceQueryStrategyEndpoint(srv))
+	s.RegisterUnaryEndpoint(_PostSearchMethodDesc, _PostSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RelationCountAggregateMethodDesc, _RelationCountAggregateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RelationMaxCheckMethodDesc, _RelationMaxCheckEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SearchTotalMethodDesc, _SearchTotalEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateInstanceMethodDesc, _UpdateInstanceEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateInstanceV2MethodDesc, _UpdateInstanceV2Endpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdatePermissionBatchMethodDesc, _UpdatePermissionBatchEndpoint(srv))
 }
 
-// API Contract
-var _AggregateCountContract = &aggregateCountContract{}
-
-type aggregateCountContract struct{}
-
-func (*aggregateCountContract) ServiceName() string          { return "instance.rpc" }
-func (*aggregateCountContract) MethodName() string           { return "AggregateCount" }
-func (*aggregateCountContract) RequestMessage() interface{}  { return new(AggregateCountRequest) }
-func (*aggregateCountContract) ResponseMessage() interface{} { return new(AggregateCountRequest) }
-func (*aggregateCountContract) ContractName() string {
-	return "easyops.api.cmdb.instance.AggregateCount"
+// Method Description
+var _AggregateCountMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.AggregateCount",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "AggregateCount",
+	RequestType:  (*AggregateCountRequest)(nil),
+	ResponseType: (*AggregateCountResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:objectId/instance/aggregate/count/:attrId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*aggregateCountContract) ContractVersion() string { return "1.0" }
-func (*aggregateCountContract) Pattern() (string, string) {
-	return "GET", "/object/:objectId/instance/aggregate/count/:attrId"
+
+var _AutoDiscoveryMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.AutoDiscovery",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "AutoDiscovery",
+	RequestType:  (*AutoDiscoveryRequest)(nil),
+	ResponseType: (*AutoDiscoveryResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/instance/_import-json",
+		},
+		Body:         "body",
+		ResponseBody: "",
+	},
 }
-func (*aggregateCountContract) Body() string { return "" }
 
-var _CreateInstanceContract = &createInstanceContract{}
-
-type createInstanceContract struct{}
-
-func (*createInstanceContract) ServiceName() string          { return "instance.rpc" }
-func (*createInstanceContract) MethodName() string           { return "CreateInstance" }
-func (*createInstanceContract) RequestMessage() interface{}  { return new(CreateInstanceRequest) }
-func (*createInstanceContract) ResponseMessage() interface{} { return new(CreateInstanceRequest) }
-func (*createInstanceContract) ContractName() string {
-	return "easyops.api.cmdb.instance.CreateInstance"
+var _BatchListInstanceQueryStrategyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.BatchListInstanceQueryStrategy",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "BatchListInstanceQueryStrategy",
+	RequestType:  (*BatchListInstanceQueryStrategyRequest)(nil),
+	ResponseType: (*BatchListInstanceQueryStrategyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "batch/object/query/strategy",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createInstanceContract) ContractVersion() string { return "1.0" }
-func (*createInstanceContract) Pattern() (string, string) {
-	return "POST", "/v2/object/:objectId/instance"
+
+var _BatchSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.BatchSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "BatchSearch",
+	RequestType:  (*BatchSearchRequest)(nil),
+	ResponseType: (*BatchSearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/batch/object/instance/_search",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*createInstanceContract) Body() string { return "instance" }
 
-var _DeleteInstanceContract = &deleteInstanceContract{}
-
-type deleteInstanceContract struct{}
-
-func (*deleteInstanceContract) ServiceName() string          { return "instance.rpc" }
-func (*deleteInstanceContract) MethodName() string           { return "DeleteInstance" }
-func (*deleteInstanceContract) RequestMessage() interface{}  { return new(DeleteInstanceRequest) }
-func (*deleteInstanceContract) ResponseMessage() interface{} { return new(DeleteInstanceRequest) }
-func (*deleteInstanceContract) ContractName() string {
-	return "easyops.api.cmdb.instance.DeleteInstance"
+var _CreateInstanceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.CreateInstance",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "CreateInstance",
+	RequestType:  (*CreateInstanceRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/object/:objectId/instance",
+		},
+		Body:         "instance",
+		ResponseBody: "data",
+	},
 }
-func (*deleteInstanceContract) ContractVersion() string { return "1.0" }
-func (*deleteInstanceContract) Pattern() (string, string) {
-	return "DELETE", "/object/:objectId/instance/:instanceId"
+
+var _DeleteInstanceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.DeleteInstance",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "DeleteInstance",
+	RequestType:  (*DeleteInstanceRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/object/:objectId/instance/:instanceId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteInstanceContract) Body() string { return "" }
 
-var _DeleteInstanceBatchContract = &deleteInstanceBatchContract{}
-
-type deleteInstanceBatchContract struct{}
-
-func (*deleteInstanceBatchContract) ServiceName() string { return "instance.rpc" }
-func (*deleteInstanceBatchContract) MethodName() string  { return "DeleteInstanceBatch" }
-func (*deleteInstanceBatchContract) RequestMessage() interface{} {
-	return new(DeleteInstanceBatchRequest)
+var _DeleteInstanceBatchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.DeleteInstanceBatch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "DeleteInstanceBatch",
+	RequestType:  (*DeleteInstanceBatchRequest)(nil),
+	ResponseType: (*DeleteInstanceBatchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/object/:objectId/instance/_batch",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteInstanceBatchContract) ResponseMessage() interface{} {
-	return new(DeleteInstanceBatchRequest)
+
+var _FulltextSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.FulltextSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "FulltextSearch",
+	RequestType:  (*FulltextSearchRequest)(nil),
+	ResponseType: (*FulltextSearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/fulltext/_search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteInstanceBatchContract) ContractName() string {
-	return "easyops.api.cmdb.instance.DeleteInstanceBatch"
+
+var _GetDefaultValueTemplateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.GetDefaultValueTemplate",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "GetDefaultValueTemplate",
+	RequestType:  (*GetDefaultValueTemplateRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:objectId/instance_default_value_template",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteInstanceBatchContract) ContractVersion() string { return "1.0" }
-func (*deleteInstanceBatchContract) Pattern() (string, string) {
-	return "DELETE", "/object/:objectId/instance/_batch"
+
+var _GetDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.GetDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "GetDetail",
+	RequestType:  (*GetDetailRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:objectId/instance/:instanceId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteInstanceBatchContract) Body() string { return "" }
 
-var _GetDefaultValueTemplateContract = &getDefaultValueTemplateContract{}
-
-type getDefaultValueTemplateContract struct{}
-
-func (*getDefaultValueTemplateContract) ServiceName() string { return "instance.rpc" }
-func (*getDefaultValueTemplateContract) MethodName() string  { return "GetDefaultValueTemplate" }
-func (*getDefaultValueTemplateContract) RequestMessage() interface{} {
-	return new(GetDefaultValueTemplateRequest)
+var _GetInstanceQueryStrategyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.GetInstanceQueryStrategy",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "GetInstanceQueryStrategy",
+	RequestType:  (*GetInstanceQueryStrategyRequest)(nil),
+	ResponseType: (*cmdb.InstanceQueryStrategy)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:objectId/query/strategy/:strategyId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getDefaultValueTemplateContract) ResponseMessage() interface{} {
-	return new(GetDefaultValueTemplateRequest)
+
+var _ImportInstanceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.ImportInstance",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "ImportInstance",
+	RequestType:  (*ImportInstanceRequest)(nil),
+	ResponseType: (*ImportInstanceResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/instance/_import",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getDefaultValueTemplateContract) ContractName() string {
-	return "easyops.api.cmdb.instance.GetDefaultValueTemplate"
+
+var _InstanceRelationsCountMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.InstanceRelationsCount",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "InstanceRelationsCount",
+	RequestType:  (*InstanceRelationsCountRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:object_id/instance/:instance_id/_relation_count",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getDefaultValueTemplateContract) ContractVersion() string { return "1.0" }
-func (*getDefaultValueTemplateContract) Pattern() (string, string) {
-	return "GET", "/object/:objectId/instance_default_value_template"
+
+var _InstanceSnapshotMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.InstanceSnapshot",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "InstanceSnapshot",
+	RequestType:  (*InstanceSnapshotRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/history/object/:object_id/instance/:instance_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getDefaultValueTemplateContract) Body() string { return "" }
 
-var _GetDetailContract = &getDetailContract{}
-
-type getDetailContract struct{}
-
-func (*getDetailContract) ServiceName() string          { return "instance.rpc" }
-func (*getDetailContract) MethodName() string           { return "GetDetail" }
-func (*getDetailContract) RequestMessage() interface{}  { return new(GetDetailRequest) }
-func (*getDetailContract) ResponseMessage() interface{} { return new(GetDetailRequest) }
-func (*getDetailContract) ContractName() string         { return "easyops.api.cmdb.instance.GetDetail" }
-func (*getDetailContract) ContractVersion() string      { return "1.0" }
-func (*getDetailContract) Pattern() (string, string) {
-	return "GET", "/object/:objectId/instance/:instanceId"
+var _ListInstanceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.ListInstance",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "ListInstance",
+	RequestType:  (*ListInstanceRequest)(nil),
+	ResponseType: (*ListInstanceResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:object_id/instance",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getDetailContract) Body() string { return "" }
 
-var _ImportInstanceContract = &importInstanceContract{}
-
-type importInstanceContract struct{}
-
-func (*importInstanceContract) ServiceName() string          { return "instance.rpc" }
-func (*importInstanceContract) MethodName() string           { return "ImportInstance" }
-func (*importInstanceContract) RequestMessage() interface{}  { return new(ImportInstanceRequest) }
-func (*importInstanceContract) ResponseMessage() interface{} { return new(ImportInstanceRequest) }
-func (*importInstanceContract) ContractName() string {
-	return "easyops.api.cmdb.instance.ImportInstance"
+var _ListInstanceQueryStrategyMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.ListInstanceQueryStrategy",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "ListInstanceQueryStrategy",
+	RequestType:  (*ListInstanceQueryStrategyRequest)(nil),
+	ResponseType: (*ListInstanceQueryStrategyResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/object/:object_id/query/strategy",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*importInstanceContract) ContractVersion() string { return "1.0" }
-func (*importInstanceContract) Pattern() (string, string) {
-	return "POST", "/object/:objectId/instance/_import"
+
+var _PostSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.PostSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "PostSearch",
+	RequestType:  (*PostSearchRequest)(nil),
+	ResponseType: (*PostSearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/instance/_search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*importInstanceContract) Body() string { return "" }
 
-var _PostSearchContract = &postSearchContract{}
-
-type postSearchContract struct{}
-
-func (*postSearchContract) ServiceName() string          { return "instance.rpc" }
-func (*postSearchContract) MethodName() string           { return "PostSearch" }
-func (*postSearchContract) RequestMessage() interface{}  { return new(PostSearchRequest) }
-func (*postSearchContract) ResponseMessage() interface{} { return new(PostSearchRequest) }
-func (*postSearchContract) ContractName() string         { return "easyops.api.cmdb.instance.PostSearch" }
-func (*postSearchContract) ContractVersion() string      { return "1.0" }
-func (*postSearchContract) Pattern() (string, string) {
-	return "POST", "/object/:objectId/instance/_search"
+var _RelationCountAggregateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.RelationCountAggregate",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "RelationCountAggregate",
+	RequestType:  (*RelationCountAggregateRequest)(nil),
+	ResponseType: (*RelationCountAggregateResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/instance/_relation_count_aggregate",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*postSearchContract) Body() string { return "" }
 
-var _SearchTotalContract = &searchTotalContract{}
-
-type searchTotalContract struct{}
-
-func (*searchTotalContract) ServiceName() string          { return "instance.rpc" }
-func (*searchTotalContract) MethodName() string           { return "SearchTotal" }
-func (*searchTotalContract) RequestMessage() interface{}  { return new(SearchTotalRequest) }
-func (*searchTotalContract) ResponseMessage() interface{} { return new(SearchTotalRequest) }
-func (*searchTotalContract) ContractName() string         { return "easyops.api.cmdb.instance.SearchTotal" }
-func (*searchTotalContract) ContractVersion() string      { return "1.0" }
-func (*searchTotalContract) Pattern() (string, string) {
-	return "POST", "/object/:objectId/instance/_search_total"
+var _RelationMaxCheckMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.RelationMaxCheck",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "RelationMaxCheck",
+	RequestType:  (*RelationMaxCheckRequest)(nil),
+	ResponseType: (*RelationMaxCheckResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/instance/_search_relation_max_check",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*searchTotalContract) Body() string { return "" }
 
-var _UpdateInstanceContract = &updateInstanceContract{}
+var _SearchTotalMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.SearchTotal",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "SearchTotal",
+	RequestType:  (*SearchTotalRequest)(nil),
+	ResponseType: (*SearchTotalResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/object/:objectId/instance/_search_total",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
+}
 
-type updateInstanceContract struct{}
+var _UpdateInstanceMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.UpdateInstance",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "UpdateInstance",
+	RequestType:  (*UpdateInstanceRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/object/:objectId/instance/:instanceId",
+		},
+		Body:         "instance",
+		ResponseBody: "data",
+	},
+}
 
-func (*updateInstanceContract) ServiceName() string          { return "instance.rpc" }
-func (*updateInstanceContract) MethodName() string           { return "UpdateInstance" }
-func (*updateInstanceContract) RequestMessage() interface{}  { return new(UpdateInstanceRequest) }
-func (*updateInstanceContract) ResponseMessage() interface{} { return new(UpdateInstanceRequest) }
-func (*updateInstanceContract) ContractName() string {
-	return "easyops.api.cmdb.instance.UpdateInstance"
+var _UpdateInstanceV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.UpdateInstanceV2",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "UpdateInstanceV2",
+	RequestType:  (*UpdateInstanceV2Request)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/v2/object/:objectId/instance/:instanceId",
+		},
+		Body:         "instance",
+		ResponseBody: "data",
+	},
 }
-func (*updateInstanceContract) ContractVersion() string { return "1.0" }
-func (*updateInstanceContract) Pattern() (string, string) {
-	return "PUT", "/object/:objectId/instance/:instanceId"
-}
-func (*updateInstanceContract) Body() string { return "instance" }
 
-var _UpdatePermissionBatchContract = &updatePermissionBatchContract{}
-
-type updatePermissionBatchContract struct{}
-
-func (*updatePermissionBatchContract) ServiceName() string { return "instance.rpc" }
-func (*updatePermissionBatchContract) MethodName() string  { return "UpdatePermissionBatch" }
-func (*updatePermissionBatchContract) RequestMessage() interface{} {
-	return new(UpdatePermissionBatchRequest)
+var _UpdatePermissionBatchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.cmdb.instance.UpdatePermissionBatch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "UpdatePermissionBatch",
+	RequestType:  (*UpdatePermissionBatchRequest)(nil),
+	ResponseType: (*UpdatePermissionBatchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/permission/:objectId/instances/_batch",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*updatePermissionBatchContract) ResponseMessage() interface{} {
-	return new(UpdatePermissionBatchRequest)
-}
-func (*updatePermissionBatchContract) ContractName() string {
-	return "easyops.api.cmdb.instance.UpdatePermissionBatch"
-}
-func (*updatePermissionBatchContract) ContractVersion() string { return "1.0" }
-func (*updatePermissionBatchContract) Pattern() (string, string) {
-	return "PUT", "/permission/:objectId/instances/_batch"
-}
-func (*updatePermissionBatchContract) Body() string { return "" }

@@ -23,5 +23,10 @@ func (this *ObjectView) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("RelationView", err)
 		}
 	}
+	if this.AttrAuthorizers != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.AttrAuthorizers); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("AttrAuthorizers", err)
+		}
+	}
 	return nil
 }

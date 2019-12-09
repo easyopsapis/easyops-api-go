@@ -21,7 +21,7 @@ var _ = math.Inf
 
 var _regex_UpdateFileRequest_Path = regexp.MustCompile(`^((\/[^\/:\*\?""<>\|\r\n]+)+)|(\/)|[a-zA-Z]:(\\[^\\:\*\?""<>\|\r\n]+)*$`)
 var _regex_UpdateFileRequest_Perm = regexp.MustCompile(`^(0[0-7]{3})`)
-var _regex_UpdateFileRequest_PackageId = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
+var _regex_UpdateFileRequest_PackageId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
 
 func (this *UpdateFileRequest) Validate() error {
 	if !_regex_UpdateFileRequest_Path.MatchString(this.Path) {
@@ -31,7 +31,7 @@ func (this *UpdateFileRequest) Validate() error {
 		return github_com_mwitkow_go_proto_validators.FieldError("Perm", fmt.Errorf(`value '%v' must be a string conforming to regex "^(0[0-7]{3})"`, this.Perm))
 	}
 	if !_regex_UpdateFileRequest_PackageId.MatchString(this.PackageId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, this.PackageId))
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.PackageId))
 	}
 	return nil
 }

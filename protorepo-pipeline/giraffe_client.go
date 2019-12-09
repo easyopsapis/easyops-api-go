@@ -12,6 +12,8 @@ import (
 	"github.com/easyopsapis/easyops-api-go/protorepo-pipeline/project"
 
 	"github.com/easyopsapis/easyops-api-go/protorepo-pipeline/provider"
+
+	"github.com/easyopsapis/easyops-api-go/protorepo-pipeline/template"
 )
 
 type Client struct {
@@ -24,6 +26,8 @@ type Client struct {
 	Project project.Client
 
 	Provider provider.Client
+
+	Template template.Client
 }
 
 func NewClient(c giraffe.Client) *Client {
@@ -38,5 +42,7 @@ func NewClient(c giraffe.Client) *Client {
 	client.Project = project.NewClient(c)
 
 	client.Provider = provider.NewClient(c)
+
+	client.Template = template.NewClient(c)
 	return &client
 }

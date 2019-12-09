@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	io "io"
@@ -23,10 +23,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for user_admin service.
 //
@@ -35,7 +36,15 @@ type Client interface {
 	AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*types.Empty, error)
 	AlterSelfPassword(ctx context.Context, in *AlterSelfPasswordRequest) (*types.Empty, error)
 	ForgotPassword(ctx context.Context, in *ForgotPasswordRequest) (*types.Empty, error)
+	GetPasswordConfig(ctx context.Context, in *types.Empty) (*GetPasswordConfigResponse, error)
+	GetUserInfo(ctx context.Context, in *GetUserInfoRequest) (*types.Struct, error)
+	ListGroupsIdName(ctx context.Context, in *ListGroupsIdNameRequest) (*types.Struct, error)
+	ListUsersInfo(ctx context.Context, in *ListUsersInfoRequest) (*ListUsersInfoResponse, error)
+	ListUsersIdNick(ctx context.Context, in *ListUsersIdNickRequest) (*types.Struct, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest) (*types.Empty, error)
+	SearchAllUsersInfo(ctx context.Context, in *SearchAllUsersInfoRequest) (*SearchAllUsersInfoResponse, error)
+	UserDelete(ctx context.Context, in *UserDeleteRequest) (*types.Empty, error)
+	GetUserLoginInfo(ctx context.Context, in *GetUserLoginInfoRequest) (*GetUserLoginInfoResponse, error)
 	UserRegister(ctx context.Context, in *UserRegisterRequest) (*UserRegisterResponse, error)
 }
 
@@ -51,7 +60,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _AlterPasswordContract, in, out)
+	err := c.c.Invoke(ctx, _AlterPasswordMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +69,7 @@ func (c *client) AlterPassword(ctx context.Context, in *AlterPasswordRequest) (*
 
 func (c *client) AlterSelfPassword(ctx context.Context, in *AlterSelfPasswordRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _AlterSelfPasswordContract, in, out)
+	err := c.c.Invoke(ctx, _AlterSelfPasswordMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +78,52 @@ func (c *client) AlterSelfPassword(ctx context.Context, in *AlterSelfPasswordReq
 
 func (c *client) ForgotPassword(ctx context.Context, in *ForgotPasswordRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _ForgotPasswordContract, in, out)
+	err := c.c.Invoke(ctx, _ForgotPasswordMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetPasswordConfig(ctx context.Context, in *types.Empty) (*GetPasswordConfigResponse, error) {
+	out := new(GetPasswordConfigResponse)
+	err := c.c.Invoke(ctx, _GetPasswordConfigMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetUserInfo(ctx context.Context, in *GetUserInfoRequest) (*types.Struct, error) {
+	out := new(types.Struct)
+	err := c.c.Invoke(ctx, _GetUserInfoMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListGroupsIdName(ctx context.Context, in *ListGroupsIdNameRequest) (*types.Struct, error) {
+	out := new(types.Struct)
+	err := c.c.Invoke(ctx, _ListGroupsIdNameMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListUsersInfo(ctx context.Context, in *ListUsersInfoRequest) (*ListUsersInfoResponse, error) {
+	out := new(ListUsersInfoResponse)
+	err := c.c.Invoke(ctx, _ListUsersInfoMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) ListUsersIdNick(ctx context.Context, in *ListUsersIdNickRequest) (*types.Struct, error) {
+	out := new(types.Struct)
+	err := c.c.Invoke(ctx, _ListUsersIdNickMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +132,34 @@ func (c *client) ForgotPassword(ctx context.Context, in *ForgotPasswordRequest) 
 
 func (c *client) ResetPassword(ctx context.Context, in *ResetPasswordRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _ResetPasswordContract, in, out)
+	err := c.c.Invoke(ctx, _ResetPasswordMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) SearchAllUsersInfo(ctx context.Context, in *SearchAllUsersInfoRequest) (*SearchAllUsersInfoResponse, error) {
+	out := new(SearchAllUsersInfoResponse)
+	err := c.c.Invoke(ctx, _SearchAllUsersInfoMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) UserDelete(ctx context.Context, in *UserDeleteRequest) (*types.Empty, error) {
+	out := new(types.Empty)
+	err := c.c.Invoke(ctx, _UserDeleteMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetUserLoginInfo(ctx context.Context, in *GetUserLoginInfoRequest) (*GetUserLoginInfoResponse, error) {
+	out := new(GetUserLoginInfoResponse)
+	err := c.c.Invoke(ctx, _GetUserLoginInfoMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +168,7 @@ func (c *client) ResetPassword(ctx context.Context, in *ResetPasswordRequest) (*
 
 func (c *client) UserRegister(ctx context.Context, in *UserRegisterRequest) (*UserRegisterResponse, error) {
 	out := new(UserRegisterResponse)
-	err := c.c.Invoke(ctx, _UserRegisterContract, in, out)
+	err := c.c.Invoke(ctx, _UserRegisterMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +180,15 @@ type Service interface {
 	AlterPassword(context.Context, *AlterPasswordRequest) (*types.Empty, error)
 	AlterSelfPassword(context.Context, *AlterSelfPasswordRequest) (*types.Empty, error)
 	ForgotPassword(context.Context, *ForgotPasswordRequest) (*types.Empty, error)
+	GetPasswordConfig(context.Context, *types.Empty) (*GetPasswordConfigResponse, error)
+	GetUserInfo(context.Context, *GetUserInfoRequest) (*types.Struct, error)
+	ListGroupsIdName(context.Context, *ListGroupsIdNameRequest) (*types.Struct, error)
+	ListUsersInfo(context.Context, *ListUsersInfoRequest) (*ListUsersInfoResponse, error)
+	ListUsersIdNick(context.Context, *ListUsersIdNickRequest) (*types.Struct, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*types.Empty, error)
+	SearchAllUsersInfo(context.Context, *SearchAllUsersInfoRequest) (*SearchAllUsersInfoResponse, error)
+	UserDelete(context.Context, *UserDeleteRequest) (*types.Empty, error)
+	GetUserLoginInfo(context.Context, *GetUserLoginInfoRequest) (*GetUserLoginInfoResponse, error)
 	UserRegister(context.Context, *UserRegisterRequest) (*UserRegisterResponse, error)
 }
 
@@ -121,9 +210,57 @@ func _ForgotPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _GetPasswordConfigEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetPasswordConfig(ctx, req.(*types.Empty))
+	}
+}
+
+func _GetUserInfoEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetUserInfo(ctx, req.(*GetUserInfoRequest))
+	}
+}
+
+func _ListGroupsIdNameEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListGroupsIdName(ctx, req.(*ListGroupsIdNameRequest))
+	}
+}
+
+func _ListUsersInfoEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListUsersInfo(ctx, req.(*ListUsersInfoRequest))
+	}
+}
+
+func _ListUsersIdNickEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListUsersIdNick(ctx, req.(*ListUsersIdNickRequest))
+	}
+}
+
 func _ResetPasswordEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.ResetPassword(ctx, req.(*ResetPasswordRequest))
+	}
+}
+
+func _SearchAllUsersInfoEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.SearchAllUsersInfo(ctx, req.(*SearchAllUsersInfoRequest))
+	}
+}
+
+func _UserDeleteEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.UserDelete(ctx, req.(*UserDeleteRequest))
+	}
+}
+
+func _GetUserLoginInfoEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetUserLoginInfo(ctx, req.(*GetUserLoginInfoRequest))
 	}
 }
 
@@ -134,91 +271,252 @@ func _UserRegisterEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_AlterPasswordContract, _AlterPasswordEndpoint(srv))
-	s.RegisterUnaryEndpoint(_AlterSelfPasswordContract, _AlterSelfPasswordEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ForgotPasswordContract, _ForgotPasswordEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ResetPasswordContract, _ResetPasswordEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UserRegisterContract, _UserRegisterEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AlterPasswordMethodDesc, _AlterPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_AlterSelfPasswordMethodDesc, _AlterSelfPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ForgotPasswordMethodDesc, _ForgotPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetPasswordConfigMethodDesc, _GetPasswordConfigEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetUserInfoMethodDesc, _GetUserInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListGroupsIdNameMethodDesc, _ListGroupsIdNameEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListUsersInfoMethodDesc, _ListUsersInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListUsersIdNickMethodDesc, _ListUsersIdNickEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ResetPasswordMethodDesc, _ResetPasswordEndpoint(srv))
+	s.RegisterUnaryEndpoint(_SearchAllUsersInfoMethodDesc, _SearchAllUsersInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UserDeleteMethodDesc, _UserDeleteEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetUserLoginInfoMethodDesc, _GetUserLoginInfoEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UserRegisterMethodDesc, _UserRegisterEndpoint(srv))
 }
 
-// API Contract
-var _AlterPasswordContract = &alterPasswordContract{}
-
-type alterPasswordContract struct{}
-
-func (*alterPasswordContract) ServiceName() string          { return "user_admin.rpc" }
-func (*alterPasswordContract) MethodName() string           { return "AlterPassword" }
-func (*alterPasswordContract) RequestMessage() interface{}  { return new(AlterPasswordRequest) }
-func (*alterPasswordContract) ResponseMessage() interface{} { return new(AlterPasswordRequest) }
-func (*alterPasswordContract) ContractName() string {
-	return "easyops.api.user_service.user_admin.AlterPassword"
+// Method Description
+var _AlterPasswordMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.AlterPassword",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "AlterPassword",
+	RequestType:  (*AlterPasswordRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/users/alter_password",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*alterPasswordContract) ContractVersion() string { return "1.0" }
-func (*alterPasswordContract) Pattern() (string, string) {
-	return "POST", "/api/v1/users/alter_password"
+
+var _AlterSelfPasswordMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.AlterSelfPassword",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "AlterSelfPassword",
+	RequestType:  (*AlterSelfPasswordRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/users/password",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*alterPasswordContract) Body() string { return "" }
 
-var _AlterSelfPasswordContract = &alterSelfPasswordContract{}
-
-type alterSelfPasswordContract struct{}
-
-func (*alterSelfPasswordContract) ServiceName() string          { return "user_admin.rpc" }
-func (*alterSelfPasswordContract) MethodName() string           { return "AlterSelfPassword" }
-func (*alterSelfPasswordContract) RequestMessage() interface{}  { return new(AlterSelfPasswordRequest) }
-func (*alterSelfPasswordContract) ResponseMessage() interface{} { return new(AlterSelfPasswordRequest) }
-func (*alterSelfPasswordContract) ContractName() string {
-	return "easyops.api.user_service.user_admin.AlterSelfPassword"
+var _ForgotPasswordMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.ForgotPassword",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "ForgotPassword",
+	RequestType:  (*ForgotPasswordRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/users/password/forgot",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*alterSelfPasswordContract) ContractVersion() string   { return "1.0" }
-func (*alterSelfPasswordContract) Pattern() (string, string) { return "POST", "/api/v1/users/password" }
-func (*alterSelfPasswordContract) Body() string              { return "" }
 
-var _ForgotPasswordContract = &forgotPasswordContract{}
-
-type forgotPasswordContract struct{}
-
-func (*forgotPasswordContract) ServiceName() string          { return "user_admin.rpc" }
-func (*forgotPasswordContract) MethodName() string           { return "ForgotPassword" }
-func (*forgotPasswordContract) RequestMessage() interface{}  { return new(ForgotPasswordRequest) }
-func (*forgotPasswordContract) ResponseMessage() interface{} { return new(ForgotPasswordRequest) }
-func (*forgotPasswordContract) ContractName() string {
-	return "easyops.api.user_service.user_admin.ForgotPassword"
+var _GetPasswordConfigMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.GetPasswordConfig",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "GetPasswordConfig",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*GetPasswordConfigResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/users/passconf",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*forgotPasswordContract) ContractVersion() string { return "1.0" }
-func (*forgotPasswordContract) Pattern() (string, string) {
-	return "POST", "/api/v1/users/password/forgot"
+
+var _GetUserInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.GetUserInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "GetUserInfo",
+	RequestType:  (*GetUserInfoRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/users/detail/:username",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*forgotPasswordContract) Body() string { return "" }
 
-var _ResetPasswordContract = &resetPasswordContract{}
-
-type resetPasswordContract struct{}
-
-func (*resetPasswordContract) ServiceName() string          { return "user_admin.rpc" }
-func (*resetPasswordContract) MethodName() string           { return "ResetPassword" }
-func (*resetPasswordContract) RequestMessage() interface{}  { return new(ResetPasswordRequest) }
-func (*resetPasswordContract) ResponseMessage() interface{} { return new(ResetPasswordRequest) }
-func (*resetPasswordContract) ContractName() string {
-	return "easyops.api.user_service.user_admin.ResetPassword"
+var _ListGroupsIdNameMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.ListGroupsIdName",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "ListGroupsIdName",
+	RequestType:  (*ListGroupsIdNameRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/groups/id_map_name",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*resetPasswordContract) ContractVersion() string { return "1.0" }
-func (*resetPasswordContract) Pattern() (string, string) {
-	return "POST", "/api/v1/users/password/reset"
+
+var _ListUsersInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.ListUsersInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "ListUsersInfo",
+	RequestType:  (*ListUsersInfoRequest)(nil),
+	ResponseType: (*ListUsersInfoResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/users",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*resetPasswordContract) Body() string { return "" }
 
-var _UserRegisterContract = &userRegisterContract{}
-
-type userRegisterContract struct{}
-
-func (*userRegisterContract) ServiceName() string          { return "user_admin.rpc" }
-func (*userRegisterContract) MethodName() string           { return "UserRegister" }
-func (*userRegisterContract) RequestMessage() interface{}  { return new(UserRegisterRequest) }
-func (*userRegisterContract) ResponseMessage() interface{} { return new(UserRegisterRequest) }
-func (*userRegisterContract) ContractName() string {
-	return "easyops.api.user_service.user_admin.UserRegister"
+var _ListUsersIdNickMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.ListUsersIdNick",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "ListUsersIdNick",
+	RequestType:  (*ListUsersIdNickRequest)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/users/id_map_nickname",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*userRegisterContract) ContractVersion() string   { return "1.0" }
-func (*userRegisterContract) Pattern() (string, string) { return "POST", "/api/v1/users/register" }
-func (*userRegisterContract) Body() string              { return "" }
+
+var _ResetPasswordMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.ResetPassword",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "ResetPassword",
+	RequestType:  (*ResetPasswordRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/users/password/reset",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _SearchAllUsersInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.SearchAllUsersInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "SearchAllUsersInfo",
+	RequestType:  (*SearchAllUsersInfoRequest)(nil),
+	ResponseType: (*SearchAllUsersInfoResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/users/all",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _UserDeleteMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.UserDelete",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "UserDelete",
+	RequestType:  (*UserDeleteRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/v1/users/:username",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _GetUserLoginInfoMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.GetUserLoginInfo",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "GetUserLoginInfo",
+	RequestType:  (*GetUserLoginInfoRequest)(nil),
+	ResponseType: (*GetUserLoginInfoResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/user/login_info",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _UserRegisterMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.user_service.user_admin.UserRegister",
+		Version: "1.0",
+	},
+	ServiceName:  "user_admin.rpc",
+	MethodName:   "UserRegister",
+	RequestType:  (*UserRegisterRequest)(nil),
+	ResponseType: (*UserRegisterResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/users/register",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

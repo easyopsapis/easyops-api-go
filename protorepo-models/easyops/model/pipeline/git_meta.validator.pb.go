@@ -20,9 +20,9 @@ var _ = math.Inf
 
 var _regex_GitMeta_Before = regexp.MustCompile(`\b[0-9a-f]{5,40}\b`)
 var _regex_GitMeta_After = regexp.MustCompile(`\b[0-9a-f]{5,40}\b`)
-var _regex_GitMeta_AuthorAvatar = regexp.MustCompile(`^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$`)
+var _regex_GitMeta_AuthorAvatar = regexp.MustCompile(`(\b(https?|ftp|file)://)?[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`)
 var _regex_GitMeta_AuthorEmail = regexp.MustCompile(`^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$`)
-var _regex_GitMeta_AuthorName = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_GitMeta_AuthorName = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *GitMeta) Validate() error {
 	if !_regex_GitMeta_Before.MatchString(this.Before) {
@@ -32,13 +32,13 @@ func (this *GitMeta) Validate() error {
 		return github_com_mwitkow_go_proto_validators.FieldError("After", fmt.Errorf(`value '%v' must be a string conforming to regex "\\b[0-9a-f]{5,40}\\b"`, this.After))
 	}
 	if !_regex_GitMeta_AuthorAvatar.MatchString(this.AuthorAvatar) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AuthorAvatar", fmt.Errorf(`value '%v' must be a string conforming to regex "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$"`, this.AuthorAvatar))
+		return github_com_mwitkow_go_proto_validators.FieldError("AuthorAvatar", fmt.Errorf(`value '%v' must be a string conforming to regex "(\\b(https?|ftp|file)://)?[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"`, this.AuthorAvatar))
 	}
 	if !_regex_GitMeta_AuthorEmail.MatchString(this.AuthorEmail) {
 		return github_com_mwitkow_go_proto_validators.FieldError("AuthorEmail", fmt.Errorf(`value '%v' must be a string conforming to regex "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,8})$"`, this.AuthorEmail))
 	}
 	if !_regex_GitMeta_AuthorName.MatchString(this.AuthorName) {
-		return github_com_mwitkow_go_proto_validators.FieldError("AuthorName", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, this.AuthorName))
+		return github_com_mwitkow_go_proto_validators.FieldError("AuthorName", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.AuthorName))
 	}
 	return nil
 }

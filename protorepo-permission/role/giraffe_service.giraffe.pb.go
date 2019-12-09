@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -22,16 +22,19 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for role service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
+	CreateRole(ctx context.Context, in *CreateRoleRequest) (*CreateRoleResponse, error)
 	GetPermissionRoleList(ctx context.Context, in *GetPermissionRoleListRequest) (*GetPermissionRoleListResponse, error)
+	GetRoleDetail(ctx context.Context, in *GetRoleDetailRequest) (*GetRoleDetailResponse, error)
 	GetUserRole(ctx context.Context, in *GetUserRoleRequest) (*GetUserRoleResponse, error)
 }
 
@@ -45,9 +48,27 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
+func (c *client) CreateRole(ctx context.Context, in *CreateRoleRequest) (*CreateRoleResponse, error) {
+	out := new(CreateRoleResponse)
+	err := c.c.Invoke(ctx, _CreateRoleMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *client) GetPermissionRoleList(ctx context.Context, in *GetPermissionRoleListRequest) (*GetPermissionRoleListResponse, error) {
 	out := new(GetPermissionRoleListResponse)
-	err := c.c.Invoke(ctx, _GetPermissionRoleListContract, in, out)
+	err := c.c.Invoke(ctx, _GetPermissionRoleListMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetRoleDetail(ctx context.Context, in *GetRoleDetailRequest) (*GetRoleDetailResponse, error) {
+	out := new(GetRoleDetailResponse)
+	err := c.c.Invoke(ctx, _GetRoleDetailMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +77,7 @@ func (c *client) GetPermissionRoleList(ctx context.Context, in *GetPermissionRol
 
 func (c *client) GetUserRole(ctx context.Context, in *GetUserRoleRequest) (*GetUserRoleResponse, error) {
 	out := new(GetUserRoleResponse)
-	err := c.c.Invoke(ctx, _GetUserRoleContract, in, out)
+	err := c.c.Invoke(ctx, _GetUserRoleMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -65,13 +86,27 @@ func (c *client) GetUserRole(ctx context.Context, in *GetUserRoleRequest) (*GetU
 
 // Service is the server API for role service.
 type Service interface {
+	CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error)
 	GetPermissionRoleList(context.Context, *GetPermissionRoleListRequest) (*GetPermissionRoleListResponse, error)
+	GetRoleDetail(context.Context, *GetRoleDetailRequest) (*GetRoleDetailResponse, error)
 	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
+}
+
+func _CreateRoleEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.CreateRole(ctx, req.(*CreateRoleRequest))
+	}
 }
 
 func _GetPermissionRoleListEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.GetPermissionRoleList(ctx, req.(*GetPermissionRoleListRequest))
+	}
+}
+
+func _GetRoleDetailEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetRoleDetail(ctx, req.(*GetRoleDetailRequest))
 	}
 }
 
@@ -82,43 +117,81 @@ func _GetUserRoleEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_GetPermissionRoleListContract, _GetPermissionRoleListEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetUserRoleContract, _GetUserRoleEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateRoleMethodDesc, _CreateRoleEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetPermissionRoleListMethodDesc, _GetPermissionRoleListEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetRoleDetailMethodDesc, _GetRoleDetailEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetUserRoleMethodDesc, _GetUserRoleEndpoint(srv))
 }
 
-// API Contract
-var _GetPermissionRoleListContract = &getPermissionRoleListContract{}
-
-type getPermissionRoleListContract struct{}
-
-func (*getPermissionRoleListContract) ServiceName() string { return "role.rpc" }
-func (*getPermissionRoleListContract) MethodName() string  { return "GetPermissionRoleList" }
-func (*getPermissionRoleListContract) RequestMessage() interface{} {
-	return new(GetPermissionRoleListRequest)
+// Method Description
+var _CreateRoleMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.role.CreateRole",
+		Version: "1.0",
+	},
+	ServiceName:  "role.rpc",
+	MethodName:   "CreateRole",
+	RequestType:  (*CreateRoleRequest)(nil),
+	ResponseType: (*CreateRoleResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/v1/permission_role/config",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getPermissionRoleListContract) ResponseMessage() interface{} {
-	return new(GetPermissionRoleListRequest)
-}
-func (*getPermissionRoleListContract) ContractName() string {
-	return "easyops.api.permission.role.GetPermissionRoleList"
-}
-func (*getPermissionRoleListContract) ContractVersion() string { return "1.0" }
-func (*getPermissionRoleListContract) Pattern() (string, string) {
-	return "GET", "/api/v1/permission_role/config"
-}
-func (*getPermissionRoleListContract) Body() string { return "" }
 
-var _GetUserRoleContract = &getUserRoleContract{}
-
-type getUserRoleContract struct{}
-
-func (*getUserRoleContract) ServiceName() string          { return "role.rpc" }
-func (*getUserRoleContract) MethodName() string           { return "GetUserRole" }
-func (*getUserRoleContract) RequestMessage() interface{}  { return new(GetUserRoleRequest) }
-func (*getUserRoleContract) ResponseMessage() interface{} { return new(GetUserRoleRequest) }
-func (*getUserRoleContract) ContractName() string         { return "easyops.api.permission.role.GetUserRole" }
-func (*getUserRoleContract) ContractVersion() string      { return "1.0" }
-func (*getUserRoleContract) Pattern() (string, string) {
-	return "GET", "/api/v1/permission_role/user_role/:user"
+var _GetPermissionRoleListMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.role.GetPermissionRoleList",
+		Version: "1.0",
+	},
+	ServiceName:  "role.rpc",
+	MethodName:   "GetPermissionRoleList",
+	RequestType:  (*GetPermissionRoleListRequest)(nil),
+	ResponseType: (*GetPermissionRoleListResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission_role/config",
+		},
+		Body:         "",
+		ResponseBody: "",
+	},
 }
-func (*getUserRoleContract) Body() string { return "" }
+
+var _GetRoleDetailMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.role.GetRoleDetail",
+		Version: "1.0",
+	},
+	ServiceName:  "role.rpc",
+	MethodName:   "GetRoleDetail",
+	RequestType:  (*GetRoleDetailRequest)(nil),
+	ResponseType: (*GetRoleDetailResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission_role/config/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _GetUserRoleMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.permission.role.GetUserRole",
+		Version: "1.0",
+	},
+	ServiceName:  "role.rpc",
+	MethodName:   "GetUserRole",
+	RequestType:  (*GetUserRoleRequest)(nil),
+	ResponseType: (*GetUserRoleResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/v1/permission_role/user_role/:user",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

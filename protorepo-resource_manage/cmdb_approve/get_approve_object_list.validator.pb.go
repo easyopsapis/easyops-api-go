@@ -28,12 +28,12 @@ func (this *GetApproveObjectListRequest) Validate() error {
 	return nil
 }
 
-var _regex_GetApproveObjectListResponse_ObjectIdList = regexp.MustCompile(`^[a-zA-Z_]{1,32}$`)
+var _regex_GetApproveObjectListResponse_ObjectIdList = regexp.MustCompile(`^[a-zA-Z_][0-9a-zA-Z_]{0,31}$`)
 
 func (this *GetApproveObjectListResponse) Validate() error {
 	for _, item := range this.ObjectIdList {
 		if !_regex_GetApproveObjectListResponse_ObjectIdList.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("ObjectIdList", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_]{1,32}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("ObjectIdList", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z_][0-9a-zA-Z_]{0,31}$"`, item))
 		}
 	}
 	return nil

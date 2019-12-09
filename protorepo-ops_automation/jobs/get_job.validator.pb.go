@@ -20,10 +20,10 @@ var _ = math.Inf
 
 func (this *GetJobsRequest) Validate() error {
 	if !(len(this.JobId) > 1) {
-		return github_com_mwitkow_go_proto_validators.FieldError("JobId", fmt.Errorf(`value '%v' must length be greater than '1'`, this.JobId))
+		return github_com_mwitkow_go_proto_validators.FieldError("JobId", fmt.Errorf(`value '%v' must have a length greater than '1'`, this.JobId))
 	}
 	if !(len(this.JobId) < 34) {
-		return github_com_mwitkow_go_proto_validators.FieldError("JobId", fmt.Errorf(`value '%v' must length be less than '34'`, this.JobId))
+		return github_com_mwitkow_go_proto_validators.FieldError("JobId", fmt.Errorf(`value '%v' must have a length smaller than '34'`, this.JobId))
 	}
 	return nil
 }

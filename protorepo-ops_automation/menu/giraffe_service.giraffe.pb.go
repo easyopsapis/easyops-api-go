@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	ops_automation "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/ops_automation"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for menu service.
 //
@@ -39,7 +40,7 @@ type Client interface {
 	GetMenu(ctx context.Context, in *GetMenuRequest) (*GetMenuResponse, error)
 	GetMenuTree(ctx context.Context, in *types.Empty) (*types.Struct, error)
 	ListMenus(ctx context.Context, in *ListMenusRequest) (*ListMenusResponse, error)
-	UpdateMenu(ctx context.Context, in *UpdateMenuRequest) (*UpdateMenuResponse, error)
+	UpdateMenu(ctx context.Context, in *ops_automation.Menu) (*UpdateMenuResponse, error)
 }
 
 type client struct {
@@ -54,7 +55,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) CreateMenu(ctx context.Context, in *ops_automation.Menu) (*CreateMenuResponse, error) {
 	out := new(CreateMenuResponse)
-	err := c.c.Invoke(ctx, _CreateMenuContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMenuMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +64,7 @@ func (c *client) CreateMenu(ctx context.Context, in *ops_automation.Menu) (*Crea
 
 func (c *client) CreateMenuTree(ctx context.Context, in *CreateMenuTreeRequest) (*CreateMenuTreeResponse, error) {
 	out := new(CreateMenuTreeResponse)
-	err := c.c.Invoke(ctx, _CreateMenuTreeContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMenuTreeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +73,7 @@ func (c *client) CreateMenuTree(ctx context.Context, in *CreateMenuTreeRequest) 
 
 func (c *client) DeleteMenu(ctx context.Context, in *DeleteMenuRequest) (*DeleteMenuResponse, error) {
 	out := new(DeleteMenuResponse)
-	err := c.c.Invoke(ctx, _DeleteMenuContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteMenuMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +82,7 @@ func (c *client) DeleteMenu(ctx context.Context, in *DeleteMenuRequest) (*Delete
 
 func (c *client) GetMenu(ctx context.Context, in *GetMenuRequest) (*GetMenuResponse, error) {
 	out := new(GetMenuResponse)
-	err := c.c.Invoke(ctx, _GetMenuContract, in, out)
+	err := c.c.Invoke(ctx, _GetMenuMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (c *client) GetMenu(ctx context.Context, in *GetMenuRequest) (*GetMenuRespo
 
 func (c *client) GetMenuTree(ctx context.Context, in *types.Empty) (*types.Struct, error) {
 	out := new(types.Struct)
-	err := c.c.Invoke(ctx, _GetMenuTreeContract, in, out)
+	err := c.c.Invoke(ctx, _GetMenuTreeMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -99,16 +100,16 @@ func (c *client) GetMenuTree(ctx context.Context, in *types.Empty) (*types.Struc
 
 func (c *client) ListMenus(ctx context.Context, in *ListMenusRequest) (*ListMenusResponse, error) {
 	out := new(ListMenusResponse)
-	err := c.c.Invoke(ctx, _ListMenusContract, in, out)
+	err := c.c.Invoke(ctx, _ListMenusMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *client) UpdateMenu(ctx context.Context, in *UpdateMenuRequest) (*UpdateMenuResponse, error) {
+func (c *client) UpdateMenu(ctx context.Context, in *ops_automation.Menu) (*UpdateMenuResponse, error) {
 	out := new(UpdateMenuResponse)
-	err := c.c.Invoke(ctx, _UpdateMenuContract, in, out)
+	err := c.c.Invoke(ctx, _UpdateMenuMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +124,7 @@ type Service interface {
 	GetMenu(context.Context, *GetMenuRequest) (*GetMenuResponse, error)
 	GetMenuTree(context.Context, *types.Empty) (*types.Struct, error)
 	ListMenus(context.Context, *ListMenusRequest) (*ListMenusResponse, error)
-	UpdateMenu(context.Context, *UpdateMenuRequest) (*UpdateMenuResponse, error)
+	UpdateMenu(context.Context, *ops_automation.Menu) (*UpdateMenuResponse, error)
 }
 
 func _CreateMenuEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -164,112 +165,143 @@ func _ListMenusEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 
 func _UpdateMenuEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.UpdateMenu(ctx, req.(*UpdateMenuRequest))
+		return s.UpdateMenu(ctx, req.(*ops_automation.Menu))
 	}
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateMenuContract, _CreateMenuEndpoint(srv))
-	s.RegisterUnaryEndpoint(_CreateMenuTreeContract, _CreateMenuTreeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteMenuContract, _DeleteMenuEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetMenuContract, _GetMenuEndpoint(srv))
-	s.RegisterUnaryEndpoint(_GetMenuTreeContract, _GetMenuTreeEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListMenusContract, _ListMenusEndpoint(srv))
-	s.RegisterUnaryEndpoint(_UpdateMenuContract, _UpdateMenuEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMenuMethodDesc, _CreateMenuEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMenuTreeMethodDesc, _CreateMenuTreeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteMenuMethodDesc, _DeleteMenuEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMenuMethodDesc, _GetMenuEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetMenuTreeMethodDesc, _GetMenuTreeEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListMenusMethodDesc, _ListMenusEndpoint(srv))
+	s.RegisterUnaryEndpoint(_UpdateMenuMethodDesc, _UpdateMenuEndpoint(srv))
 }
 
-// API Contract
-var _CreateMenuContract = &createMenuContract{}
-
-type createMenuContract struct{}
-
-func (*createMenuContract) ServiceName() string          { return "menu.rpc" }
-func (*createMenuContract) MethodName() string           { return "CreateMenu" }
-func (*createMenuContract) RequestMessage() interface{}  { return new(ops_automation.Menu) }
-func (*createMenuContract) ResponseMessage() interface{} { return new(ops_automation.Menu) }
-func (*createMenuContract) ContractName() string         { return "easyops.api.ops_automation.menu.CreateMenu" }
-func (*createMenuContract) ContractVersion() string      { return "1.0" }
-func (*createMenuContract) Pattern() (string, string)    { return "POST", "/menus" }
-func (*createMenuContract) Body() string                 { return "" }
-
-var _CreateMenuTreeContract = &createMenuTreeContract{}
-
-type createMenuTreeContract struct{}
-
-func (*createMenuTreeContract) ServiceName() string          { return "menu.rpc" }
-func (*createMenuTreeContract) MethodName() string           { return "CreateMenuTree" }
-func (*createMenuTreeContract) RequestMessage() interface{}  { return new(CreateMenuTreeRequest) }
-func (*createMenuTreeContract) ResponseMessage() interface{} { return new(CreateMenuTreeRequest) }
-func (*createMenuTreeContract) ContractName() string {
-	return "easyops.api.ops_automation.menu.CreateMenuTree"
+// Method Description
+var _CreateMenuMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.CreateMenu",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "CreateMenu",
+	RequestType:  (*ops_automation.Menu)(nil),
+	ResponseType: (*CreateMenuResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/menus",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*createMenuTreeContract) ContractVersion() string   { return "1.0" }
-func (*createMenuTreeContract) Pattern() (string, string) { return "POST", "/menuTree" }
-func (*createMenuTreeContract) Body() string              { return "" }
 
-var _DeleteMenuContract = &deleteMenuContract{}
-
-type deleteMenuContract struct{}
-
-func (*deleteMenuContract) ServiceName() string          { return "menu.rpc" }
-func (*deleteMenuContract) MethodName() string           { return "DeleteMenu" }
-func (*deleteMenuContract) RequestMessage() interface{}  { return new(DeleteMenuRequest) }
-func (*deleteMenuContract) ResponseMessage() interface{} { return new(DeleteMenuRequest) }
-func (*deleteMenuContract) ContractName() string         { return "easyops.api.ops_automation.menu.DeleteMenu" }
-func (*deleteMenuContract) ContractVersion() string      { return "1.0" }
-func (*deleteMenuContract) Pattern() (string, string)    { return "DELETE", "/menus/:menusId" }
-func (*deleteMenuContract) Body() string                 { return "" }
-
-var _GetMenuContract = &getMenuContract{}
-
-type getMenuContract struct{}
-
-func (*getMenuContract) ServiceName() string          { return "menu.rpc" }
-func (*getMenuContract) MethodName() string           { return "GetMenu" }
-func (*getMenuContract) RequestMessage() interface{}  { return new(GetMenuRequest) }
-func (*getMenuContract) ResponseMessage() interface{} { return new(GetMenuRequest) }
-func (*getMenuContract) ContractName() string         { return "easyops.api.ops_automation.menu.GetMenu" }
-func (*getMenuContract) ContractVersion() string      { return "1.0" }
-func (*getMenuContract) Pattern() (string, string)    { return "GET", "/menus/:menusId" }
-func (*getMenuContract) Body() string                 { return "" }
-
-var _GetMenuTreeContract = &getMenuTreeContract{}
-
-type getMenuTreeContract struct{}
-
-func (*getMenuTreeContract) ServiceName() string          { return "menu.rpc" }
-func (*getMenuTreeContract) MethodName() string           { return "GetMenuTree" }
-func (*getMenuTreeContract) RequestMessage() interface{}  { return new(types.Empty) }
-func (*getMenuTreeContract) ResponseMessage() interface{} { return new(types.Empty) }
-func (*getMenuTreeContract) ContractName() string {
-	return "easyops.api.ops_automation.menu.GetMenuTree"
+var _CreateMenuTreeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.CreateMenuTree",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "CreateMenuTree",
+	RequestType:  (*CreateMenuTreeRequest)(nil),
+	ResponseType: (*CreateMenuTreeResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/ops_automation/v1/menuTree",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*getMenuTreeContract) ContractVersion() string   { return "1.0" }
-func (*getMenuTreeContract) Pattern() (string, string) { return "GET", "/menuTree" }
-func (*getMenuTreeContract) Body() string              { return "" }
 
-var _ListMenusContract = &listMenusContract{}
+var _DeleteMenuMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.DeleteMenu",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "DeleteMenu",
+	RequestType:  (*DeleteMenuRequest)(nil),
+	ResponseType: (*DeleteMenuResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/ops_automation/v1/menus/:menusId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type listMenusContract struct{}
+var _GetMenuMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.GetMenu",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "GetMenu",
+	RequestType:  (*GetMenuRequest)(nil),
+	ResponseType: (*GetMenuResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/menus/:menusId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-func (*listMenusContract) ServiceName() string          { return "menu.rpc" }
-func (*listMenusContract) MethodName() string           { return "ListMenus" }
-func (*listMenusContract) RequestMessage() interface{}  { return new(ListMenusRequest) }
-func (*listMenusContract) ResponseMessage() interface{} { return new(ListMenusRequest) }
-func (*listMenusContract) ContractName() string         { return "easyops.api.ops_automation.menu.ListMenus" }
-func (*listMenusContract) ContractVersion() string      { return "1.0" }
-func (*listMenusContract) Pattern() (string, string)    { return "GET", "/menus" }
-func (*listMenusContract) Body() string                 { return "" }
+var _GetMenuTreeMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.GetMenuTree",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "GetMenuTree",
+	RequestType:  (*types.Empty)(nil),
+	ResponseType: (*types.Struct)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/menuTree",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-var _UpdateMenuContract = &updateMenuContract{}
+var _ListMenusMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.ListMenus",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "ListMenus",
+	RequestType:  (*ListMenusRequest)(nil),
+	ResponseType: (*ListMenusResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/ops_automation/v1/menus",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
 
-type updateMenuContract struct{}
-
-func (*updateMenuContract) ServiceName() string          { return "menu.rpc" }
-func (*updateMenuContract) MethodName() string           { return "UpdateMenu" }
-func (*updateMenuContract) RequestMessage() interface{}  { return new(UpdateMenuRequest) }
-func (*updateMenuContract) ResponseMessage() interface{} { return new(UpdateMenuRequest) }
-func (*updateMenuContract) ContractName() string         { return "easyops.api.ops_automation.menu.UpdateMenu" }
-func (*updateMenuContract) ContractVersion() string      { return "1.0" }
-func (*updateMenuContract) Pattern() (string, string)    { return "PUT", "/menus/:menusId" }
-func (*updateMenuContract) Body() string                 { return "" }
+var _UpdateMenuMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.ops_automation.menu.UpdateMenu",
+		Version: "1.0",
+	},
+	ServiceName:  "menu.rpc",
+	MethodName:   "UpdateMenu",
+	RequestType:  (*ops_automation.Menu)(nil),
+	ResponseType: (*UpdateMenuResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Put{
+			Put: "/api/ops_automation/v1/menus/:id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}

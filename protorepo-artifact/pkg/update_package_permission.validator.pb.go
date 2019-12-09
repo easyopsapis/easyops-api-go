@@ -19,28 +19,28 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-var _regex_UpdatePackagePermissionRequest_PackageId = regexp.MustCompile(`^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$`)
-var _regex_UpdatePackagePermissionRequest_UpdateAuthorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_UpdatePackagePermissionRequest_DeleteAuthorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
-var _regex_UpdatePackagePermissionRequest_ReadAuthorizers = regexp.MustCompile(`^[A-Za-z_-]\w{3,64}$`)
+var _regex_UpdatePackagePermissionRequest_PackageId = regexp.MustCompile(`^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$`)
+var _regex_UpdatePackagePermissionRequest_UpdateAuthorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_UpdatePackagePermissionRequest_DeleteAuthorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_UpdatePackagePermissionRequest_ReadAuthorizers = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
 
 func (this *UpdatePackagePermissionRequest) Validate() error {
 	if !_regex_UpdatePackagePermissionRequest_PackageId.MatchString(this.PackageId) {
-		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[?a-zA-Z0-9]{8}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{4}-[?a-zA-Z0-9]{12}$"`, this.PackageId))
+		return github_com_mwitkow_go_proto_validators.FieldError("PackageId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-fA-F0-9]{8}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{4}-?[a-fA-F0-9]{12}$"`, this.PackageId))
 	}
 	for _, item := range this.UpdateAuthorizers {
 		if !_regex_UpdatePackagePermissionRequest_UpdateAuthorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("UpdateAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("UpdateAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.DeleteAuthorizers {
 		if !_regex_UpdatePackagePermissionRequest_DeleteAuthorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("DeleteAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("DeleteAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	for _, item := range this.ReadAuthorizers {
 		if !_regex_UpdatePackagePermissionRequest_ReadAuthorizers.MatchString(item) {
-			return github_com_mwitkow_go_proto_validators.FieldError("ReadAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[A-Za-z_-]\\w{3,64}$"`, item))
+			return github_com_mwitkow_go_proto_validators.FieldError("ReadAuthorizers", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, item))
 		}
 	}
 	return nil

@@ -7,7 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	giraffe_micro "github.com/easyops-cn/giraffe-micro"
-	_ "github.com/easyops-cn/go-proto-giraffe"
+	go_proto_giraffe "github.com/easyops-cn/go-proto-giraffe"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	app_store "github.com/easyopsapis/easyops-api-go/protorepo-models/easyops/model/app_store"
@@ -24,10 +24,11 @@ var _ = math.Inf
 var _ = io.EOF
 var _ context.Context
 var _ giraffe_micro.Client
+var _ go_proto_giraffe.Contract
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = giraffe_micro.SupportPackageIsVersion3 // please upgrade the giraffe_micro package
+const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_micro package
 
 // Client is the client API for version service.
 //
@@ -50,7 +51,7 @@ func NewClient(c giraffe_micro.Client) Client {
 
 func (c *client) Create(ctx context.Context, in *app_store.AppVersion) (*app_store.AppVersion, error) {
 	out := new(app_store.AppVersion)
-	err := c.c.Invoke(ctx, _CreateContract, in, out)
+	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +60,7 @@ func (c *client) Create(ctx context.Context, in *app_store.AppVersion) (*app_sto
 
 func (c *client) DeleteAppVersion(ctx context.Context, in *DeleteAppVersionRequest) (*types.Empty, error) {
 	out := new(types.Empty)
-	err := c.c.Invoke(ctx, _DeleteAppVersionContract, in, out)
+	err := c.c.Invoke(ctx, _DeleteAppVersionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +69,7 @@ func (c *client) DeleteAppVersion(ctx context.Context, in *DeleteAppVersionReque
 
 func (c *client) ListAppVersion(ctx context.Context, in *ListAppVersionRequest) (*ListAppVersionResponse, error) {
 	out := new(ListAppVersionResponse)
-	err := c.c.Invoke(ctx, _ListAppVersionContract, in, out)
+	err := c.c.Invoke(ctx, _ListAppVersionMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -101,55 +102,62 @@ func _ListAppVersionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 }
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_CreateContract, _CreateEndpoint(srv))
-	s.RegisterUnaryEndpoint(_DeleteAppVersionContract, _DeleteAppVersionEndpoint(srv))
-	s.RegisterUnaryEndpoint(_ListAppVersionContract, _ListAppVersionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_DeleteAppVersionMethodDesc, _DeleteAppVersionEndpoint(srv))
+	s.RegisterUnaryEndpoint(_ListAppVersionMethodDesc, _ListAppVersionEndpoint(srv))
 }
 
-// API Contract
-var _CreateContract = &createContract{}
-
-type createContract struct{}
-
-func (*createContract) ServiceName() string          { return "version.rpc" }
-func (*createContract) MethodName() string           { return "Create" }
-func (*createContract) RequestMessage() interface{}  { return new(app_store.AppVersion) }
-func (*createContract) ResponseMessage() interface{} { return new(app_store.AppVersion) }
-func (*createContract) ContractName() string         { return "easyops.api.app_store.version.Create" }
-func (*createContract) ContractVersion() string      { return "1.0" }
-func (*createContract) Pattern() (string, string)    { return "POST", "/api/app_store/v1/app_version" }
-func (*createContract) Body() string                 { return "" }
-
-var _DeleteAppVersionContract = &deleteAppVersionContract{}
-
-type deleteAppVersionContract struct{}
-
-func (*deleteAppVersionContract) ServiceName() string          { return "version.rpc" }
-func (*deleteAppVersionContract) MethodName() string           { return "DeleteAppVersion" }
-func (*deleteAppVersionContract) RequestMessage() interface{}  { return new(DeleteAppVersionRequest) }
-func (*deleteAppVersionContract) ResponseMessage() interface{} { return new(DeleteAppVersionRequest) }
-func (*deleteAppVersionContract) ContractName() string {
-	return "easyops.api.app_store.version.DeleteAppVersion"
+// Method Description
+var _CreateMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.version.Create",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "Create",
+	RequestType:  (*app_store.AppVersion)(nil),
+	ResponseType: (*app_store.AppVersion)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/app_store/v1/app_version",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*deleteAppVersionContract) ContractVersion() string { return "1.0" }
-func (*deleteAppVersionContract) Pattern() (string, string) {
-	return "DELETE", "/api/app_store/v1/app_version/:versionId"
-}
-func (*deleteAppVersionContract) Body() string { return "" }
 
-var _ListAppVersionContract = &listAppVersionContract{}
-
-type listAppVersionContract struct{}
-
-func (*listAppVersionContract) ServiceName() string          { return "version.rpc" }
-func (*listAppVersionContract) MethodName() string           { return "ListAppVersion" }
-func (*listAppVersionContract) RequestMessage() interface{}  { return new(ListAppVersionRequest) }
-func (*listAppVersionContract) ResponseMessage() interface{} { return new(ListAppVersionRequest) }
-func (*listAppVersionContract) ContractName() string {
-	return "easyops.api.app_store.version.ListAppVersion"
+var _DeleteAppVersionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.version.DeleteAppVersion",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "DeleteAppVersion",
+	RequestType:  (*DeleteAppVersionRequest)(nil),
+	ResponseType: (*types.Empty)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Delete{
+			Delete: "/api/app_store/v1/app_version/:versionId",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listAppVersionContract) ContractVersion() string { return "1.0" }
-func (*listAppVersionContract) Pattern() (string, string) {
-	return "GET", "/api/app_store/v1/app_version/app_id/:app_id"
+
+var _ListAppVersionMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.app_store.version.ListAppVersion",
+		Version: "1.0",
+	},
+	ServiceName:  "version.rpc",
+	MethodName:   "ListAppVersion",
+	RequestType:  (*ListAppVersionRequest)(nil),
+	ResponseType: (*ListAppVersionResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/app_store/v1/app_version/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
 }
-func (*listAppVersionContract) Body() string { return "" }
