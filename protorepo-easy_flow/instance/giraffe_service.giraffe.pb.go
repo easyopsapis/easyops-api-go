@@ -32,8 +32,8 @@ const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_m
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error)
 	GetSearch(ctx context.Context, in *GetSearchRequest) (*GetSearchResponse, error)
+	PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error)
 }
 
 type client struct {
@@ -46,15 +46,6 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error) {
-	out := new(PostSearchResponse)
-	err := c.c.Invoke(ctx, _PostSearchMethodDesc, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *client) GetSearch(ctx context.Context, in *GetSearchRequest) (*GetSearchResponse, error) {
 	out := new(GetSearchResponse)
 	err := c.c.Invoke(ctx, _GetSearchMethodDesc, in, out)
@@ -64,16 +55,19 @@ func (c *client) GetSearch(ctx context.Context, in *GetSearchRequest) (*GetSearc
 	return out, nil
 }
 
-// Service is the server API for instance service.
-type Service interface {
-	PostSearch(context.Context, *PostSearchRequest) (*PostSearchResponse, error)
-	GetSearch(context.Context, *GetSearchRequest) (*GetSearchResponse, error)
+func (c *client) PostSearch(ctx context.Context, in *PostSearchRequest) (*PostSearchResponse, error) {
+	out := new(PostSearchResponse)
+	err := c.c.Invoke(ctx, _PostSearchMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-func _PostSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.PostSearch(ctx, req.(*PostSearchRequest))
-	}
+// Service is the server API for instance service.
+type Service interface {
+	GetSearch(context.Context, *GetSearchRequest) (*GetSearchResponse, error)
+	PostSearch(context.Context, *PostSearchRequest) (*PostSearchResponse, error)
 }
 
 func _GetSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -82,30 +76,18 @@ func _GetSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _PostSearchEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.PostSearch(ctx, req.(*PostSearchRequest))
+	}
+}
+
 func RegisterService(s giraffe_micro.Server, srv Service) {
-	s.RegisterUnaryEndpoint(_PostSearchMethodDesc, _PostSearchEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetSearchMethodDesc, _GetSearchEndpoint(srv))
+	s.RegisterUnaryEndpoint(_PostSearchMethodDesc, _PostSearchEndpoint(srv))
 }
 
 // Method Description
-var _PostSearchMethodDesc = &giraffe_micro.MethodDesc{
-	Contract: &go_proto_giraffe.Contract{
-		Name:    "easyops.api.easy_flow.instance.PostSearch",
-		Version: "1.0",
-	},
-	ServiceName:  "instance.rpc",
-	MethodName:   "PostSearch",
-	RequestType:  (*PostSearchRequest)(nil),
-	ResponseType: (*PostSearchResponse)(nil),
-	HttpRule: &go_proto_giraffe.HttpRule{
-		Pattern: &go_proto_giraffe.HttpRule_Get{
-			Get: "/instance/search",
-		},
-		Body:         "",
-		ResponseBody: "data",
-	},
-}
-
 var _GetSearchMethodDesc = &giraffe_micro.MethodDesc{
 	Contract: &go_proto_giraffe.Contract{
 		Name:    "easyops.api.easy_flow.instance.GetSearch",
@@ -115,6 +97,24 @@ var _GetSearchMethodDesc = &giraffe_micro.MethodDesc{
 	MethodName:   "GetSearch",
 	RequestType:  (*GetSearchRequest)(nil),
 	ResponseType: (*GetSearchResponse)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/instance/search",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _PostSearchMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.easy_flow.instance.PostSearch",
+		Version: "1.0",
+	},
+	ServiceName:  "instance.rpc",
+	MethodName:   "PostSearch",
+	RequestType:  (*PostSearchRequest)(nil),
+	ResponseType: (*PostSearchResponse)(nil),
 	HttpRule: &go_proto_giraffe.HttpRule{
 		Pattern: &go_proto_giraffe.HttpRule_Post{
 			Post: "/instance/search",

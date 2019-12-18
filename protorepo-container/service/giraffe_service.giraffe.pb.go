@@ -35,6 +35,7 @@ const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_m
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
 	Create(ctx context.Context, in *CreateRequest) (*container.Service, error)
+	CreateFromYaml(ctx context.Context, in *CreateFromYamlRequest) (*container.Service, error)
 	DeleteService(ctx context.Context, in *DeleteServiceRequest) (*types.Empty, error)
 	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
 	GetStatus(ctx context.Context, in *GetStatusRequest) (*container.Service, error)
@@ -56,6 +57,15 @@ func NewClient(c giraffe_micro.Client) Client {
 func (c *client) Create(ctx context.Context, in *CreateRequest) (*container.Service, error) {
 	out := new(container.Service)
 	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) CreateFromYaml(ctx context.Context, in *CreateFromYamlRequest) (*container.Service, error) {
+	out := new(container.Service)
+	err := c.c.Invoke(ctx, _CreateFromYamlMethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -119,6 +129,7 @@ func (c *client) UpdateResourceSpec(ctx context.Context, in *UpdateResourceSpecR
 // Service is the server API for service service.
 type Service interface {
 	Create(context.Context, *CreateRequest) (*container.Service, error)
+	CreateFromYaml(context.Context, *CreateFromYamlRequest) (*container.Service, error)
 	DeleteService(context.Context, *DeleteServiceRequest) (*types.Empty, error)
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	GetStatus(context.Context, *GetStatusRequest) (*container.Service, error)
@@ -130,6 +141,12 @@ type Service interface {
 func _CreateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.Create(ctx, req.(*CreateRequest))
+	}
+}
+
+func _CreateFromYamlEndpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.CreateFromYaml(ctx, req.(*CreateFromYamlRequest))
 	}
 }
 
@@ -171,6 +188,7 @@ func _UpdateResourceSpecEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 
 func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_CreateMethodDesc, _CreateEndpoint(srv))
+	s.RegisterUnaryEndpoint(_CreateFromYamlMethodDesc, _CreateFromYamlEndpoint(srv))
 	s.RegisterUnaryEndpoint(_DeleteServiceMethodDesc, _DeleteServiceEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetStatusMethodDesc, _GetStatusEndpoint(srv))
@@ -192,6 +210,24 @@ var _CreateMethodDesc = &giraffe_micro.MethodDesc{
 	HttpRule: &go_proto_giraffe.HttpRule{
 		Pattern: &go_proto_giraffe.HttpRule_Post{
 			Post: "/api/container/v1/services",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _CreateFromYamlMethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.container.service.CreateFromYaml",
+		Version: "1.0",
+	},
+	ServiceName:  "service.rpc",
+	MethodName:   "CreateFromYaml",
+	RequestType:  (*CreateFromYamlRequest)(nil),
+	ResponseType: (*container.Service)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/api/container/v1/services/yaml",
 		},
 		Body:         "",
 		ResponseBody: "data",

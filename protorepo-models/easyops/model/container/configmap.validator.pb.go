@@ -21,6 +21,8 @@ var _ = math.Inf
 
 var _regex_ConfigMap_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 var _regex_ConfigMap_ResourceName = regexp.MustCompile(`^[a-z]([-a-z0-9]*[a-z0-9])?$`)
+var _regex_ConfigMap_Creator = regexp.MustCompile(`^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$`)
+var _regex_ConfigMap_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
 
 func (this *ConfigMap) Validate() error {
 	if !_regex_ConfigMap_InstanceId.MatchString(this.InstanceId) {
@@ -33,6 +35,17 @@ func (this *ConfigMap) Validate() error {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Data); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Data", err)
 		}
+	}
+	if this.Annotations != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Annotations); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Annotations", err)
+		}
+	}
+	if !_regex_ConfigMap_Creator.MatchString(this.Creator) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Creator", fmt.Errorf(`value '%v' must be a string conforming to regex "^[a-zA-Z0-9][.a-zA-Z0-9_-]{2,31}$"`, this.Creator))
+	}
+	if !_regex_ConfigMap_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
 	}
 	return nil
 }

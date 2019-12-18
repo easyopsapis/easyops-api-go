@@ -40,7 +40,8 @@ type Client interface {
 	DeleteTrigger(ctx context.Context, in *DeleteTriggerRequest) (*types.Empty, error)
 	DeleteTriggers(ctx context.Context, in *DeleteTriggersRequest) (*types.Empty, error)
 	Execute(ctx context.Context, in *ExecuteRequest) (*ExecuteResponse, error)
-	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
+	Get(ctx context.Context, in *GetRequest) (*pipeline.Pipeline, error)
+	GetV2(ctx context.Context, in *GetV2Request) (*GetV2Response, error)
 	GetTrigger(ctx context.Context, in *GetTriggerRequest) (*pipeline.Trigger, error)
 	GetTriggerDetail(ctx context.Context, in *GetTriggerDetailRequest) (*GetTriggerDetailResponse, error)
 	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
@@ -113,9 +114,18 @@ func (c *client) Execute(ctx context.Context, in *ExecuteRequest) (*ExecuteRespo
 	return out, nil
 }
 
-func (c *client) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
-	out := new(GetResponse)
+func (c *client) Get(ctx context.Context, in *GetRequest) (*pipeline.Pipeline, error) {
+	out := new(pipeline.Pipeline)
 	err := c.c.Invoke(ctx, _GetMethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *client) GetV2(ctx context.Context, in *GetV2Request) (*GetV2Response, error) {
+	out := new(GetV2Response)
+	err := c.c.Invoke(ctx, _GetV2MethodDesc, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +194,8 @@ type Service interface {
 	DeleteTrigger(context.Context, *DeleteTriggerRequest) (*types.Empty, error)
 	DeleteTriggers(context.Context, *DeleteTriggersRequest) (*types.Empty, error)
 	Execute(context.Context, *ExecuteRequest) (*ExecuteResponse, error)
-	Get(context.Context, *GetRequest) (*GetResponse, error)
+	Get(context.Context, *GetRequest) (*pipeline.Pipeline, error)
+	GetV2(context.Context, *GetV2Request) (*GetV2Response, error)
 	GetTrigger(context.Context, *GetTriggerRequest) (*pipeline.Trigger, error)
 	GetTriggerDetail(context.Context, *GetTriggerDetailRequest) (*GetTriggerDetailResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
@@ -235,6 +246,12 @@ func _GetEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _GetV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetV2(ctx, req.(*GetV2Request))
+	}
+}
+
 func _GetTriggerEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return s.GetTrigger(ctx, req.(*GetTriggerRequest))
@@ -279,6 +296,7 @@ func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_DeleteTriggersMethodDesc, _DeleteTriggersEndpoint(srv))
 	s.RegisterUnaryEndpoint(_ExecuteMethodDesc, _ExecuteEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetMethodDesc, _GetEndpoint(srv))
+	s.RegisterUnaryEndpoint(_GetV2MethodDesc, _GetV2Endpoint(srv))
 	s.RegisterUnaryEndpoint(_GetTriggerMethodDesc, _GetTriggerEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetTriggerDetailMethodDesc, _GetTriggerDetailEndpoint(srv))
 	s.RegisterUnaryEndpoint(_ListMethodDesc, _ListEndpoint(srv))
@@ -404,10 +422,28 @@ var _GetMethodDesc = &giraffe_micro.MethodDesc{
 	ServiceName:  "pipeline.rpc",
 	MethodName:   "Get",
 	RequestType:  (*GetRequest)(nil),
-	ResponseType: (*GetResponse)(nil),
+	ResponseType: (*pipeline.Pipeline)(nil),
 	HttpRule: &go_proto_giraffe.HttpRule{
 		Pattern: &go_proto_giraffe.HttpRule_Get{
 			Get: "/api/pipeline/v1/projects/:project_id/pipelines/:pipeline_id",
+		},
+		Body:         "",
+		ResponseBody: "data",
+	},
+}
+
+var _GetV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.pipeline.pipeline.GetV2",
+		Version: "1.0",
+	},
+	ServiceName:  "pipeline.rpc",
+	MethodName:   "GetV2",
+	RequestType:  (*GetV2Request)(nil),
+	ResponseType: (*GetV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Get{
+			Get: "/api/pipeline/v2/projects/:project_id/pipelines/:pipeline_id",
 		},
 		Body:         "",
 		ResponseBody: "data",

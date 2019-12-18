@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	_ "github.com/mwitkow/go-proto-validators"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	math "math"
@@ -52,6 +53,11 @@ func (this *AlertRule) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("Templates", err)
 		}
 	}
+	if this.Instances != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Instances); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Instances", err)
+		}
+	}
 	return nil
 }
 func (this *AlertRule_AlertDims) Validate() error {
@@ -79,5 +85,13 @@ func (this *AlertRule_Actions_Condition) Validate() error {
 	return nil
 }
 func (this *AlertRule_Templates) Validate() error {
+	return nil
+}
+func (this *AlertRule_Instances) Validate() error {
+	if this.Query != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Query); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Query", err)
+		}
+	}
 	return nil
 }

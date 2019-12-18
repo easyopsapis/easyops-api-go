@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	math "math"
 )
@@ -25,5 +26,15 @@ func (this *DeploymentStrategy) Validate() error {
 	return nil
 }
 func (this *DeploymentStrategy_RollingUpdate) Validate() error {
+	if this.MaxSurge != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MaxSurge); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("MaxSurge", err)
+		}
+	}
+	if this.MaxUnavailable != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.MaxUnavailable); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("MaxUnavailable", err)
+		}
+	}
 	return nil
 }

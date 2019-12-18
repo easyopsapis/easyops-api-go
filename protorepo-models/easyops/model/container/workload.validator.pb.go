@@ -66,6 +66,13 @@ func (this *Workload) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("DeploymentStrategy", err)
 		}
 	}
+	for _, item := range this.ImagePullSecrets {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("ImagePullSecrets", err)
+			}
+		}
+	}
 	if this.DeploymentStatus != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.DeploymentStatus); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("DeploymentStatus", err)

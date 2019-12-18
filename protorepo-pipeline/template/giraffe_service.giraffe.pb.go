@@ -34,11 +34,11 @@ const _ = giraffe_micro.SupportPackageIsVersion4 // please upgrade the giraffe_m
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type Client interface {
-	Create(ctx context.Context, in *pipeline.PipelineTemplate) (*pipeline.PipelineTemplate, error)
+	Create(ctx context.Context, in *pipeline.Template) (*pipeline.Template, error)
 	DeleteTemplate(ctx context.Context, in *DeleteTemplateRequest) (*types.Empty, error)
 	Get(ctx context.Context, in *GetRequest) (*GetResponse, error)
 	List(ctx context.Context, in *ListRequest) (*ListResponse, error)
-	Update(ctx context.Context, in *UpdateRequest) (*pipeline.PipelineTemplate, error)
+	Update(ctx context.Context, in *UpdateRequest) (*pipeline.Template, error)
 }
 
 type client struct {
@@ -51,8 +51,8 @@ func NewClient(c giraffe_micro.Client) Client {
 	}
 }
 
-func (c *client) Create(ctx context.Context, in *pipeline.PipelineTemplate) (*pipeline.PipelineTemplate, error) {
-	out := new(pipeline.PipelineTemplate)
+func (c *client) Create(ctx context.Context, in *pipeline.Template) (*pipeline.Template, error) {
+	out := new(pipeline.Template)
 	err := c.c.Invoke(ctx, _CreateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
@@ -87,8 +87,8 @@ func (c *client) List(ctx context.Context, in *ListRequest) (*ListResponse, erro
 	return out, nil
 }
 
-func (c *client) Update(ctx context.Context, in *UpdateRequest) (*pipeline.PipelineTemplate, error) {
-	out := new(pipeline.PipelineTemplate)
+func (c *client) Update(ctx context.Context, in *UpdateRequest) (*pipeline.Template, error) {
+	out := new(pipeline.Template)
 	err := c.c.Invoke(ctx, _UpdateMethodDesc, in, out)
 	if err != nil {
 		return nil, err
@@ -98,16 +98,16 @@ func (c *client) Update(ctx context.Context, in *UpdateRequest) (*pipeline.Pipel
 
 // Service is the server API for template service.
 type Service interface {
-	Create(context.Context, *pipeline.PipelineTemplate) (*pipeline.PipelineTemplate, error)
+	Create(context.Context, *pipeline.Template) (*pipeline.Template, error)
 	DeleteTemplate(context.Context, *DeleteTemplateRequest) (*types.Empty, error)
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	Update(context.Context, *UpdateRequest) (*pipeline.PipelineTemplate, error)
+	Update(context.Context, *UpdateRequest) (*pipeline.Template, error)
 }
 
 func _CreateEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.Create(ctx, req.(*pipeline.PipelineTemplate))
+		return s.Create(ctx, req.(*pipeline.Template))
 	}
 }
 
@@ -151,8 +151,8 @@ var _CreateMethodDesc = &giraffe_micro.MethodDesc{
 	},
 	ServiceName:  "template.rpc",
 	MethodName:   "Create",
-	RequestType:  (*pipeline.PipelineTemplate)(nil),
-	ResponseType: (*pipeline.PipelineTemplate)(nil),
+	RequestType:  (*pipeline.Template)(nil),
+	ResponseType: (*pipeline.Template)(nil),
 	HttpRule: &go_proto_giraffe.HttpRule{
 		Pattern: &go_proto_giraffe.HttpRule_Post{
 			Post: "/api/pipeline/v1/templates",
@@ -224,7 +224,7 @@ var _UpdateMethodDesc = &giraffe_micro.MethodDesc{
 	ServiceName:  "template.rpc",
 	MethodName:   "Update",
 	RequestType:  (*UpdateRequest)(nil),
-	ResponseType: (*pipeline.PipelineTemplate)(nil),
+	ResponseType: (*pipeline.Template)(nil),
 	HttpRule: &go_proto_giraffe.HttpRule{
 		Pattern: &go_proto_giraffe.HttpRule_Put{
 			Put: "/api/pipeline/v1/templates/:id",

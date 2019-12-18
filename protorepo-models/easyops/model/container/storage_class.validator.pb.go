@@ -21,6 +21,7 @@ var _ = math.Inf
 
 var _regex_StorageClass_InstanceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 var _regex_StorageClass_ResourceName = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`)
+var _regex_StorageClass_Ctime = regexp.MustCompile(`^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$`)
 
 func (this *StorageClass) Validate() error {
 	if !_regex_StorageClass_InstanceId.MatchString(this.InstanceId) {
@@ -38,6 +39,9 @@ func (this *StorageClass) Validate() error {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Parameters); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Parameters", err)
 		}
+	}
+	if !_regex_StorageClass_Ctime.MatchString(this.Ctime) {
+		return github_com_mwitkow_go_proto_validators.FieldError("Ctime", fmt.Errorf(`value '%v' must be a string conforming to regex "^((?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9])[T ](2[0-3]|[0-1][0-9]):([0-5][0-9]):[0-5][0-9](\\.[0-9]+)?(Z|[+-](?:2[0-3]|[0-1][0-9]):[0-5][0-9])?$"`, this.Ctime))
 	}
 	return nil
 }

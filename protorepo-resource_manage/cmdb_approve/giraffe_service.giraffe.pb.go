@@ -40,6 +40,7 @@ type Client interface {
 	GetHistoryApproverList(ctx context.Context, in *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error)
 	GetHistoryObjectList(ctx context.Context, in *GetHistoryObjectListRequest) (*GetHistoryObjectListResponse, error)
 	InstanceRelationEdit(ctx context.Context, in *InstanceRelationEditRequest) (*types.Empty, error)
+	RelationDiscoveryV2(ctx context.Context, in *RelationDiscoveryV2Request) (*RelationDiscoveryV2Response, error)
 }
 
 type client struct {
@@ -106,6 +107,15 @@ func (c *client) InstanceRelationEdit(ctx context.Context, in *InstanceRelationE
 	return out, nil
 }
 
+func (c *client) RelationDiscoveryV2(ctx context.Context, in *RelationDiscoveryV2Request) (*RelationDiscoveryV2Response, error) {
+	out := new(RelationDiscoveryV2Response)
+	err := c.c.Invoke(ctx, _RelationDiscoveryV2MethodDesc, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Service is the server API for cmdb_approve service.
 type Service interface {
 	CreateInstanceApplyPermission(context.Context, *notify.OperationLogWithMeta) (*types.Empty, error)
@@ -114,6 +124,7 @@ type Service interface {
 	GetHistoryApproverList(context.Context, *GetHistoryApproverListRequest) (*GetHistoryApproverListResponse, error)
 	GetHistoryObjectList(context.Context, *GetHistoryObjectListRequest) (*GetHistoryObjectListResponse, error)
 	InstanceRelationEdit(context.Context, *InstanceRelationEditRequest) (*types.Empty, error)
+	RelationDiscoveryV2(context.Context, *RelationDiscoveryV2Request) (*RelationDiscoveryV2Response, error)
 }
 
 func _CreateInstanceApplyPermissionEndpoint(s Service) giraffe_micro.UnaryEndpoint {
@@ -152,6 +163,12 @@ func _InstanceRelationEditEndpoint(s Service) giraffe_micro.UnaryEndpoint {
 	}
 }
 
+func _RelationDiscoveryV2Endpoint(s Service) giraffe_micro.UnaryEndpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.RelationDiscoveryV2(ctx, req.(*RelationDiscoveryV2Request))
+	}
+}
+
 func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_CreateInstanceApplyPermissionMethodDesc, _CreateInstanceApplyPermissionEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetApproveCountMethodDesc, _GetApproveCountEndpoint(srv))
@@ -159,6 +176,7 @@ func RegisterService(s giraffe_micro.Server, srv Service) {
 	s.RegisterUnaryEndpoint(_GetHistoryApproverListMethodDesc, _GetHistoryApproverListEndpoint(srv))
 	s.RegisterUnaryEndpoint(_GetHistoryObjectListMethodDesc, _GetHistoryObjectListEndpoint(srv))
 	s.RegisterUnaryEndpoint(_InstanceRelationEditMethodDesc, _InstanceRelationEditEndpoint(srv))
+	s.RegisterUnaryEndpoint(_RelationDiscoveryV2MethodDesc, _RelationDiscoveryV2Endpoint(srv))
 }
 
 // Method Description
@@ -267,5 +285,23 @@ var _InstanceRelationEditMethodDesc = &giraffe_micro.MethodDesc{
 		},
 		Body:         "",
 		ResponseBody: "data",
+	},
+}
+
+var _RelationDiscoveryV2MethodDesc = &giraffe_micro.MethodDesc{
+	Contract: &go_proto_giraffe.Contract{
+		Name:    "easyops.api.resource_manage.cmdb_approve.RelationDiscoveryV2",
+		Version: "1.0",
+	},
+	ServiceName:  "cmdb_approve.rpc",
+	MethodName:   "RelationDiscoveryV2",
+	RequestType:  (*RelationDiscoveryV2Request)(nil),
+	ResponseType: (*RelationDiscoveryV2Response)(nil),
+	HttpRule: &go_proto_giraffe.HttpRule{
+		Pattern: &go_proto_giraffe.HttpRule_Post{
+			Post: "/v2/object_relation/:relationId/_autodiscovery/multi",
+		},
+		Body:         "",
+		ResponseBody: "",
 	},
 }

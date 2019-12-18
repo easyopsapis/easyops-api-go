@@ -19,9 +19,13 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+var _regex_ListRequest_ClusterId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 var _regex_ListRequest_NamespaceId = regexp.MustCompile(`^[0-9a-z]{13}$`)
 
 func (this *ListRequest) Validate() error {
+	if !_regex_ListRequest_ClusterId.MatchString(this.ClusterId) {
+		return github_com_mwitkow_go_proto_validators.FieldError("ClusterId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.ClusterId))
+	}
 	if !_regex_ListRequest_NamespaceId.MatchString(this.NamespaceId) {
 		return github_com_mwitkow_go_proto_validators.FieldError("NamespaceId", fmt.Errorf(`value '%v' must be a string conforming to regex "^[0-9a-z]{13}$"`, this.NamespaceId))
 	}
